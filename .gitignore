@@ -1,0 +1,7 @@
+
+nodemon.js
+
+npm-debug.log
+server/tmp/*
+server/qrcodes/
+server/node_modules
