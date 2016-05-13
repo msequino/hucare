@@ -1,0 +1,253 @@
+body {
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #fff;
+}
+
+.show-modal{
+  display: block;
+}
+.jumbotron{
+  background-color: #fff;
+
+}
+p.showInline{
+  display:-webkit-box;
+}
+
+.form-signin {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+}
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+  margin-bottom: 10px;
+}
+.form-signin .checkbox {
+  font-weight: normal;
+}
+.form-signin .form-control {
+  position: relative;
+  height: auto;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.mouse-over{
+  cursor: pointer;
+  cursor: hand;
+}
+.animate-show {
+  line-height: 20px;
+  opacity: 1;
+  padding: 10px;
+  border: 1px solid black;
+  background: white;
+}
+
+.animate-show.ng-hide-add, .animate-show.ng-hide-remove {
+  transition: all linear 0.5s;
+}
+
+.animate-show.ng-hide {
+  line-height: 0;
+  opacity: 0;
+  padding: 0 10px;
+}
+
+.check-element {
+  padding: 10px;
+  border: 1px solid black;
+  background: white;
+}
+
+.navbar-dropdown{
+  margin-right: 15px;
+}
+.navbar-dropdown > ul{
+  margin-left:85%;
+  margin-top:2%;
+}
+.tooltip {
+  display: none;
+  position: absolute;
+  background-color: #222;
+  padding: 7px 10px;
+  max-width: 250px;
+  color: #fff;
+}
+
+.tooltip-show {
+  display: inherit;
+}
+
+.tooltip-arrow {
+  position: absolute;
+	width: 0;
+	height: 0;
+}
+
+.tooltip-down .tooltip-arrow {
+  top: -5px;
+  left: 50%;
+  margin-left: -5px;
+	  border-left: 5px solid transparent;
+	  border-right: 5px solid transparent;
+	  border-bottom: 5px solid #222;
+}
+
+.tooltip-up .tooltip-arrow {
+  bottom: -5px;
+  left: 50%;
+  margin-left: -5px;
+  	border-left: 5px solid transparent;
+	  border-right: 5px solid transparent;
+	  border-top: 5px solid #222;
+}
+
+.tooltip-right .tooltip-arrow {
+  left: -5px;
+  top: 50%;
+  margin-top: -3px;
+  	border-top: 5px solid transparent;
+	  border-bottom: 5px solid transparent;
+	  border-right: 5px solid #222;
+}
+
+.tooltip-left .tooltip-arrow {
+  right: -5px;
+  top: 50%;
+  margin-top: -3px;
+  	border-top: 5px solid transparent;
+	  border-bottom: 5px solid transparent;
+	  border-left: 5px solid #222;
+}
+h3.title{
+  display:inline-flex;
+}
+p.blank-space{
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.ui-tooltip, .arrow:after {
+  background: black;
+  border: 2px solid white;
+}
+.ui-tooltip {
+  padding: 10px 20px;
+  color: white;
+  border-radius: 20px;
+  font: bold 14px "Helvetica Neue", Sans-Serif;
+  text-transform: uppercase;
+  box-shadow: 0 0 7px black;
+}
+.arrow {
+  width: 70px;
+  height: 16px;
+  overflow: hidden;
+  position: absolute;
+  left: 50%;
+  margin-left: -35px;
+  bottom: -16px;
+}
+.arrow.top {
+  top: -16px;
+  bottom: auto;
+}
+.arrow.left {
+  left: 20%;
+}
+.small{
+  width: 30%;
+}
+
+.arrow:after {
+  content: "";
+  position: absolute;
+  left: 20px;
+  top: -20px;
+  width: 25px;
+  height: 25px;
+  box-shadow: 6px 5px 9px -9px black;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+.arrow.top:after {
+  bottom: -20px;
+  top: auto;
+}
+
+th.large{
+  padding : 10px;
+  padding-right: 150px;
+  font-size:18px;
+}
+
+.underlined {
+  text-decoration: underline;
+}
+.bordered{
+  font-family: Arial,Helvetica,sans-serif!important;
+  font-size : 15px!important;
+  border-style: solid;
+  border-color: #ff3333;
+  border-radius: 10px;
+}
+.has-error-background > label {
+  color: #f00;
+}
+
+.navbar-center {
+  text-align: center;
+}
+.navbar-default{
+  background-color: #a7b3f9;
+  border-color: #a7b3f9;
+  color: #fff;
+}
+
+div#sidebar-wrapper{
+  background-color: #a7b3f9;
+  color: #fff;
+}
+
+.hide {
+  display: none;
+}
+span.error{
+  color: red;
+}
+.nav-footer{
+  position:fixed;
+  bottom:20%;
+}
+
+th{
+  text-align: center;
+}
+th.header{
+  border-left: 2px solid #ddd;
+}
+
+td.no-border{
+  border-top: none!important;
+}

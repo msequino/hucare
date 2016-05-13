@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <meta charset="utf-8" />
+    <title>HuCare - Pannello di controllo</title>
+
+    <script src="assets/jquery/jquery-2.1.4.min.js"></script>
+    <script src="assets/jquery/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="assets/jquery/css/jquery-ui.min.css" />
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css" />
+    <script src="assets/bootstrap/js/bootstrap.js"></script>
+
+    <script src="assets/angular-1.2/angular.js"></script>
+    <script src="assets/angular-1.2/angular-route.js"></script>
+    <script src="assets/angular-1.2/angular-cookies.js"></script>
+    <script src="assets/moment.js"></script>
+    <script src="assets/angular-moment.min.js"></script>
+
+    <link href="assets/bootstrap/css/custom.css" rel="stylesheet" />
+
+    <style>
+  		body {
+  			padding: 2em;
+  		}
+  		pre {
+  			border: 1px solid #999;
+  			padding: 1em;
+  			background-color: #FFE;
+  		}
+  		li {
+  			list-style-position: inside;
+  		}
+  		.slider-style {
+  			margin-top: 10px;
+  		}
+  		.sliderExample > div {
+  			margin: 1em 0;
+  		}
+  		.vertical-container {
+  			width: 15%;
+  			display: inline-block;
+  		}
+  		#swatch {
+  			width: 100px;
+  			height: 100px;
+  			border: 1px solid black;
+  		}
+      .ui-datepicker{z-index:1151 !important;}
+  	</style>
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+</head>
+<body>
+
+    <div class="jumbotron">
+        <div class="container">
+          <div ng-class="{ 'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }" ng-if="flash" ng-bind="flash.message"></div>
+          <div ng-view></div>
+        </div>
+    </div>
+
+  <!--<script src="//code.angularjs.org/1.2.20/angular.js"></script>
+  <script src="//code.angularjs.org/1.2.20/angular-route.js"></script>
+  <script src="//code.angularjs.org/1.2.13/angular-cookies.js"></script>-->
+
+  <script src="components/app.js"></script>
+  <script src="components/shared/Controllers/authentication.js"></script>
+  <script src="components/shared/flashService.js"></script>
+
+  <!-- Real user service that uses an api -->
+  <script src="components/shared/Controllers/user.js"></script>
+  <script src="components/shared/Controllers/doctor.js"></script>
+  <script src="components/shared/Controllers/option.js"></script>
+  <script src="components/shared/Controllers/patient.js"></script>
+  <script src="components/shared/Controllers/study.js"></script>
+
+  <script src="components/shared/filters.js"></script>
+  <script src="components/shared/directives.js"></script>
+
+  <script src="components/home/homeController.js"></script>
+  <script src="components/user/userController.js"></script>
+
+  <link rel="stylesheet" href="assets/slider/demo/css/slider.css">
+  <script src="assets/slider/src/slider.js"></script>
+
+</body>
+</html>

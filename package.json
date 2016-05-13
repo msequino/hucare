@@ -1,0 +1,33 @@
+{
+  "name": "hucare",
+  "version": "1.1.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "test": "mocha server/test/"
+  },
+  "dependencies": {
+    "angular": "latest",
+    "angular-bootstrap-datetimepicker": "latest",
+    "body-parser": "latest",
+    "connect": "latest",
+    "cookie-parser": "latest",
+    "debug": "latest",
+    "email-templates": "^1.1.2",
+    "express": "latest",
+    "express-session": "latest",
+    "handlebars": "~4.0.4",
+    "https": "latest",
+    "method-override": "latest",
+    "morgan": "latest",
+    "mysql": "^2.9.0",
+    "nodemon": "latest",
+    "passport": "latest",
+    "passport-local": "latest",
+    "promise": "^7.1.1",
+    "sequelize": "latest"
+  },
+  "devDependencies": {
+    "qrcode": "^0.4.2"
+  }
+}

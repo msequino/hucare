@@ -1,0 +1,142 @@
+<div id="{{handler}}" class="modal fade" ng-class="{in:vm.showModal,'show-modal':vm.showModal}" aria-hidden="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Inserisci nuova somministrazione</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="form-group col-md-6">
+            <label for="TherapyC1s1">Data e ora:</label>
+            <input type="datetime-local" ng-change="vm.isTherapyValid()" class="form-control" ng-model="vm.therapy.c1s1" min="{{vm.data.Summary.c1s1 | date :'yyyy-MM-ddTHH:mm:ss'}}"/>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="AnalgesiaC1s10c">Tempo totale lavoro (ore) (minuti) :</label>
+            <div class="row">
+              <div class="col-md-6">
+                <input type="number" min="0" class="form-control" ng-model="vm.therapy.c1s1h"/>
+              </div>
+              <div class="col-md-6">
+                <input type="number" min="0" max="59" class="form-control" ng-model="vm.therapy.c1s1m"/>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md-4" ng-class="{ 'has-error': vm.form.TherapyC1s2a.$dirty && (vm.form.TherapyC1s2a.$error.min || vm.form.TherapyC1s2a.$error.max) }">
+            <label for="TherapyC1s2a">NRS prima:</label>
+            <input type="number" name="TherapyC1s2a" ng-change="vm.isTherapyValid()" class="form-control" ng-model="vm.therapy.c1s2a" min="0" max="10"/>
+            <span ng-show="vm.form.TherapyC1s2a.$dirty && vm.form.TherapyC1s2a.$error.min" class="help-block">Maggiore di 0</span>
+            <span ng-show="vm.form.TherapyC1s2a.$dirty && vm.form.TherapyC1s2a.$error.max" class="help-block">Minore di 10</span>
+          </div>
+          <div class="form-group col-md-4" ng-class="{ 'has-error': vm.form.TherapyC1s2b.$dirty && (vm.form.TherapyC1s2b.$error.min || vm.form.TherapyC1s2b.$error.max) }">
+            <label for="TherapyC1s2b">NRS dopo:</label>
+            <input type="number" name="TherapyC1s2b" ng-change="vm.isTherapyValid()" class="form-control" ng-model="vm.therapy.c1s2b" min="0" max="10"/>
+            <span ng-show="vm.form.TherapyC1s2b.$dirty && vm.form.TherapyC1s2b.$error.min" class="help-block">Maggiore di 0</span>
+            <span ng-show="vm.form.TherapyC1s2b.$dirty && vm.form.TherapyC1s2b.$error.max" class="help-block">Minore di 10</span>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md-4">
+            <label for="TherapyC1s3">Tecnica:</label>
+            <select name="TherapyC1s3" class="form-control" ng-change="vm.isTherapyValid()" ng-model="vm.therapy.c1s3"
+              ng-options="item as item for item in vm.items['Therapy.c1s3'] track by item">
+              <option value=""></option>
+            </select>
+          </div>
+
+          <div class="form-group col-md-4">
+            <label for="TherapyC1s3a">Tipo somministrazione:</label>
+            <select name="TherapyC1s3a" class="form-control" ng-change="vm.isTherapyValid()" ng-model="vm.therapy.c1s3a"
+              ng-options="item as item for item in vm.items['Therapy.c1s3a'] track by item">
+              <option value=""></option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md-6">
+            <label for="TherapyC1s4">Anestetico locale </label>
+            <div class="radio">
+              <label for="TherapyC1s4{{item}}" class="radio-inline"  ng-repeat="(key,item) in vm.items['Therapy.c1s4']">
+                <input type="radio" name="TherapyC1s4" ng-disabled="!vm.therapy.c1s3" ng-change="vm.cleanTherapyC1s4() && vm.isTherapyValid()" ng-model="vm.therapy.c1s4" value="{{item}}">{{item}}
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" ng-show="vm.therapy.c1s4 == 'Si'">
+          <div class="form-group col-md-4">
+            <label for="TherapyC1s4a">Farmaco:</label>
+            <select name="TherapyC1s4a" class="form-control" ng-model="vm.therapy.c1s4a"
+              ng-options="item as item for item in vm.items['Therapy.c1s4a'] track by item">
+              <option value=""></option>
+            </select>
+          </div>
+
+          <div class="form-group col-md-4" ng-class="{ 'has-error': vm.form.TherapyC1s4b.$dirty && vm.form.TherapyC1s4b.$error.min }">
+            <label for="TherapyC1s4b">Q.tà (ml):</label>
+            <input type="number" name="TherapyC1s4b" class="form-control" ng-change="vm.isTherapyValid()" ng-model="vm.therapy.c1s4b" min="0"/>
+            <span ng-show="vm.form.TherapyC1s4b.$dirty && vm.form.TherapyC1s4b.$error.min" class="help-block">Maggiore di 0</span>
+          </div>
+
+          <div class="form-group col-md-4" ng-class="{ 'has-error': vm.form.TherapyC2s4c.$dirty && (vm.form.TherapyC1s4c.$error.min || vm.form.TherapyC1s4c.$error.max) }">
+            <label for="TherapyC1s4c">Conc. (mg/ml):</label>
+            <input type="number" name="TherapyC1s4c" class="form-control" ng-change="vm.isTherapyValid()" ng-model="vm.therapy.c1s4c" min="0" max="100"/>
+            <span ng-show="vm.form.TherapyC1s4c.$dirty && vm.form.TherapyC1s4c.$error.min" class="help-block">Maggiore di 0</span>
+            <span ng-show="vm.form.TherapyC1s4c.$dirty && vm.form.TherapyC1s4c.$error.max" class="help-block">Minore di 100</span>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-md-6">
+            <label for="TherapyC1s5">Oppioide </label>
+            <div class="radio">
+              <label for="TherapyC1s5{{item}}" class="radio-inline"  ng-repeat="(key,item) in vm.items['Therapy.c1s5']">
+                <input type="radio" name="TherapyC1s5" ng-disabled="!vm.therapy.c1s3" ng-change="vm.cleanTherapyC1s5() && vm.isTherapyValid()" ng-model="vm.therapy.c1s5" value="{{item}}">{{item}}
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" ng-show="vm.therapy.c1s5 == 'Si'">
+          <div class="form-group col-md-4">
+            <label for="TherapyC1s5a">Farmaco:</label>
+            <select name="TherapyC1s5a" class="form-control" ng-model="vm.therapy.c1s5a"
+              ng-options="item as item for item in vm.items['Therapy.c1s5a'] track by item">
+              <option value=""></option>
+            </select>
+          </div>
+
+          <div class="form-group col-md-4" ng-class="{ 'has-error': vm.form.TherapyC1s5b.$dirty && vm.form.TherapyC1s5b.$error.min }">
+            <label for="TherapyC1s5b">Q.tà (mcg):</label>
+            <input type="number" name="TherapyC1s5b" class="form-control" ng-change="vm.isTherapyValid()" ng-model="vm.therapy.c1s5b" min="0"/>
+            <span ng-show="vm.form.TherapyC1s5b.$dirty && vm.form.TherapyC1s5b.$error.min" class="help-block">Maggiore di 0</span>
+          </div>
+
+          <div class="form-group col-md-4" ng-class="{ 'has-error': vm.form.TherapyC1s5c.$dirty && vm.form.TherapyC1s5c.$error.min }">
+            <label for="TherapyC1s5c">Conc. (mcg/ml):</label>
+            <input type="number" name="Therapyc1s5c" class="form-control" ng-change="vm.isTherapyValid()" ng-model="vm.therapy.c1s5c" min="0"/>
+            <span ng-show="vm.form.TherapyC1s5c.$dirty && vm.form.TherapyC1s5c.$error.min" class="help-block">Maggiore di 0</span>
+          </div>
+        </div>
+
+
+        <div ng-include="'components/home/modal/topup.html'" ng-show="vm.therapy.c1s3 == 'Top-up'"></div>
+        <div ng-include="'components/home/modal/infusione.html'" ng-show="vm.therapy.c1s3 == 'Infusione continua'"></div>
+        <div ng-include="'components/home/modal/pieb.html'" ng-show="vm.therapy.c1s3 == 'PIEB'"></div>
+        <div ng-include="'components/home/modal/pcapeb.html'" ng-show="vm.therapy.c1s3 == 'PCA+PIEB'"></div>
+        <div ng-include="'components/home/modal/pca.html'" ng-show="vm.therapy.c1s3 == 'PCA'"></div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="vm.closeTherapy()">Cancella</button>
+        <button type="button" ng-disabled="!vm.isTherapyValid()" class="btn btn-primary" ng-click="vm.addTherapy()">Inserisci</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop fade in" ng-show="vm.showModal"></div>

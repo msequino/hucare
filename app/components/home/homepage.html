@@ -1,0 +1,53 @@
+<div class="row">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th colspan="4" class="header">Valutazione basale</th>
+          <th colspan="4" class="header">Valutazione follow-up</th>
+        </tr>
+        <tr>
+          <th>ID paziente</th>
+          <th>Sesso</th>
+          <th>Data nascita</th>
+          <th>EORTC</th>
+          <th>HADS</th>
+          <th>NEQ</th>
+          <th>Reporting Form</th>
+          <th>EORTC</th>
+          <th>HADS</th>
+          <th>NEQ</th>
+          <th>Reporting Form</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="mouse-over" ng-class="{success : patient.finalized}" ng-repeat="patient in vm.patients | customLimitTo:vm.itemsPerPage:(vm.pagination-1)*vm.itemsPerPage" ng-dblclick="vm.changeView('components/home/editInfo.html',4,patient.id)">
+          <td><center>{{vm.ClinicAbbr + patient.name}}</center></td>
+          <td>{{patient.sex == '1' ? "Uomo" : "Donna"}}</td>
+          <td>{{patient.birth | date : 'yyyy-MM-dd'}}</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+</div>
+
+<nav class="nav-footer">
+  <ul class="pagination" ng-repeat="n in [] | range:vm.Math.ceil(vm.patients.length / vm.itemsPerPage)">
+    <li ng-if="n==0" ng-hide="vm.pagination-1==0">
+      <a href="" aria-label="Precedente" ng-click="vm.pagination = vm.pagination-1"><span aria-hidden="true">&laquo;</span></a>
+    </li>
+    <li ng-class="{active:vm.pagination == (n+1)}"><a href="" ng-click="vm.pagination = (n+1)">{{n+1}}</a></li>
+    <li ng-if="n==vm.Math.ceil(vm.patients.length / vm.itemsPerPage)-1" ng-hide="vm.pagination==vm.Math.ceil(vm.patients.length / vm.itemsPerPage)">
+      <a href="" aria-label="Successivo" ng-click="vm.pagination = vm.pagination+1"><span aria-hidden="true">&raquo;</span></a>
+    </li>
+  </ul>
+</nav>

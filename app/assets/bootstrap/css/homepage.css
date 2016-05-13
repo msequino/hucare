@@ -1,0 +1,14 @@
+body {
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #eee;
+}
+
+.jumbotron{
+  background-color: #eee;
+
+}
+.navbar-default{
+  background-color: #a7b3f9;
+  color:#000;
+}

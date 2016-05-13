@@ -1,0 +1,46 @@
+<h3>Screening Paziente</h3>
+<div class="panel panel-success">
+  <div class="panel-heading">
+    Caratteristiche demografiche paziente
+  </div>
+  <div class="panel-body">
+    <table class="table">
+      <tbody>
+        <tr ng-class="{'danger': vm.data.Patient.finalized && vm.form.PatientBirth.$error.required}">
+          <td><label>1. Data di nascita</label></td>
+          <td>
+            <p class="showInline"><input type="text" name="PatientBirth" disabled class="form-control small" date-options="dateOptions" ng-model="vm.data.Patient.birth" datepicker required/></p>
+          </td>
+        </tr>
+        <tr ng-class="{'danger': vm.data.Patient.finalized && vm.form.PatientSex.$error.required}">
+          <td><label>2. Sesso</label></td>
+          <td>
+            <label for="PatientSex{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Uomo',2: 'Donna'}">
+              <input type="radio" name="PatientSex" ng-disabled="vm.finalized" ng-model="vm.data.Patient.sex" value="{{key}}" required> {{item}}
+            </label>
+          </td>
+        </tr>
+        <tr ng-class="{'danger': vm.data.Patient.finalized && vm.form.PatientMarital.$error.required}">
+          <td><label>3. Stato civile</label></td>
+          <td>
+            <label for="PatientMarital{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Coniugato/a o convive stabilmente',2: 'Altro'}">
+              <input type="radio" name="PatientMarital" ng-disabled="vm.finalized" ng-model="vm.data.Patient.marital" value="{{key}}" required> {{item}}
+            </label>
+          </td>
+        </tr>
+        <tr ng-class="{'danger': vm.data.Patient.finalized && vm.form.PatientScholar.$error.required}">
+          <td><label>4. Livello d'istruzione massimo</label></td>
+          <td>
+            <div class="radio">
+              <label for="PatientScholar{{item}}" class="" ng-repeat="(key,item) in {1 : 'Primario (nessuno / elementare / scuola media)',2: 'Secondario (diploma scuola media superiore)',3:'Universitario (laurea / post-laurea)'}">
+                <input type="radio" name="PatientScholar" ng-disabled="vm.finalized" ng-model="vm.data.Patient.scholar" value="{{key}}" required> {{item}}
+
+              </label>
+            </div>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+</div>

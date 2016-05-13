@@ -1,0 +1,15 @@
+
+<div class="row">
+  <div class="form-group col-md-4" ng-class="{ 'has-error': vm.form.TherapyC2s1.$dirty && vm.form.TherapyC2s1.$error.min }">
+    <label for="TherapyC2s1">Volume bolo (ml):</label>
+    <input type="number" name="Therapyc2s1" class="form-control" ng-model="vm.therapy.c2s1" min="0"/>
+    <span ng-show="vm.form.TherapyC2s1.$dirty && vm.form.TherapyC2s1.$error.min" class="help-block">Maggiore di 0</span>
+  </div>
+
+  <div class="form-group col-md-4" ng-class="{ 'has-error': vm.form.TherapyC2s2.$dirty && vm.form.TherapyC2s2.$error.min }">
+    <label for="TherapyC2s2">Intervallo tra i boli (ml):</label>
+    <input type="number" name="Therapyc2s2" class="form-control" ng-model="vm.therapy.c2s2" min="0"/>
+    <span ng-show="vm.form.TherapyC2s2.$dirty && vm.form.TherapyC2s2.$error.min" class="help-block">Maggiore di 0</span>
+  </div>
+
+</div>

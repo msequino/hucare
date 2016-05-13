@@ -1,0 +1,14 @@
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+  <ul class="sidebar-nav">
+    <li class="sidebar-brand">
+    </li>
+    <li>
+        <a class="mouse-over" ng-click="vm.changeView('components/home/homepage.html',3)"><span class="glyphicon glyphicon-home"/> Lista pazienti</a>
+    </li>
+    <li>
+        <a class="mouse-over" ng-show="vm.user.ClinicId" ng-click="vm.changeView('components/home/editPatient.html',4)"><span class="glyphicon glyphicon-bed"/> Nuovo paziente</a>
+    </li>
+  </ul>
+</div>
+<!-- /#sidebar-wrapper -->

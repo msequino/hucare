@@ -1,0 +1,38 @@
+<div class="row">
+
+  <div class="col-md-10 col-md-offset-1 thumbnail">
+      <form name="vm.form" role="form" novalidate>
+        <input type="hidden" ng-model="vm.data.id"/>
+
+        <div class="slide-animate" ng-include="vm.patientPage"></div>
+
+<!--        <div class="row">
+          <div class="form-actions col-md-6">
+              <button type="submit" ng-disabled="vm.form.$invalid || vm.data == {}" class="btn btn-primary">{{vm.data.id ? "Aggiorna" : "Registra"}}</button>
+              <a ng-click="vm.cleanForm()" class="btn btn-link">Cancella</a>
+          </div>
+        </div>-->
+        <br>
+        <div ng-show="vm.isEligible(vm.data.Screening)" class="col col-md-10 col-md-offset-1 alert alert-danger" role="alert">
+          <input type="checkbox" ng-model="vm.data.Patient.finalized">
+          <strong>FINALIZZA</strong>
+          Attivando la casella la scheda verrà finalizzata
+        </div>
+        <nav>
+          <ul class="pager">
+            <li class="previous mouse-over" ng-show="vm.countPatView > 0">
+              <a ng-click="vm.change(-1);"><span aria-hidden="true">&larr;</span> Indietro</a>
+            </li>
+            <li class="next mouse-over" ng-show="vm.countPatView < 2 && vm.isEligible(vm.data.Screening)">
+              <a ng-click="vm.change(1);">Avanti <span aria-hidden="true">&rarr;</span></a>
+            </li>
+            <li class="next mouse-over" ng-show="vm.countPatView == 2 || !vm.isEligible(vm.data.Screening)">
+              <a ng-click="vm.submitPatient(vm.isEligible(vm.data.Screening))">Salva <span aria-hidden="true"></span></a>
+            </li>
+          </ul>
+        </nav>
+      </form>
+  </div>
+</div>
+
+<div ng-include="'components/home/modal/newPatient.html'"></div>

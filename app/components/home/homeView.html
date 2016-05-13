@@ -1,0 +1,22 @@
+<div class="slide-animate" ng-include="'components/layout/navbar.html'"></div>
+
+<div id="wrapper" ng-class="{toggled:vm.showSidebar}">
+
+<div class="slide-animate" ng-include="'components/layout/sidebar.html'"></div>
+
+  <div id="page-content-wrapper">
+      <div class="container-fluid">
+          <div class="row">
+              <div ng-show="vm.error" class="alert alert-danger">Non è possibile salvare i dati</div>
+              <div ng-show="vm.success" class="alert alert-success">Salvataggio effettuato</div>
+
+              <div class="col-lg-12">
+                <div class="slide-animate" ng-include="vm.template"></div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+</div>
+
+<link href="assets/sidebar/css/simple-sidebar.css" rel="stylesheet"/>

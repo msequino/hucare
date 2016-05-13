@@ -1,0 +1,24 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="col-md-5">
+    <div class="navbar-header">
+      <a class="navbar-brand navbar-left mouse-over" ng-click="vm.showSidebar = !vm.showSidebar"  aria-label="Toggle ngHide">{{vm.showSidebar ? "Mostra" : "Nascondi"}} menù</a>
+    </div>
+  </div>
+
+  <div class="col-md-3" ng-show="vm.data.patientId">
+    <div class="navbar-center">
+      <span id="label-navbar" class="fix-to-top hide">{{vm.text_patient_page_1}}</span><br><p ng-show="vm.data.Patient.finalized && vm.form.$invalid">{{vm.text_patient_page_2}}</p>
+    </div>
+  </div>
+
+  <div class="dropdown navbar-dropdown" ng-class="{open:vm.openDropdown}"  ng-mouseover="vm.openDropdown = true" ng-mouseleave="vm.openDropdown = false" >
+    <a class="nav navbar-nav navbar-brand navbar-right mouse-over" type="button" id="menu1" data-toggle="dropdown" aria-expanded="false">{{vm.user.username}}
+      <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu test" role="menu" aria-labelledby="menu1">
+      <li role="presentation"><a class="mouse-over" ng-click="vm.changeView('components/home/editProfile.html',5)"><span class="glyphicon glyphicon-user"> Visualizza profilo</span></a></li>
+      <li role="presentation" class="divider"></li>
+      <li role="presentation"><a class="mouse-over" ng-click="vm.logout()"><span class="glyphicon glyphicon-log-out"> Logout</span></a></li>
+    </ul>
+  </div>
+</nav>
