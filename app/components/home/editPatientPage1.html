@@ -9,7 +9,7 @@
         <tr ng-class="{'danger': vm.data.Patient.finalized && vm.form.PatientBirth.$error.required}">
           <td><label>1. Data di nascita</label></td>
           <td>
-            <p class="showInline"><input type="text" name="PatientBirth" disabled class="form-control small" date-options="dateOptions" ng-model="vm.data.Patient.birth" datepicker required/></p>
+            <p class="showInline"><input type="text" name="PatientBirth" disabled finalized="vm.finalized" class="form-control small" max-date="vm.yrs18ago" min-date="vm.yrs75ago" ng-model="vm.data.Patient.birth" datepicker required/></p>
           </td>
         </tr>
         <tr ng-class="{'danger': vm.data.Patient.finalized && vm.form.PatientSex.$error.required}">

@@ -23,6 +23,7 @@ module.exports = function(app) {
 
   // Deny only USER
   var isAdmin = function(req, res, next){
+    console.log("sdokspodkoa");
     if (!req.isAuthenticated())
       return res.sendStatus(401);
     if (!req.user.isNotUser() )
@@ -38,17 +39,19 @@ module.exports = function(app) {
   app.post('/auth/signup', passport.authenticate('local-signup'), Auth.signup);
   app.post('/auth/logout', isAuthenticated, Auth.logout);
 
+  app.route("/user/:username").get(isAuthenticated,User.getUserByUsername);
+  app.route("/users/clinic").get(User.getUsersByClinicId);
   app.route("/users").get(isAdmin,User.getUsers);
   app.route("/users/:id").get(isAdmin,User.getUser);
-  app.route("/user/:username").get(isAuthenticated,User.getUserByUsername);
   app.route("/users/:id").put(isAdmin,User.updateUser);
   app.route("/users").post(isAdmin,User.insertUser);
 
   app.route("/patients/:id").get(isAuthenticated,Patient.getPatient);
   app.route("/patients").get(isAuthenticated,Patient.getPatients);
   app.route("/patients/:id").put(isAuthenticated,Patient.updatePatient);
-  app.route("/patients").post(isAuthenticated,Patient.insertPatient);
   app.route("/patients/screening").post(isAuthenticated,Patient.insertNoEligiblePatients);
+  app.route("/patients").post(isAuthenticated,Patient.insertPatient);
+  app.route("/patient/login").post(Patient.isValidPatient);
 
   app.route("/questionaires/bypatient/:id").get(isAuthenticated,Patient.getPatient);
   app.route("/questionaires").get(isAuthenticated,Patient.getPatients);

@@ -3,6 +3,44 @@
 
     angular
         .module('app')
+        .directive('metastatic', function() {
+          return {
+            require: 'ngModel',
+            link: function(scope, elm, attrs, ctrl) {
+
+              scope.$watch('vm.data.Patient.metastatic',function(value){
+                ctrl.$setValidity('metastatic', value == 2);
+              });
+              scope.$watch('vm.data.Patient.finalized',function(value){
+                if(angular.element.find("input#finalized")[0].checked){
+                  ctrl.$setValidity('metastatic', true);
+                  return undefined;
+                }
+
+                if (ctrl.$viewValue != null) {
+                  // it is valid
+                  ctrl.$setValidity('metastatic', true);
+                  return ctrl.$viewValue;
+                } else {
+                  // it is invalid, return undefined (no model update)
+                  ctrl.$setValidity('metastatic', false);
+                  return undefined;
+                }
+              });
+              ctrl.$parsers.unshift(function(viewValue) {
+                if (viewValue != null) {
+                  // it is valid
+                  ctrl.$setValidity('metastatic', true);
+                  return viewValue;
+                } else {
+                  // it is invalid, return undefined (no model update)
+                  ctrl.$setValidity('metastatic', false);
+                  return undefined;
+                }
+              });
+            }
+          };
+        })
         .directive('datepicker', function(){
           function link(scope,element,attrs,ngModelCtrl){
 
@@ -14,6 +52,7 @@
                 }
               element.datepicker("option","minDate",value);
             });
+
             scope.$watch('finalized', function(value) {
               element.datepicker("option","showOn",scope.finalized ? "" : "button");
             });
@@ -23,6 +62,7 @@
                 dateFormat : "yy-mm-dd",
                 showOn : scope.finalized ? "" : "button",
                 maxDate : scope.maxDate,
+                minDate : scope.minDate,
                 changeMonth: true,
                 changeYear: true,
                 buttonImage : "img/calendar.gif",

@@ -13,6 +13,8 @@
 
         vm.errors = {};
         vm.today = new Date();
+        vm.yrs18ago = new Date(vm.today.getFullYear()-18,vm.today.getMonth(),vm.today.getDate());
+        vm.yrs75ago = new Date(vm.today.getFullYear()-75,vm.today.getMonth(),vm.today.getDate());
 
         vm.countPatView = 0;
 
@@ -90,14 +92,28 @@
               else{
                 if(loadItems == 3) //Load patients
                   PatientService.GetAll().then(function (response) {
-                    vm.patients = response['patients'];
-                    vm.ClinicAbbr = response['clinic'];
+                    vm.patients = response;
                     vm.pagination = 1;
                   });
                   else{
                     if(loadItems == 4){
                         vm.countPatView = 0;
                         vm.patientPage = "components/home/editPatientPage0.html";
+                        vm.finalized = 0;
+                        if(id)
+                          PatientService.GetById(id).then(function (response) {
+
+                            vm.data.Patient = {};
+                            vm.data.Screening = {};
+                            angular.copy(response,vm.data.Patient);
+                            angular.copy(response.Screening,vm.data.Screening);
+                            delete vm.data.Patient.Screening;
+
+                            vm.finalized = vm.data.Patient.finalized;
+                            vm.countPatView = 1;
+                            vm.patientPage = "components/home/editPatientPage1.html";
+
+                          });
                     }
                     else{
                       if(loadItems == 5) //Load patient with id
@@ -189,38 +205,45 @@
           }
         }
 
-        function submitPatient(isEligible){
-          if(!isEligible)
+        function submitPatient(savable){
+          var isEligible = vm.isEligible(vm.data.Screening);
+          if(!(isEligible || savable))
           {
-            
+            vm.showPatientModal = true;
             vm.data.Patient = null;
+            return;
           }
 
-          if(vm.form.$invalid && vm.data.Patient.finalized == 1){
+          vm.data.Patient = vm.data.Patient || {};
+
+          if(vm.form.$invalid && vm.data.Patient.finalized){
             alert("Paziente non finalizzabile, controllare i campi bordati di rosso");
             return;
           }
 
           vm.data.Screening.ClinicId = vm.user.ClinicId;
-          PatientService.Create(vm.data,isEligible).then(function(response){
-            if(("success" in response)){
-              vm.error = !response.success;
-              vm.message = response.message.data;
-              return;
-            }
+          if(!vm.data.Patient.id)
+            PatientService.Create(vm.data,isEligible).then(function(response){
+              if(("success" in response)){
+                vm.error = !response.success;
+                vm.message = response.message.data;
+                return;
+              }
+              //vm.data.Patient.id = response.id;
+              //vm.patients.push({id : vm.data.id});
+              //vm.backToHomepage();
+              vm.patient_qrcode = response;
+            });
+          else
+            PatientService.Update(vm.data.Patient).then(function(response){
+              if(("success" in response)){
+                vm.error = !response.success;
+                vm.message = response.message.data;
+                return;
+              }
+              vm.backToHomepage();
+            });
 
-            vm.data.id = response.id;
-            vm.patients.push({id : vm.data.id});
-            vm.showPatientModal = true;
-            //INVIA paziente via mail
-            /*angular.element("#link").attr("href", angular.element("#link").attr("href") +
-                        vm.data.id + "%2c" +
-                        vm.data.name + "%2c" +
-                        vm.data.surname + "%2c" +
-                        vm.data.birth + "%2c" +
-                        vm.data.code);*/
-            //angular.element("#link").trigger('click');
-          });
         }
 
         function backToHomepage(){
@@ -228,7 +251,6 @@
           vm.success = true;
           cleanForm();
           timer(true,true);
-
         }
 
         function timer(successAlert,mChangeView){

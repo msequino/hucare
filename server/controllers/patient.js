@@ -12,16 +12,14 @@ module.exports.getPatients = function(req,res,next){
       [{
         model: db.Screening,
         required: true,
-        where : clinic
+        where : clinic,
+        include : [{
+          model:db.Clinic,
+        }]
       }]
     }
   ).then(function(patients){
-    var data = {};
-    data['patients'] = patients;
-    db.Clinic.findById(req.user.getDataValue('ClinicId')).then(function(result){
-      data['clinic'] = result.abbr;
-      res.json(data);
-    });
+    res.json(patients);
 
   }).catch(function(error){
     log.log('error',error);
@@ -31,47 +29,87 @@ module.exports.getPatients = function(req,res,next){
 }
 
 module.exports.getPatient = function(req,res,next){
-  var response = {};
-  db.Patient.findOne({where : {id:req.params.id}}).then(function(patient){
-    response['Patient'] = patient;
-    res.json(response);
+  db.Patient.findOne({ include:
+    [{
+      model: db.Screening,
+      required: true,
+    }],
+    where : {id:req.params.id}
+  }).then(function(result){
+
+    res.sendFile(__dirname + "/../qrcodes/"+result.name+".png");
+    var data = {};
+    data['patient'] = result;
+    data['img'] =
+    res.json(result);
 
   }).catch(function(error){
     res.json(error);
   });
 }
 
+module.exports.isValidPatient = function(req,res,next){
+
+  db.Patient.findOne( { where : {name:req.body.username.substr(2,6)} ,
+    include:
+      [{
+        model: db.Screening,
+        required: true,
+        where : {clinicId:req.body.clinic}
+      }],
+
+  }).then(function(patient){
+    var birth = new Date(patient.birth).toISOString();
+
+    var b = birth.substr(0,birth.indexOf("T")).split("-");
+
+    var isOk = (b[2] == req.body.password.substr(0,2) && b[1] == req.body.password.substr(2,4));
+
+    res.json({code : (isOk ? 200 : 400), data : isOk ? {GroupId:3,username:req.body.username,id:patient.id,ClinicId:req.body.clinic, sex : parseInt(patient.sex)} : {}});
+
+  }).catch(function(error){
+    console.log(error);
+    res.json({code : 400 , message : "Patient not valid"});
+  });
+}
+
 Number.prototype.printName = function(){
-  var s = ("000" + this.valueOf()+1);
+  var s = ("000" + (parseInt(this.valueOf())));
   return s.substring(s.length - 4);
 }
 
 module.exports.insertPatient = function(req,res,next){
 
-  db.Patient.findAndCountAll({where : {ClinicId:req.body.Patient.ClinicId}}).then(function(result){
-    req.body.Patient.name = result.count.printName();
-    createQRCode({patient : req.body.Patient.name}).then(function(length){
-      db.sequelize.transaction(function(t){
-        return db.Screening.create(req.body.Screening, {transaction : t}).then(function(screening){
-          log.log('info',"USER " + req.user.id + " CREATED screening " + screening.id + ' ('+ JSON.stringify(screening) + ')');
-          req.body.Patient.ScreeningId = screening.id;
-          if(req.body.Patient !== undefined)
-            return db.Patient.create(req.body.Patient, {transaction : t}).then(function(patient){
-              log.log('info',"USER " + req.user.id + " CREATED patient " + patient.id + ' ('+ JSON.stringify(patient) + ')');
-            });
+  var patient = 0;
+  db.Patient.findAndCountAll(
+    { include:
+      [{
+        model: db.Screening,
+        required: true,
+        where : {ClinicId:req.body.Screening.ClinicId}
+      }]
+    }
+  ).then(function(result){
+    db.sequelize.transaction(function(t){
+      return db.Screening.create(req.body.Screening, {transaction : t}).then(function(screening){
+        log.log('info',"USER " + req.user.id + " CREATED screening " + screening.id + ' ('+ JSON.stringify(screening) + ')');
+        req.body.Patient.ScreeningId = screening.id;
+        patient = result.count;
+        req.body.Patient.name = (result.count+1).printName();
+        return db.Patient.create(req.body.Patient, {transaction : t}).then(function(patient){
+          log.log('info',"USER " + req.user.id + " CREATED patient " + patient.id + ' ('+ JSON.stringify(patient) + ')');
+//          if(patient.finalized)  createQRCode({patient : patient.name});
         });
-      }).then(function(result){
-        res.json(p);
-      }).catch(function(error){
-        res.status(404).send({message : "Error in inserting"});
-      });
+      })
+    }).then(function(result){
+        res.json({code : 200 , message : "Informazioni salvate"});
     }).catch(function(error){
-      log.log('error',error);
-      res.status(404).send({message : "Impossible to create QRCode"});
+      console.log(error);
+      res.status(404).send({code: 400, message : "Error in inserting"});
     });
   }).catch(function(error){
     log.log('error',error);
-    res.status(404).send({message : "No Patient counted"});
+    res.status(404).send({code: 400, message : "No Patient counted"});
   });
 }
 
@@ -94,11 +132,11 @@ module.exports.updatePatient = function(req,res,next){
         res.json(p);
       }).catch(function(error){
         log.log('error',error);
-        res.status(404).send(error.errors[0].message);
+        res.status(404).send(error);
       });
   }).catch(function(error){
     log.log('error',error);
-    res.status(404).send(error.errors[0].message);
+    res.status(404).send(error);
   });
 }
 

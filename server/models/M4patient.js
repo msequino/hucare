@@ -21,10 +21,18 @@ module.exports = function(sequelize, DataTypes) {
       type : DataTypes.DATEONLY,
     },
     firstdatemonth: {
-      type : DataTypes.ENUM('1','2','3','4','5','6','7','8','9','10','11','12'),
+      type : DataTypes.INTEGER,
+      validate : {
+        min : 1,
+        max : 12
+      }
     },
     firstdateyear: {
-      type : DataTypes.ENUM('2016','2017','2018','2019'),
+      type : DataTypes.INTEGER,
+      validate : {
+        min : 1990,
+        max : 2018
+      }
     },
     metastatic: {
       type : DataTypes.ENUM('1','2'),
@@ -63,7 +71,7 @@ module.exports = function(sequelize, DataTypes) {
       type : DataTypes.ENUM('1','2','3'),
     },
     finalized: {
-      type : DataTypes.ENUM('0','1'),
+      type : DataTypes.BOOLEAN,
     }
 
   }, {

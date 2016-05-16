@@ -58,8 +58,9 @@
             begin = parseInt(begin);
             var out = [];
             for(var i=0 ; i<limit;i++)
-              if(input.length > i+begin)
-                out.push(input[i+begin]);
+              if(input)
+                if(input.length > i+begin)
+                  out.push(input[i+begin]);
 
             return out;
           }

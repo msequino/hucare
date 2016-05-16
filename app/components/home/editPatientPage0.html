@@ -134,7 +134,7 @@
 <br/>
 <div ng-show="vm.data.Screening.signed == 1">
   <p>Se il paziente è eleggibile, si prega di informarlo esaustivamente sulle finalità dello studio, di far firmare l'apposito modulo del consenso informato scritto e di riportare la data in basso</p>
-  <p class="showInline"><input type="text" name="consenso" disabled class="form-control small" date-options="dateOptions" ng-model="vm.data.Screening.consenso" datepicker/></p>
+  <p class="showInline"><input type="text" name="consenso" disabled finalized="vm.finalized" class="form-control small" max-date="vm.today" ng-model="vm.data.Screening.consenso" datepicker/></p>
 </div>
 
 <!-- TODO cancella quando finisce studio di fattibilità-->

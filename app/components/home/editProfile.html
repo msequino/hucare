@@ -24,22 +24,8 @@
             <label for="password">Password</label>
             <input type="password" class="form-control" ng-model="vm.data.password" />
         </div>
-<!--        <div class="row" ng-show="vm.user.isAdmin">
-          <div class="form-group col-md-6">
-              <label for="GroupId">Tipo profilo</label>
-              <select class="form-control" ng-model="vm.data.GroupId" ng-options="item.id as item.title for item in vm.groups" />
-          </div>
-          <div class="form-group col-md-6">
-              <label for="ClinicId">Clinica</label>
-              <select class="form-control" ng-model="vm.data.ClinicId" ng-options="item.id as item.title for item in vm.clinics" />
-          </div>
-        </div>-->
+
         <div class="row">
-          <div class="col-md-6">
-            <input type="checkbox" name="active" ng-model="vm.data.active" ng-checked="vm.data.active">
-              <label for="active">Utente attivo?</label>
-            </input>
-          </div>
           <div class="form-actions col-md-6">
               <button type="submit" ng-disabled="vm.form.$invalid || vm.data == {}" class="btn btn-primary">{{vm.data.id ? "Aggiorna" : "Registra"}}</button>
               <a ng-click="vm.cleanForm()" class="btn btn-link">Cancella</a>

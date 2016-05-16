@@ -27,6 +27,7 @@ module.exports = function(sequelize, DataTypes) {
       },
       read_info : function(){
         return {
+          id : this.getDataValue("id"),
           username : this.getDataValue("username"),
           ClinicId : this.getDataValue("ClinicId"),
           GroupId : this.getDataValue("GroupId")
@@ -34,6 +35,9 @@ module.exports = function(sequelize, DataTypes) {
       },
       isNotUser : function(){
         return this.getDataValue('GroupId') < 3;
+      },
+      getUsername : function(){
+        return this.getDataValue('username');
       },
     },
   });

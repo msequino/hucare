@@ -2,17 +2,17 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Paziente non eleggibile</h4>
+        <h4 class="modal-title">Paziente inserito correttamente</h4>
       </div>
       <div class="modal-body">
-          <p class="danger">ATTENZIONE:<br>
-             Paziente non elegibile, continuando il paziente verrà salvato e sarà usato solo a fini statistici.
-           </p>
+          <p class="danger">E' possibile tramite l'app di HuCare, leggere il qr-code sotto ed inizializzare i questionari per i pazienti,
+            altrimenti stampare la pagina e recarsi dalla figura preposta.</p>
+          <img ng-src="data:image/JPEG;base64,{{vm.patient_qrcode}}">
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" ng-click="showPatientModal = false;">Annulla</button>
         Oppure
-        <button type="button" class="btn btn-success" ng-click="vm.submitPatient(true);vm.showPatientModal = false;">Conferma</a>
+        <button type="button" class="btn btn-success" ng-click="vm.showPatientModal = false;">Stampa</a>
       </div>
     </div>
   </div>
