@@ -3,7 +3,7 @@ var debug = require('debug')('hucare'),
   app = require('../server'),
   models = require("../server/models");
 
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 3002);
 
 models.sequelize.sync().then(function () {
   var server = app.listen(app.get('port'), function() {
