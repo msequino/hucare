@@ -8,35 +8,28 @@
             require: 'ngModel',
             link: function(scope, elm, attrs, ctrl) {
 
-              scope.$watch('vm.data.Patient.metastatic',function(value){
-                ctrl.$setValidity('metastatic', value == 2);
-              });
-              scope.$watch('vm.data.Patient.finalized',function(value){
-                if(angular.element.find("input#finalized")[0].checked){
-                  ctrl.$setValidity('metastatic', true);
-                  return undefined;
-                }
+              ctrl.$parsers.unshift(function(viewValue) {
+                console.log( ctrl.$name + " " + ctrl.$error.metastatic + " " + ctrl.$viewValue );
 
-                if (ctrl.$viewValue != null) {
-                  // it is valid
+                ctrl.$setValidity('metastatic', angular.element.find("input#finalized")[0].checked ? viewValue != null : true);
+                return viewValue != null ? viewValue : undefined;
+              });
+
+              scope.$watch('vm.data.Patient.metastatic',function(value){
+                console.log("1) -> " + value + " ---> " +ctrl.$name + " " + ctrl.$error.metastatic + " " + ctrl.$viewValue );
+                if(value == 2){
                   ctrl.$setValidity('metastatic', true);
                   return ctrl.$viewValue;
-                } else {
-                  // it is invalid, return undefined (no model update)
-                  ctrl.$setValidity('metastatic', false);
-                  return undefined;
+                }else{
+                  ctrl.$setValidity('metastatic', ctrl.$viewValue != null);
+                  return ctrl.$viewValue != null ? ctrl.$viewValue : undefined;
                 }
               });
-              ctrl.$parsers.unshift(function(viewValue) {
-                if (viewValue != null) {
-                  // it is valid
-                  ctrl.$setValidity('metastatic', true);
-                  return viewValue;
-                } else {
-                  // it is invalid, return undefined (no model update)
-                  ctrl.$setValidity('metastatic', false);
-                  return undefined;
-                }
+
+              scope.$watch('vm.data.Patient.finalized',function(value){
+                console.log("2)-> " + value + " ---> " +ctrl.$name + " " + ctrl.$error.metastatic + " " + ctrl.$viewValue );
+                ctrl.$setValidity('metastatic', value ? ctrl.$viewValue != null : true);
+                return ctrl.$viewValue != null ? ctrl.$viewValue : undefined;
               });
             }
           };

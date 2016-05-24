@@ -3,11 +3,13 @@ var User = require("../controllers/user"),
     Auth = require("../controllers/auth"),
     Clinic = require("../controllers/clinic"),
     Group = require("../controllers/group"),
-    Patient = require("../controllers/patient");
+    Patient = require("../controllers/patient"),
+    Questionaire = require("../controllers/questionaire");
 
 module.exports = function(app) {
 
   var isAuthenticated = function(req, res, next){
+
     if (!req.isAuthenticated())
       return res.sendStatus(401);
     next();
@@ -23,7 +25,6 @@ module.exports = function(app) {
 
   // Deny only USER
   var isAdmin = function(req, res, next){
-    console.log("sdokspodkoa");
     if (!req.isAuthenticated())
       return res.sendStatus(401);
     if (!req.user.isNotUser() )
@@ -40,7 +41,7 @@ module.exports = function(app) {
   app.post('/auth/logout', isAuthenticated, Auth.logout);
 
   app.route("/user/:username").get(isAuthenticated,User.getUserByUsername);
-  app.route("/users/clinic").get(User.getUsersByClinicId);
+  app.route("/users/clinic/:clinic").get(User.getUsersByClinicId);
   app.route("/users").get(isAdmin,User.getUsers);
   app.route("/users/:id").get(isAdmin,User.getUser);
   app.route("/users/:id").put(isAdmin,User.updateUser);
@@ -49,14 +50,27 @@ module.exports = function(app) {
   app.route("/patients/:id").get(isAuthenticated,Patient.getPatient);
   app.route("/patients").get(isAuthenticated,Patient.getPatients);
   app.route("/patients/:id").put(isAuthenticated,Patient.updatePatient);
-  app.route("/patients/screening").post(isAuthenticated,Patient.insertNoEligiblePatients);
   app.route("/patients").post(isAuthenticated,Patient.insertPatient);
   app.route("/patient/login").post(Patient.isValidPatient);
+  app.route("/screening").post(isAuthenticated,Patient.insertNoEligiblePatients);
 
   app.route("/questionaires/bypatient/:id").get(isAuthenticated,Patient.getPatient);
   app.route("/questionaires").get(isAuthenticated,Patient.getPatients);
   app.route("/questionaires/:id").put(isAuthenticated,Patient.updatePatient);
   app.route("/questionaires").post(isAuthenticated,Patient.insertPatient);
+
+  app.route("/questionaires/t0/:patientId").post(isAuthenticated,Questionaire.insertAllT0);
+  app.route("/questionaires/t1/:patientId").post(isAuthenticated,Questionaire.insertAllT1);
+
+  app.route("/questionaires/eortcs/t0").post(isAuthenticated,Questionaire.insertT0Eortc);
+  app.route("/questionaires/eortcs/t1").post(isAuthenticated,Questionaire.insertT1Eortc);
+  app.route("/questionaires/hads/t0").post(isAuthenticated,Questionaire.insertT0Hads);
+  app.route("/questionaires/hads/t1").post(isAuthenticated,Questionaire.insertT1Hads);
+  app.route("/questionaires/neqs/t0").post(isAuthenticated,Questionaire.insertT0Neq);
+  app.route("/questionaires/neqs/t1").post(isAuthenticated,Questionaire.insertT1Neq);
+  app.route("/questionaires/reportings/t0").post(isAuthenticated,Questionaire.insertT0Reporting);
+  app.route("/questionaires/reportings/t1").post(isAuthenticated,Questionaire.insertT1Reporting);
+  app.route("/questionaires/evaluations").post(isAuthenticated,Questionaire.insertEvaluation);
 
   app.route("/clinics").get(isAuthenticated,Clinic.getClinics);
 

@@ -70,6 +70,12 @@ module.exports = function(sequelize, DataTypes) {
     typetreatment: {
       type : DataTypes.ENUM('1','2','3'),
     },
+    T0Date: {
+      type : DataTypes.DATE,
+    },
+    T1Date: {
+      type : DataTypes.DATE,
+    },
     finalized: {
       type : DataTypes.BOOLEAN,
     }
@@ -78,6 +84,15 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: function(models) {
         Patient.belongsTo(models.Screening);
+        Patient.belongsTo(models.T0Eortc);
+        Patient.belongsTo(models.T1Eortc);
+        Patient.belongsTo(models.T0Hads,{as: 'T0Hads'});
+        Patient.belongsTo(models.T1Hads,{as: 'T1Hads'});
+        Patient.belongsTo(models.T0Neq);
+        Patient.belongsTo(models.T1Neq);
+        Patient.belongsTo(models.T0Reporting);
+        Patient.belongsTo(models.T1Reporting);
+        Patient.belongsTo(models.Evaluation);
       }
     },
   });

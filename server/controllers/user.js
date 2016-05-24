@@ -10,7 +10,7 @@ module.exports.getUsers = function(req,res,next){
 
 module.exports.getUsersByClinicId = function(req,res,next){
   var response = [];
-  db.User.findAll({where : {ClinicId : req.query.clinic}, attributes:['id','username']}).then(function(users){
+  db.User.findAll({where : {ClinicId : req.params.clinic}, attributes:['id','username']}).then(function(users){
 
     var user = [];
 
@@ -24,7 +24,7 @@ module.exports.getUsersByClinicId = function(req,res,next){
         [{
           model: db.Screening,
           required: true,
-          where : {ClinicId : req.query.clinic},
+          where : {ClinicId : req.params.clinic},
           attributes:['id'],
           include : [{
             model:db.Clinic,

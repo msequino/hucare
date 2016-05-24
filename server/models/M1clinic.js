@@ -3,6 +3,7 @@
 module.exports = function(sequelize, DataTypes) {
   var Clinic = sequelize.define("Clinic", {
     name: DataTypes.STRING,
+    city: DataTypes.STRING,
     abbr: DataTypes.STRING(2),
   },
   {

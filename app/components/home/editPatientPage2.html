@@ -1,4 +1,4 @@
-<h3>Screening Paziente</h3>
+<h3>Screening Paziente {{vm.data.Screening.Clinic.abbr + vm.data.Patient.name}}</h3>
 <div class="panel panel-success">
   <div class="panel-heading">
     Caratteristiche cliniche paziente
@@ -48,6 +48,7 @@
         <tr ng-show="vm.data.Patient.metastatic == 1">
           <td colspan="2"><label>4.1 Se TUMORE METASTATICO, indicare le sedi </label></td>
         </tr>
+        {{vm.form.PatientMetastatic1.$error.metastatic}}
         <tr class="no-border" ng-class="{'danger': vm.data.Patient.finalized && vm.form.PatientMetastatic1.$error.metastatic}" ng-show="vm.data.Patient.metastatic == 1">
           <td class="no-border"> Epatica</td>
           <td class="no-border">
@@ -60,7 +61,7 @@
           <td class="no-border"> Polmonare</td>
           <td class="no-border">
             <label for="PatientMetastatic2{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Si',2: 'No'}">
-              <input type="radio" name="PatientMetastatic2" ng-disabled="vm.finalized" ng-reference="vm.data.Patient.metastatic" ng-model="vm.data.Patient.metastatic2" value="{{key}}" metastatic> {{item}}
+              <input type="radio" name="PatientMetastatic2" ng-disabled="vm.finalized" ng-model="vm.data.Patient.metastatic2" value="{{key}}" metastatic> {{item}}
             </label>
           </td>
         </tr>
@@ -68,7 +69,7 @@
           <td class="no-border"> Ossea</td>
           <td class="no-border">
             <label for="PatientMetastatic3{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Si',2: 'No'}">
-              <input type="radio" name="PatientMetastatic3" ng-disabled="vm.finalized" ng-reference="vm.data.Patient.metastatic" ng-model="vm.data.Patient.metastatic3" value="{{key}}" metastatic> {{item}}
+              <input type="radio" name="PatientMetastatic3" ng-disabled="vm.finalized" ng-model="vm.data.Patient.metastatic3" value="{{key}}" metastatic > {{item}}
             </label>
           </td>
         </tr>
@@ -76,7 +77,7 @@
           <td class="no-border"> Cerebrale</td>
           <td class="no-border">
             <label for="PatientMetastatic4{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Si',2: 'No'}">
-              <input type="radio" name="PatientMetastatic4" ng-disabled="vm.finalized" ng-reference="vm.data.Patient.metastatic" ng-model="vm.data.Patient.metastatic4" value="{{key}}" metastatic> {{item}}
+              <input type="radio" name="PatientMetastatic4" ng-disabled="vm.finalized" ng-model="vm.data.Patient.metastatic4" value="{{key}}" metastatic > {{item}}
             </label>
           </td>
         </tr>
@@ -84,7 +85,7 @@
           <td class="no-border"> Addominale</td>
           <td class="no-border">
             <label for="PatientMetastatic5{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Si',2: 'No'}">
-              <input type="radio" name="PatientMetastatic5" ng-disabled="vm.finalized" ng-reference="vm.data.Patient.metastatic" ng-model="vm.data.Patient.metastatic5" value="{{key}}" metastatic> {{item}}
+              <input type="radio" name="PatientMetastatic5" ng-disabled="vm.finalized" ng-model="vm.data.Patient.metastatic5" value="{{key}}" metastatic > {{item}}
             </label>
           </td>
         </tr>
@@ -92,7 +93,7 @@
           <td class="no-border"> Linfonodale</td>
           <td class="no-border">
             <label for="PatientMetastatic6{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Si',2: 'No'}">
-              <input type="radio" name="PatientMetastatic6" ng-disabled="vm.finalized" ng-reference="vm.data.Patient.metastatic" ng-model="vm.data.Patient.metastatic6" value="{{key}}" metastatic> {{item}}
+              <input type="radio" name="PatientMetastatic6" ng-disabled="vm.finalized" ng-model="vm.data.Patient.metastatic6" value="{{key}}" metastatic > {{item}}
             </label>
           </td>
         </tr>
@@ -100,16 +101,17 @@
           <td class="no-border"> Altra sede (specificare)</td>
           <td class="no-border">
             <label for="PatientMetastatic7{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Si',2: 'No'}">
-              <input type="radio" name="PatientMetastatic7" ng-disabled="vm.finalized" ng-reference="vm.data.Patient.metastatic" ng-model="vm.data.Patient.metastatic7" value="{{key}}" metastatic> {{item}}
+              <input type="radio" name="PatientMetastatic7" ng-change="vm.data.Patient.metastaticother = null" ng-disabled="vm.finalized" ng-model="vm.data.Patient.metastatic7" value="{{key}}" metastatic > {{item}}
             </label>
           </td>
         </tr>
-        <tr class="no-border" ng-class="{'danger': vm.data.Patient.finalized && vm.form.PatientMetastaticOther.$error.metastatic}" ng-show="vm.data.Patient.metastatic == 1">
+        <tr class="no-border" ng-class="{'danger': vm.data.Patient.finalized && vm.form.PatientMetastaticOther.$error.metastatic}" ng-show="vm.data.Patient.metastatic == 1 && vm.data.Patient.metastatic7 == 1">
           <td class="no-border"> Specificare</td>
           <td class="no-border">
             <input type="text" name="PatientMetastaticOther" class="form-control" ng-disabled="vm.finalized" ng-model="vm.data.Patient.metastaticother" >
           </td>
         </tr>
+
         <tr ng-class="{'danger': vm.data.Patient.finalized && vm.form.PatientEcog.$error.required}">
           <td><label>5. Performance Status di ECOG</label></td>
           <td>

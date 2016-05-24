@@ -2,39 +2,32 @@
 
 module.exports = function(sequelize, DataTypes) {
   var T1Reporting = sequelize.define("T1Reporting", {
-    time: {
-      type : DataTypes.ENUM('1','2'),
-      comment : "Tempo di compilazione (basale => 1 ;dopo 3 mesi => 2)"
+    date: {
+      type : DataTypes.DATEONLY,
     },
-    ecog: {
+    dom1: {
       type : DataTypes.INTEGER(1),
       validate : {min : 0 , max : 5},
       comment : "compState = 1 => questionari compilati; compSta = 2 => almeno un questionario risulta non compilato "
     },
-    progression: {
+    dom2: {
       type : DataTypes.INTEGER(1),
       validate : {min : 1 , max : 3},
       comment : "Se compState = 2 => chiedi motivazione"
     },
-    answer: {
+    dom3: {
       type : DataTypes.INTEGER(1),
       validate : {min : 1 , max : 6},
       comment : "Se compState = 2 => chiedi motivazione"
     },
-    answerSpec: {
+    dom3t: {
       type : DataTypes.STRING,
       comment : "Se answer = 6 => specificare"
-    },
-    finalized: {
-      type : DataTypes.BOOLEAN,
-      allowNull : false,
-      defaultValue : false
     },
 
   }, {
     classMethods: {
       associate: function(models) {
-          T1Reporting.belongsTo(models.Patient);
       }
     },
   });

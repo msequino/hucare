@@ -6,16 +6,17 @@ module.exports = function(sequelize, DataTypes) {
       type : DataTypes.DATEONLY,
     },
     dom1: {
-      type : DataTypes.ENUM('1','2','3','4','5'),
+      type : DataTypes.INTEGER(1),
+      validate : {min : 1 , max : 5},
     },
     dom2: {
-      type : DataTypes.ENUM('1','2','3','4','5'),
+      type : DataTypes.INTEGER(1),
+      validate : {min : 1 , max : 5},
     },
 
   }, {
     classMethods: {
       associate: function(models) {
-          Evaluation.belongsTo(models.Patient);
       }
     },
   });
