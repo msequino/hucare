@@ -27,6 +27,6 @@
     "passport-local": "latest",
     "promise": "^7.1.1",
     "sequelize": "latest"
-  },
+  }
 
 }
