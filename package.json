@@ -28,7 +28,5 @@
     "promise": "^7.1.1",
     "sequelize": "latest"
   },
-  "devDependencies": {
-    "qrcode": "^0.4.2"
-  }
+
 }
