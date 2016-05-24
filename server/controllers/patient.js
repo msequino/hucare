@@ -11,7 +11,6 @@ module.exports.getPatients = function(req,res,next){
     { include:
       [{
         model: db.Screening,
-        required: true,
         where : clinic,
         include : [{
           model:db.Clinic,
@@ -19,7 +18,7 @@ module.exports.getPatients = function(req,res,next){
       }]
     }
   ).then(function(patients){
-    res.json(patients);
+    res.json({code : 200, data : patients});
 
   }).catch(function(error){
     log.log('error',error);
@@ -33,18 +32,21 @@ module.exports.getPatient = function(req,res,next){
     [{
       model: db.Screening,
       required: true,
+      include : [{
+        model:db.Clinic,
+      }]
     }],
     where : {id:req.params.id}
-  }).then(function(result){
+  }).then(function(patient){
 
-    res.sendFile(__dirname + "/../qrcodes/"+result.name+".png");
-    var data = {};
-    data['patient'] = result;
-    data['img'] =
-    res.json(result);
+    //res.sendFile(__dirname + "/../qrcodes/"+patient.name+".png");
+    //var data = {};
+    //data['patient'] = patient;
+//    data['img'] =
+    res.json({code : 200, data : patient});
 
   }).catch(function(error){
-    res.json(error);
+    res.json({code : 200, message : error});
   });
 }
 
@@ -65,7 +67,22 @@ module.exports.isValidPatient = function(req,res,next){
 
     var isOk = (b[2] == req.body.password.substr(0,2) && b[1] == req.body.password.substr(2,4));
 
-    res.json({code : (isOk ? 200 : 400), data : isOk ? {GroupId:3,username:req.body.username,id:patient.id,ClinicId:req.body.clinic, sex : parseInt(patient.sex)} : {}});
+    res.json({code : (isOk ? 200 : 400), data : isOk ? {GroupId:3,
+      username:req.body.username,
+      id:patient.id,
+      ClinicId:req.body.clinic,
+      sex : parseInt(patient.sex),
+      T0Date : patient.T0Date,
+      T1Date : patient.T1Date,
+      T0Eortc : patient.T0EortcId,
+      T1Eortc : patient.T1EortcId,
+      T0Hads : patient.T0HadsId,
+      T1Hads : patient.T1HadsId,
+      T0Neq : patient.T0NeqId,
+      T1Neq : patient.T1NeqId,
+      T0Reporting : patient.T0ReportingId,
+      T1Reporting : patient.T1ReportingId,
+      Evalutation : patient.Evalutation} : {}});
 
   }).catch(function(error){
     console.log(error);
@@ -98,7 +115,7 @@ module.exports.insertPatient = function(req,res,next){
         req.body.Patient.name = (result.count+1).printName();
         return db.Patient.create(req.body.Patient, {transaction : t}).then(function(patient){
           log.log('info',"USER " + req.user.id + " CREATED patient " + patient.id + ' ('+ JSON.stringify(patient) + ')');
-//          if(patient.finalized)  createQRCode({patient : patient.name});
+          //if(patient.finalized)  createQRCode({patient : patient.name,birth: patient.birth});
         });
       })
     }).then(function(result){
@@ -116,7 +133,7 @@ module.exports.insertPatient = function(req,res,next){
 module.exports.insertNoEligiblePatients = function(req,res,next){
 
   db.Screening.create(req.body.Screening).then(function(result){
-    res.json(result);
+    res.json({code : 200 , data: result ,message : "Informazioni salvate"});
   }).catch(function(error){
     log.log('error',error);
     res.status(404).send({message : "No Screening inserted"});
@@ -142,8 +159,9 @@ module.exports.updatePatient = function(req,res,next){
 
 function createQRCode(args){
 
+  var b = args['birth'].split("-");
   return new Promise(function(fulfill, reject){
-    qrcode.save(__dirname +'/../qrcodes/'+args['patient'] + '.png',args['patient'] , function(err,length){
+    qrcode.save(__dirname +'/../qrcodes/'+args['patient'] + '.png',args['patient']+";"+b[2]+""+b[1] , function(err,length){
       if(err) reject(err);
       else fulfill(length);
     });

@@ -27,14 +27,14 @@
           <td><center>{{patient.Screening.Clinic.abbr + patient.name}}</center></td>
           <td>{{patient.sex == '1' ? "Uomo" : (patient.sex == '2' ? "Donna" : "")}}</td>
           <td>{{patient.birth | date : 'yyyy-MM-dd'}}</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td><span class="glyphicon" ng-class="{'glyphicon-ok': patient.T0EortcId,'glyphicon-remove': !patient.T0EortcId}" aria-hidden="true"></span></td>
+          <td><span class="glyphicon" ng-class="{'glyphicon-ok': patient.T0HadsId,'glyphicon-remove': !patient.T0HadsId}" aria-hidden="true"></span></td>
+          <td><span class="glyphicon" ng-class="{'glyphicon-ok': patient.T0NeqId,'glyphicon-remove': !patient.T0NeqId}" aria-hidden="true"></span></td>
+          <td><span class="glyphicon" ng-class="{'glyphicon-ok': patient.T0ReportingId,'glyphicon-remove': !patient.T0ReportingId}" aria-hidden="true"></span></td>
+          <td><span class="glyphicon" ng-class="{'glyphicon-ok': patient.T1EortcId,'glyphicon-remove': !patient.T1EortcId}" aria-hidden="true"></span></td>
+          <td><span class="glyphicon" ng-class="{'glyphicon-ok': patient.T1HadsId,'glyphicon-remove': !patient.T1HadsId}" aria-hidden="true"></span></td>
+          <td><span class="glyphicon" ng-class="{'glyphicon-ok': patient.T1NeqId,'glyphicon-remove': !patient.T1NeqId}" aria-hidden="true"></span></td>
+          <td><span class="glyphicon" ng-class="{'glyphicon-ok': patient.T1ReportingId,'glyphicon-remove': !patient.T1ReportingId}" aria-hidden="true"></span></td>
         </tr>
       </tbody>
     </table>

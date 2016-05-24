@@ -9,6 +9,7 @@
   "dependencies": {
     "angular": "latest",
     "angular-bootstrap-datetimepicker": "latest",
+    "angular-qrcode": "^6.2.1",
     "body-parser": "latest",
     "connect": "latest",
     "cookie-parser": "latest",
@@ -27,7 +28,5 @@
     "promise": "^7.1.1",
     "sequelize": "latest"
   },
-  "devDependencies": {
-    "qrcode": "^0.4.2"
-  }
+
 }

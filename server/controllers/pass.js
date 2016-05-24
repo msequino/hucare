@@ -17,6 +17,7 @@ module.exports = function(req,res,next){
     },
     function(req, username, password, done) {
       // check in mongo if a user with username exists or not
+      console.log(req.query);
       db.User.findOne({where : { 'username' :  username }}).then(
         function(user) {
           // Username does not exist, log error & redirect back
@@ -56,6 +57,7 @@ module.exports = function(req,res,next){
 
         // find a user whose email is the same as the forms email
         // we are checking to see if the user trying to login already exists
+        console.log(username);
         db.User.findOne({ where : { 'username' :  username }}).then(function(err, user) {
             // if there are any errors, return the error
             if (err)

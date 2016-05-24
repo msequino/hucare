@@ -27,7 +27,7 @@
         }
 
         function Create(patient,isEligible) {
-            return $http.post(application + '/patients' + (isEligible ? '' : '/screening'), patient).then(handleSuccess, handleError);
+            return $http.post(application + (isEligible ? '/patients' : '/screening'), patient).then(handleSuccess, handleError);
         }
 
         function Update(patient) {
