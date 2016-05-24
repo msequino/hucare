@@ -6,3 +6,7 @@
 {"level":"error","message":"USER 2 ERROR ({})","timestamp":"2016-05-20T15:44:23.941Z"}
 {"level":"error","message":"LOGIN Cremona NOT FOUND","timestamp":"2016-05-21T14:04:07.340Z"}
 {"level":"error","message":"LOGIN Cremona@assistenza.it INVALID password","timestamp":"2016-05-23T10:03:52.179Z"}
+{"level":"error","message":"LOGIN mansequino@gmail.com NOT FOUND","timestamp":"2016-05-24T11:44:19.395Z"}
+{"level":"error","message":"LOGIN utente@gmail.com INVALID password","timestamp":"2016-05-24T11:59:44.584Z"}
+{"level":"error","message":"LOGIN utente@gmail.com INVALID password","timestamp":"2016-05-24T11:59:48.561Z"}
+{"level":"error","message":"LOGIN admin INVALID password","timestamp":"2016-05-24T13:10:22.727Z"}

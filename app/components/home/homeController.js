@@ -113,6 +113,7 @@
                             var pdd = vm.data.Patient.birth.substr(0,10).split("-");
 
                             vm.qrcode = vm.data.Screening.Clinic.abbr + vm.data.Patient.name + ';' + pdd[2] + "" + pdd[1];
+
                             vm.finalized = vm.data.Patient.finalized;
                             vm.countPatView = 1;
                             vm.patientPage = "components/home/editPatientPage1.html";

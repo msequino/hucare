@@ -31,7 +31,9 @@ app.use(express.static(path.join(__dirname, 'app/')));
 
 //Middleware per togliere prima parte di stringa, viene usato quando si installa nell'app 'dispatcher'
 app.use(function(req,res,next){
-  req.url = req.url.substring("/hucare".length,req.url.length);
+  //console.log(req.url);
+  //req.url = req.url.substring("/hucare".length,req.url.length);
+  //console.log(req.url);
   next();
 });
 

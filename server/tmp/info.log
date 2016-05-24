@@ -79,3 +79,19 @@
 {"level":"info","message":"LOGIN admin log IN","timestamp":"2016-05-24T09:58:39.632Z"}
 {"level":"info","message":"LOGIN admin log IN","timestamp":"2016-05-24T10:04:48.817Z"}
 {"level":"info","message":"1 CREATE user 3","timestamp":"2016-05-24T10:07:16.137Z"}
+{"level":"error","message":"LOGIN mansequino@gmail.com NOT FOUND","timestamp":"2016-05-24T11:44:19.391Z"}
+{"level":"info","message":"LOGIN admin log IN","timestamp":"2016-05-24T11:44:25.484Z"}
+{"level":"error","message":"LOGIN utente@gmail.com INVALID password","timestamp":"2016-05-24T11:59:44.583Z"}
+{"level":"error","message":"LOGIN utente@gmail.com INVALID password","timestamp":"2016-05-24T11:59:48.561Z"}
+{"level":"info","message":"LOGIN admin log IN","timestamp":"2016-05-24T12:00:15.496Z"}
+{"level":"info","message":"1 UPDATED user {\"id\":3,\"name\":\"Utente\",\"surname\":\"Prova\",\"username\":\"utente@gmail.com\",\"password\":\"$2a$08$7uxHcKYEJ9G5xoyCDeRhueAVdeDmynPhfQuc4hXoVS5fTyRyr25Ia\",\"createdAt\":\"2016-05-24T10:07:16.000Z\",\"updatedAt\":\"2016-05-24T12:00:20.000Z\",\"GroupId\":2,\"ClinicId\":2}","timestamp":"2016-05-24T12:00:20.713Z"}
+{"level":"info","message":"LOGIN utente@gmail.com log IN","timestamp":"2016-05-24T12:00:25.681Z"}
+{"level":"info","message":"LOGIN utente@gmail.com log IN","timestamp":"2016-05-24T12:28:26.402Z"}
+{"level":"info","message":"LOGIN utente@gmail.com log IN","timestamp":"2016-05-24T12:35:14.758Z"}
+{"level":"info","message":"LOGIN utente@gmail.com log IN","timestamp":"2016-05-24T12:49:04.006Z"}
+{"level":"info","message":"LOGIN utente@gmail.com log IN","timestamp":"2016-05-24T12:59:14.052Z"}
+{"level":"info","message":"LOGIN utente@gmail.com log IN","timestamp":"2016-05-24T13:05:43.240Z"}
+{"level":"info","message":"USER 3 CREATED screening 2 ({\"id\":2,\"signed\":\"1\",\"ClinicId\":\"2\",\"consenso\":\"2016-05-22\",\"excl1\":\"2\",\"excl2\":\"2\",\"excl3\":\"2\",\"excl4\":\"2\",\"incl3\":\"1\",\"excl5\":\"2\",\"incl2\":\"1\",\"excl6\":\"2\",\"incl5\":\"1\",\"excl7\":\"2\",\"incl4\":\"1\",\"incl1\":\"1\",\"updatedAt\":\"2016-05-24T13:06:42.000Z\",\"createdAt\":\"2016-05-24T13:06:42.000Z\"})","timestamp":"2016-05-24T13:06:42.188Z"}
+{"level":"info","message":"USER 3 CREATED patient 1 ({\"id\":1,\"sex\":\"1\",\"birth\":\"1998-05-21\",\"metastatic\":\"1\",\"finalized\":true,\"metastatic1\":\"1\",\"date\":\"2016-05-24\",\"metastatic2\":\"2\",\"metastatic4\":\"2\",\"metastatic3\":\"1\",\"ecog\":\"3\",\"metastatic6\":\"2\",\"metastatic5\":\"1\",\"metastatic7\":\"1\",\"typetreatment\":\"2\",\"firstdateyear\":\"2016\",\"firstdatemonth\":\"5\",\"place\":\"4\",\"metastaticother\":\"android.support.v7.widget.AppCompatEditText{ad299068 VFED..CL ........ 346,0-508,91 #7f0e012b app:id/metastaticOtherPlace}\",\"scholar\":\"1\",\"marital\":\"1\",\"ScreeningId\":2,\"name\":\"0001\",\"updatedAt\":\"2016-05-24T13:06:42.000Z\",\"createdAt\":\"2016-05-24T13:06:42.000Z\"})","timestamp":"2016-05-24T13:06:42.221Z"}
+{"level":"error","message":"LOGIN admin INVALID password","timestamp":"2016-05-24T13:10:22.726Z"}
+{"level":"info","message":"LOGIN admin log IN","timestamp":"2016-05-24T13:10:25.873Z"}
