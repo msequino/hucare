@@ -1,7 +1,7 @@
 
 var db = require("../models"),
   //sequelize = require("sequelize"),
-  qrcode = require("qrcode"),
+  //qrcode = require("qrcode"),
   Promise = require("promise"),
   log = require("../config/winston");
 
@@ -156,7 +156,7 @@ module.exports.updatePatient = function(req,res,next){
     res.status(404).send(error);
   });
 }
-
+/*
 function createQRCode(args){
 
   var b = args['birth'].split("-");
@@ -167,4 +167,4 @@ function createQRCode(args){
     });
 
   });
-}
+}*/

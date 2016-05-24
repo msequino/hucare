@@ -10,13 +10,17 @@
     "angular": "latest",
     "angular-bootstrap-datetimepicker": "latest",
     "angular-qrcode": "^6.2.1",
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "latest",
     "connect": "latest",
+    "connect-flash": "^0.1.1",
+    "consolidate": "^0.14.1",
     "cookie-parser": "latest",
     "debug": "latest",
     "email-templates": "^1.1.2",
     "express": "latest",
     "express-session": "latest",
+    "git": "^0.1.5",
     "handlebars": "~4.0.4",
     "https": "latest",
     "method-override": "latest",
@@ -26,7 +30,8 @@
     "passport": "latest",
     "passport-local": "latest",
     "promise": "^7.1.1",
-    "sequelize": "latest"
+    "sequelize": "latest",
+    "serve-favicon": "^2.3.0",
+    "winston": "^2.2.0"
   }
-
 }

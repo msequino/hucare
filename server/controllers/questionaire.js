@@ -1,7 +1,7 @@
 
 var db = require("../models"),
   //sequelize = require("sequelize"),
-  qrcode = require("qrcode"),
+  //qrcode = require("qrcode"),
   Promise = require("promise"),
   log = require("../config/winston");
 
