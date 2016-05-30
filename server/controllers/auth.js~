@@ -17,5 +17,5 @@ module.exports.signup = function(req, res) {
 
 module.exports.logout = function(req, res){
   req.logOut();
-  res.json({code : 200});
+  res.sendStatus(200);
 };
