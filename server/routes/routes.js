@@ -62,6 +62,10 @@ module.exports = function(app) {
   app.route("/questionaires/t0/:patientId").post(isAuthenticated,Questionaire.insertAllT0);
   app.route("/questionaires/t1/:patientId").post(isAuthenticated,Questionaire.insertAllT1);
 
+  app.route("/questionaires/insertall/t0/:patientId").post(isAuthenticated,Questionaire.insertAllRowT0);
+  app.route("/questionaires/insertall/t1/:patientId").post(isAuthenticated,Questionaire.insertAllRowT1);
+
+
   app.route("/questionaires/eortcs/t0").post(isAuthenticated,Questionaire.insertT0Eortc);
   app.route("/questionaires/eortcs/t1").post(isAuthenticated,Questionaire.insertT1Eortc);
   app.route("/questionaires/hads/t0").post(isAuthenticated,Questionaire.insertT0Hads);
