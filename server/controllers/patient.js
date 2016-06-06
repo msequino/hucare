@@ -112,7 +112,7 @@ module.exports.insertPatient = function(req,res,next){
         log.log('info',"USER " + req.user.id + " CREATED screening " + screening.id + ' ('+ JSON.stringify(screening) + ')');
         req.body.Patient.ScreeningId = screening.id;
         patient = result.count;
-        req.body.Patient.name = (result.count+1).printName();
+        req.body.Patient.name = req.body.Patient.name + (result.count+1).printName();
         return db.Patient.create(req.body.Patient, {transaction : t}).then(function(patient){
           log.log('info',"USER " + req.user.id + " CREATED patient " + patient.id + ' ('+ JSON.stringify(patient) + ')');
           //if(patient.finalized)  createQRCode({patient : patient.name,birth: patient.birth});
@@ -155,6 +155,12 @@ module.exports.updatePatient = function(req,res,next){
     log.log('error',error);
     res.status(404).send(error);
   });
+}
+
+module.exports.printPatient = function(req,res,next){
+  console.log(req.params);
+  console.log(req.query);
+  res.json({code : 200 , data: result ,message : "Informazioni salvate"});
 }
 /*
 function createQRCode(args){

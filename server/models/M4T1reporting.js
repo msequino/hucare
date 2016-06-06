@@ -17,13 +17,32 @@ module.exports = function(sequelize, DataTypes) {
     },
     dom3: {
       type : DataTypes.INTEGER(1),
-      validate : {min : 1 , max : 6},
+      validate : {min : 1 , max : 2},
       comment : "Se compState = 2 => chiedi motivazione"
     },
-    dom3t: {
+    dom4: {
+      type : DataTypes.INTEGER(1),
+      validate : {min : 1 , max : 3},
+      comment : "Se compState = 2 => chiedi motivazione"
+    },
+    dom4t: {
       type : DataTypes.STRING,
       comment : "Se answer = 6 => specificare"
     },
+    dom5: {
+      type : DataTypes.INTEGER(1),
+      validate : {min : 1 , max : 2},
+    },
+    dom6: {
+      type : DataTypes.INTEGER(1),
+      validate : {min : 1 , max : 6},
+      comment : "Se compState = 2 => chiedi motivazione"
+    },
+    dom6t: {
+      type : DataTypes.STRING,
+      comment : "Se answer = 6 => specificare"
+    },
+
 
   }, {
     classMethods: {

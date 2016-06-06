@@ -38,7 +38,7 @@ module.exports = function(sequelize, DataTypes) {
       type : DataTypes.ENUM('1','2'),
     },
     place: {
-      type : DataTypes.ENUM('1','2','3','4','5','6','7','8','9','10','11'),
+      type : DataTypes.ENUM('1','2','3','4','5','6','7','8','9','10','11','12'),
     },
     metastatic1: {
       type : DataTypes.ENUM('1','2'),
@@ -67,8 +67,20 @@ module.exports = function(sequelize, DataTypes) {
     ecog: {
       type : DataTypes.ENUM('0','1','2','3','4','5'),
     },
-    typetreatment: {
-      type : DataTypes.ENUM('1','2','3'),
+    typetreatment1: {
+      type : DataTypes.ENUM('1','2'),
+    },
+    typetreatment2: {
+      type : DataTypes.ENUM('1','2'),
+    },
+    typetreatment3: {
+      type : DataTypes.ENUM('1','2'),
+    },
+    typetreatment4: {
+      type : DataTypes.ENUM('1','2'),
+    },
+    typetreatment5: {
+      type : DataTypes.ENUM('1','2'),
     },
     T0Date: {
       type : DataTypes.DATE,
