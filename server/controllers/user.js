@@ -75,7 +75,7 @@ module.exports.insertUser = function(req,res,next){
 }
 
 module.exports.updateUser = function(req,res,next){
-  db.User.findOne({where : {id : req.params.id}}).then(function(user){
+  db.User.findOne({where : {username : req.params.id}}).then(function(user){
     console.log(req.body);
     if(user)
       user.updateAttributes(req.body).then(function(u){
