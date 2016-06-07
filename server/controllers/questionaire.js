@@ -60,7 +60,7 @@ module.exports.insertAllRowT0 = function(req,res,next){
             /*TODO Nello studio normale, devi togliere le valutazioni */
             return db.Evaluation.create(req.body.Evaluation, {transaction : t}).then(function(ev){
               log.log('info',"USER " + req.user.id + " CREATED Evaluation " + ev.id + ' ('+ JSON.stringify(ev) + ')');
-              return db.Screening.create(req.body.Screening, {transaction : t}).then(function(ev){
+              return db.Screening.create(req.body.Screening, {transaction : t}).then(function(sc){
                 log.log('info',"USER " + req.user.id + " CREATED Screening " + sc.id + ' ('+ JSON.stringify(sc) + ')');
                 req.body.Patient.T0EortcId = e.id;
                 req.body.Patient.T0HadsId = h.id;
@@ -93,7 +93,6 @@ module.exports.insertAllRowT0 = function(req,res,next){
 
 module.exports.insertAllT1 = function(req,res,next){
   console.log(req.body);
-  console.log(req.params);
 
   db.sequelize.transaction(function(t){
     return db.T1Eortc.create(req.body.Eortc, {transaction : t}).then(function(e){
