@@ -76,16 +76,17 @@ module.exports.insertUser = function(req,res,next){
 
 module.exports.updateUser = function(req,res,next){
   db.User.findOne({where : {id : req.params.id}}).then(function(user){
+    console.log(req.body);
     if(user)
       user.updateAttributes(req.body).then(function(u){
         log.log('info',req.user.id + ' UPDATED user '+ JSON.stringify(user));
-        res.json(u);
+        res.json({code : 200, message :"Aggiornamento effettuato"});
       }).catch(function(error){
         log.log('error',error);
-        res.status(404).send(error.errors[0].message);
+        res.json({code : 401});
       });
   }).catch(function(error){
     log.log('error',error);
-    res.status(404).send(error.errors[0].message);
+    res.json({code : 401});
   });
 }

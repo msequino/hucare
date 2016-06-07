@@ -42,6 +42,7 @@ module.exports = function(app) {
 
   app.route("/user/:username").get(isAuthenticated,User.getUserByUsername);
   app.route("/users/clinic/:clinic").get(User.getUsersByClinicId);
+  app.route("/users/changepassword/:id").post(User.updateUser);
   app.route("/users").get(isAdmin,User.getUsers);
   app.route("/users/:id").get(isAdmin,User.getUser);
   app.route("/users/:id").put(isAdmin,User.updateUser);
@@ -65,7 +66,6 @@ module.exports = function(app) {
 
   app.route("/questionaires/insertall/t0/:patientId").post(isAuthenticated,Questionaire.insertAllRowT0);
   app.route("/questionaires/insertall/t1/:patientId").post(isAuthenticated,Questionaire.insertAllRowT1);
-
 
   app.route("/questionaires/eortcs/t0").post(isAuthenticated,Questionaire.insertT0Eortc);
   app.route("/questionaires/eortcs/t1").post(isAuthenticated,Questionaire.insertT1Eortc);

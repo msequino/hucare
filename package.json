@@ -29,6 +29,7 @@
     "nodemon": "latest",
     "passport": "latest",
     "passport-local": "latest",
+    "pdfkit": "^0.7.2",
     "promise": "^7.1.1",
     "sequelize": "latest",
     "serve-favicon": "^2.3.0",
