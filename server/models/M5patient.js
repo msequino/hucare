@@ -9,13 +9,16 @@ module.exports = function(sequelize, DataTypes) {
       type : DataTypes.DATEONLY,
     },
     sex: {
-      type : DataTypes.ENUM('1','2'),
+      type : DataTypes.INTEGER(1),
+      validate : {min : 1 , max : 2},
     },
     marital: {
-      type : DataTypes.ENUM('1','2'),
+      type : DataTypes.INTEGER(1),
+      validate : {min : 1 , max : 2},
     },
     scholar: {
-      type : DataTypes.ENUM('1','2','3'),
+      type : DataTypes.INTEGER(1),
+      validate : {min : 1 , max : 3},
     },
     date: {
       type : DataTypes.DATEONLY,
@@ -35,52 +38,67 @@ module.exports = function(sequelize, DataTypes) {
       }
     },
     metastatic: {
-      type : DataTypes.ENUM('1','2'),
+      type : DataTypes.INTEGER(1),
+      validate : {min : 1 , max : 2},
     },
     place: {
-      type : DataTypes.ENUM('1','2','3','4','5','6','7','8','9','10','11','12'),
+      type : DataTypes.INTEGER(2),
+      validate : {min : 1 , max : 12},
     },
     metastatic1: {
-      type : DataTypes.ENUM('1','2'),
+      type : DataTypes.INTEGER(1),
+      validate : {min : 1 , max : 2},
     },
     metastatic2: {
-      type : DataTypes.ENUM('1','2'),
+      type : DataTypes.INTEGER(1),
+      validate : {min : 1 , max : 2},
     },
     metastatic3: {
-      type : DataTypes.ENUM('1','2'),
+      type : DataTypes.INTEGER(1),
+      validate : {min : 1 , max : 2},
     },
     metastatic4: {
-      type : DataTypes.ENUM('1','2'),
+      type : DataTypes.INTEGER(1),
+      validate : {min : 1 , max : 2},
     },
     metastatic5: {
-      type : DataTypes.ENUM('1','2'),
+      type : DataTypes.INTEGER(1),
+      validate : {min : 1 , max : 2},
     },
     metastatic6: {
-      type : DataTypes.ENUM('1','2'),
+      type : DataTypes.INTEGER(1),
+      validate : {min : 1 , max : 2},
     },
     metastatic7: {
-      type : DataTypes.ENUM('1','2'),
+      type : DataTypes.INTEGER(1),
+      validate : {min : 1 , max : 2},
     },
     metastaticother: {
       type : DataTypes.STRING,
     },
     ecog: {
-      type : DataTypes.ENUM('0','1','2','3','4','5'),
+      type : DataTypes.INTEGER(1),
+      validate : {min : 0 , max : 5},
     },
     typetreatment1: {
-      type : DataTypes.ENUM('1','2'),
+      type : DataTypes.INTEGER(1),
+      validate : {min : 1 , max : 2},
     },
     typetreatment2: {
-      type : DataTypes.ENUM('1','2'),
+      type : DataTypes.INTEGER(1),
+      validate : {min : 1 , max : 2},
     },
     typetreatment3: {
-      type : DataTypes.ENUM('1','2'),
+      type : DataTypes.INTEGER(1),
+      validate : {min : 1 , max : 2},
     },
     typetreatment4: {
-      type : DataTypes.ENUM('1','2'),
+      type : DataTypes.INTEGER(1),
+      validate : {min : 1 , max : 2},
     },
     typetreatment5: {
-      type : DataTypes.ENUM('1','2'),
+      type : DataTypes.INTEGER(1),
+      validate : {min : 1 , max : 2},
     },
     T0Date: {
       type : DataTypes.DATE,
