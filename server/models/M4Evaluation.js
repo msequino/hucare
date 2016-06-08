@@ -7,11 +7,11 @@ module.exports = function(sequelize, DataTypes) {
     },
     dom1: {
       type : DataTypes.INTEGER(1),
-      validate : {min : 1 , max : 5},
+      validate : {min : 0 , max : 4},
     },
     dom2: {
       type : DataTypes.INTEGER(1),
-      validate : {min : 1 , max : 5},
+      validate : {min : 0 , max : 4},
     },
 
   }, {
