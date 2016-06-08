@@ -160,7 +160,7 @@ module.exports.updatePatient = function(req,res,next){
 module.exports.printPatient = function(req,res,next){
   console.log(req.params);
   console.log(req.query);
-  res.json({code : 200 , data: result ,message : "Informazioni salvate"});
+  res.json({code : 200  ,message : "Informazioni salvate"});
 }
 /*
 function createQRCode(args){
