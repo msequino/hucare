@@ -35,7 +35,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     dom6: {
       type : DataTypes.INTEGER(1),
-      validate : {min : 1 , max : 6},
+      validate : {min : 0 , max : 6},
       comment : "Se compState = 2 => chiedi motivazione"
     },
     dom6t: {
