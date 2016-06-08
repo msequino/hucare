@@ -48,7 +48,7 @@ module.exports = function(app) {
   app.route("/users/:id").put(isAdmin,User.updateUser);
   app.route("/users").post(isAdmin,User.insertUser);
 
-  app.route("/patients/document").post(isAuthenticated,Patient.printPatient);
+  app.route("/patients/document/:id").get(isAuthenticated,Patient.printPatient);
   app.route("/patients/:id").get(isAuthenticated,Patient.getPatient);
   app.route("/patients").get(isAuthenticated,Patient.getPatients);
   app.route("/patients/:id").put(isAuthenticated,Patient.updatePatient);
