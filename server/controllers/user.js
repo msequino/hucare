@@ -92,9 +92,8 @@ module.exports.updateUser = function(req,res,next){
 
 
 module.exports.sendApk = function(req,res,next){
-  var dirname = "/home/rajamalw/Node/file-upload";
-  var apk = fs.readFileSync('apps/hucare/server/apk/app-debug.apk');
+/*  var apk = fs.readFileSync('apps/hucare/server/apk/app-debug.apk');
   res.writeHead(200, {'Content-Type': 'application/vnd.android.package-archive' });
-  res.end(apk, 'binary');
-//  res.download('apps/hucare/server/apk/app-debug.apk', 'newApp.apk');
+  res.end(apk, 'binary');*/
+  res.download('apps/hucare/server/apk/app-debug.apk', 'newApp.apk');
 }
