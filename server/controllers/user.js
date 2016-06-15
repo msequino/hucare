@@ -76,7 +76,6 @@ module.exports.insertUser = function(req,res,next){
 
 module.exports.updateUser = function(req,res,next){
   db.User.findOne({where : {username : req.params.id}}).then(function(user){
-    console.log(req.body);
     if(user)
       user.updateAttributes(req.body).then(function(u){
         log.log('info',req.user.id + ' UPDATED user '+ JSON.stringify(user));
@@ -94,11 +93,9 @@ module.exports.updateUser = function(req,res,next){
 
 module.exports.sendApk = function(req,res,next){
   res.download('apps/hucare/server/apk/app-debug.apk', 'newApp.apk', function(err){
-    console.log(err);
-  if (err) {
-    log.log('error',err);
-  } else {
-    log.log('info',"download done");
-  }
- });
+    if (err)
+      log.log('error',err);
+    else
+      log.log('info',"download done");
+  });
 }
