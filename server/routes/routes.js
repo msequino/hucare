@@ -41,7 +41,7 @@ module.exports = function(app) {
   app.post('/auth/logout', isAuthenticated, Auth.logout);
 
   app.route("/user/:username").get(isAuthenticated,User.getUserByUsername);
-  app.route("/users/upgrade").get(isAuthenticated,User.sendApk);
+  app.route("/users/upgrade").post(isAuthenticated,User.sendApk);
   app.route("/users/clinic/:clinic").get(User.getUsersByClinicId);
   app.route("/users/changepassword/:id").post(User.updateUser);
   app.route("/users").get(isAdmin,User.getUsers);
