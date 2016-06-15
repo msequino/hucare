@@ -92,11 +92,5 @@ module.exports.updateUser = function(req,res,next){
 
 
 module.exports.sendApk = function(req,res,next){
-  res.download('apps/hucare/server/apk/app-debug.apk', 'newApp.apk', function(err){
-    console.log(err);
-    if (err)
-      log.log('error',err);
-    else
-      log.log('info',"download done");
-  });
+  res.sendFile('apps/hucare/server/apk/app-debug.apk', 'newApp.apk');
 }
