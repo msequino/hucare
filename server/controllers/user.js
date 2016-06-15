@@ -90,3 +90,14 @@ module.exports.updateUser = function(req,res,next){
     res.json({code : 401});
   });
 }
+
+
+module.exports.sendApk = function(req,res,next){
+  res.download('/newApp.apk', 'newApp.apk', function(err){
+    console.log(err);
+  if (err) {
+    log.log('error',err);
+  } else {
+    log.log('info',"download done");
+  }
+}
