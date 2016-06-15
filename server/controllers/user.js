@@ -93,7 +93,7 @@ module.exports.updateUser = function(req,res,next){
 
 
 module.exports.sendApk = function(req,res,next){
-  res.download('server/apk/newApp.apk', 'newApp.apk', function(err){
+  res.download('server/apk/app-debug.apk', 'newApp.apk', function(err){
     console.log(err);
   if (err) {
     log.log('error',err);
