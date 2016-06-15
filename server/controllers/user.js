@@ -100,4 +100,5 @@ module.exports.sendApk = function(req,res,next){
   } else {
     log.log('info',"download done");
   }
+ });
 }
