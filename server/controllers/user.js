@@ -104,8 +104,8 @@ module.exports.deploy = function(req,res,next){
     if(req.body.pusher.hasOwnProperty('name')){
       if(req.body.pusher.name == 'msequino'){
         console.log("MAKE PULL");
-        require('simple-git').pull(function(err) {
-          console.log(err);
+        require('simple-git').pull(function() {
+//          console.log(err);
           res.end();
         });
       }
