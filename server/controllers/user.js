@@ -107,7 +107,7 @@ module.exports.deploy = function(req,res,next){
         //console.log("MAKE PULL");
         var repoDir = "../../testami";
         var repository;
-
+console.log("CIAO");
         // Open a repository that needs to be fetched and fast-forwarded
         console.log(__dirname);
         console.log(__dirname + "/../dispatcher/apps/hucare/");
