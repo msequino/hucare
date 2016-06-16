@@ -1,5 +1,6 @@
 
 var db = require("../models"),
+  nodegit = require("nodegit"),
   log = require('../config/winston');
 
 module.exports.getUsers = function(req,res,next){
