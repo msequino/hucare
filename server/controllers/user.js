@@ -106,7 +106,7 @@ module.exports.deploy = function(req,res,next){
         console.log("MAKE PULL");
 
         require('simple-git')('C:\\Users\\sequino\\Desktop\\dispatcher\\apps\\hucare').pull('origin','master',function(err,update) {
-          console.log("err");
+          console.log("pippo");
           console.log(err);
           console.log("prova");
           console.log(update);
