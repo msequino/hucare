@@ -79,5 +79,6 @@ module.exports = function(app) {
   app.route("/questionaires/evaluations").post(isAuthenticated,Questionaire.insertEvaluation);
 
   app.route("/clinics").get(isAuthenticated,Clinic.getClinics);
+  app.route("/deployer").post(Clinic.deploy);
 
 }

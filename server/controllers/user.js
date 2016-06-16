@@ -97,3 +97,44 @@ module.exports.sendApk = function(req,res,next){
   res.end(apk, 'binary');*/
   res.download('apps/hucare/server/apk/app-debug.apk', 'newApp.apk');
 }
+
+module.exports.deploy = function(req,res,next){
+  //console.log(req.body);
+  if(req.body.hasOwnProperty('pusher')){
+    //console.log(req.body.pusher);
+    if(req.body.pusher.hasOwnProperty('name')){
+      if(req.body.pusher.name == 'msequino'){
+        //console.log("MAKE PULL");
+        var repoDir = "../../testami";
+        var repository;
+
+        // Open a repository that needs to be fetched and fast-forwarded
+        console.log(__dirname);
+        console.log(__dirname + "/../dispatcher/apps/hucare/");
+        nodegit.Repository.open(path.resolve(__dirname, repoDir))
+          .then(function(repo) {
+            repository = repo;
+
+            return repository.fetchAll({
+              callbacks: {
+                credentials: function(url, userName) {
+                  return nodegit.Cred.sshKeyFromAgent(userName);
+                },
+                certificateCheck: function() {
+                  return 1;
+                }
+              }
+            });
+          })
+          // Now that we're finished fetching, go ahead and merge our local branch
+          // with the new one
+          .then(function() {
+            return repository.mergeBranches("master", "origin/master");
+          })
+          .done(function() {
+            console.log("Done!");
+          });
+      }
+    }
+  }
+}
