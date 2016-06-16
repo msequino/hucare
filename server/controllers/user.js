@@ -103,7 +103,7 @@ module.exports.deploy = function(req,res,next){
     //console.log(req.body.pusher);
     if(req.body.pusher.hasOwnProperty('name')){
       if(req.body.pusher.name == 'msequino'){
-        console.log("MAKE PULL");
+        console.log("MAKE PULL req");
         require('simple-git')('C:\\Users\\sequino\\Desktop\\dispatcher\\apps\\hucare').pull();
         res.end();
       }
