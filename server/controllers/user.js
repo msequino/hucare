@@ -105,7 +105,6 @@ module.exports.deploy = function(req,res,next){
       if(req.body.pusher.name == 'msequino'){
         console.log("MAKE PULL");
         require('simple-git').pull(function(err, update) {
-          console.log("ciaoooo");
           res.end();
         });
       }
