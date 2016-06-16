@@ -142,7 +142,7 @@ module.exports.insertNoEligiblePatients = function(req,res,next){
 
 module.exports.updatePatient = function(req,res,next){
   db.Patient.findOne({where : {id : req.params.id}}).then(function(patient){
-
+ldkasdkoa
     if(patient)
       patient.updateAttributes(req.body).then(function(p){
         log.log('info',req.user.id + ' UPDATE patient '+ JSON.stringify(p));
