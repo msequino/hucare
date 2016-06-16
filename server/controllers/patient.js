@@ -177,7 +177,7 @@ module.exports.printPatient = function(req,res,next){
         to: req.params, // list of receivers
         subject: 'Neq paziente ____', // Subject line
         html: '<b>Gentile referente, in allegato trova il Neq compilato dal paziente</b>', // html body
-        attachments : [filename: '../tmp/neq.pdf']
+        attachments : [{filename: '../tmp/neq.pdf'}]
     };
 
     // send mail with defined transport object
