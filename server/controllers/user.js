@@ -90,7 +90,6 @@ module.exports.updateUser = function(req,res,next){
   });
 }
 
-
 module.exports.sendApk = function(req,res,next){
 /*  var apk = fs.readFileSync('apps/hucare/server/apk/app-debug.apk');
   res.writeHead(200, {'Content-Type': 'application/vnd.android.package-archive' });
