@@ -160,7 +160,30 @@ module.exports.updatePatient = function(req,res,next){
 module.exports.printPatient = function(req,res,next){
   console.log(req.params);
   console.log(req.query);
-  res.json({code : 200  ,message : "Informazioni salvate"});
+  var pdf = require('html-pdf');
+  var html = fs.readFileSync('../views/neq.html', 'utf8');
+  var options = { format: 'Letter' };
+  var nodemailer = require('nodemailer');
+
+  pdf.create(html, options).toFile('../tmp/neq.pdf', function(err, res) {
+    if (err) return console.log(err);
+
+    // create reusable transporter object using the default SMTP transport
+    var transporter = nodemailer.createTransport('smtps://5859205@aruba.it:8308n3dxs4@smtp.gmail.com');
+
+    // setup e-mail data with unicode symbols
+    var mailOptions = {
+        from: '"Progetto Hucare" <progetto.hucare@gmail.com>', // sender address
+        to: req.params, // list of receivers
+        subject: 'Neq paziente ____', // Subject line
+        html: '<b>Gentile referente, in allegato trova il Neq compilato dal paziente</b>' // html body
+        attachments : [filename: '../tmp/neq.pdf']
+    };
+
+    // send mail with defined transport object
+    transporter.sendMail(mailOptions, function(error, info){
+      res.json({code : 200  ,message : "Informazioni salvate"});  });
+  });
 }
 /*
 function createQRCode(args){
