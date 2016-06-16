@@ -107,6 +107,7 @@ module.exports.deploy = function(req,res,next){
         console.log(__dirname + '/../../');
         require('simple-git')(__dirname + '/../../').pull(function(err,update) {
           console.log(err);
+          console.log(update);
           res.end();
         });
       }
