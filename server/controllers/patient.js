@@ -162,7 +162,7 @@ module.exports.updatePatient = function(req,res,next){
 
 module.exports.printPatient = function(req,res,next){
   console.log(req.params);
-  var html = fs.readFileSync('../views/neq.html', 'utf8');
+  var html = fs.readFileSync(__dirname + '/../views/neq.html', 'utf8');
   var options = { format: 'Letter' };
 
   pdf.create(html, options).toFile(__dirname + '/../tmp/neq.pdf', function(err, res) {
