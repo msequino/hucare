@@ -9,7 +9,6 @@
   "dependencies": {
     "angular": "latest",
     "angular-bootstrap-datetimepicker": "latest",
-    "angular-qrcode": "^6.2.1",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "latest",
     "connect": "latest",
