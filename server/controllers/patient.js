@@ -165,7 +165,7 @@ module.exports.printPatient = function(req,res,next){
   var html = fs.readFileSync(__dirname + '/../views/neq.html', 'utf8');
   var options = { format: 'Letter' };
 
-  pdf.create(html, options).toFile(__dirname + '/../tmp/neq.pdf', function(err, res) {
+  pdf.create(html, options).toFile(__dirname + '/../tmp/neq.pdf', function(err, result) {
     if (err) return console.log(err);
 
     // create reusable transporter object using the default SMTP transport
@@ -182,7 +182,9 @@ module.exports.printPatient = function(req,res,next){
 
     // send mail with defined transport object
     transporter.sendMail(mailOptions, function(error, info){
-      res.json({code : 200  ,message : "Informazioni salvate"});  });
+      if(error)  res.json({code : 400  ,message : "Mail non inviata"});
+      res.json({code : 200  ,message : "Informazioni salvate"});
+    });
   });
 }
 /*
