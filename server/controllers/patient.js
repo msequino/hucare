@@ -170,7 +170,7 @@ module.exports.printPatient = function(req,res,next){
 
     // create reusable transporter object using the default SMTP transport
     var transporter = nodemailer.createTransport({
-      host : 'smtp.aruba.com',
+      host : 'smtps.aruba.com',
       port : 465,
       secure : true,
       auth : {
