@@ -173,44 +173,129 @@ module.exports.printPatient = function(req,res,next){
       }],
   }).then(function(patient){
 
-    if(!patient) return res.json({code : 400  ,message : "Paziente non ancora inserito all'interno del database centrale. Si prega di inserirlo tramite il relativo reporting form"});
-    var html = createHtml(patient.patient,patient.t0neq);
-//    var html = createHtml(patient.patient,patient.t0neq);
+    if(!patient) return res.json({code : 400  ,message : "Il paziente non è stato ancora inserito nel database centrale. Si prega di inserirlo tramite il relativo reporting form"});
+    //if(!patient.T0Neq) return res.json({code : 400  ,message : "Il paziente non ha compilato il questionario"});
+    var html = createNeq(patient.name,patient.T0Neq,0);
     var options = { format: 'Letter' };
 
-    pdf.create(html, options).toFile(__dirname + '/../tmp/neq.pdf', function(err, result) {
+    pdf.create(html, options).toFile(__dirname + '/../tmp/'+req.params.id+'_neq0.pdf', function(err, result) {
       if (err) return console.log(err);
 
-      var obj = JSON.parse(fs.readFileSync(__dirname +'\\..\\config\\aruba_config.json', 'utf8'));
-      // create reusable transporter object using the default SMTP transport
-      var transporter = nodemailer.createTransport(obj);
-      // setup e-mail data with unicode symbols
-      var mailOptions = {
-          from: '"Progetto Hucare" <progetto.hucare@gmail.com>', // sender address
-          to: req.query.email, // list of receivers
-          subject: 'Neq paziente ' + req.params.id, // Subject line
-          html: '<b>Gentile referente, in allegato trova il Neq compilato dal paziente ' + req.params.id +'</b>', // html body
-          attachments : [{filename: 'neq.pdf', path : __dirname +'\\..\\tmp\\neq.pdf'}]
-      };
+      if(patient.T1Neq){
+        var html = createNeq(patient.name,patient.T1Neq,1);
 
-      // send mail with defined transport object
-      transporter.sendMail(mailOptions, function(error, info){
-        fs.unlink(__dirname +'\\..\\tmp\\neq.pdf');
-        if(error)  res.json({code : 400  ,message : "Mail non inviata"});
-        else
-          res.json({code : 200  ,message : "Informazioni salvate"});
-      });
+      }else{
+        var obj = JSON.parse(fs.readFileSync(__dirname +'\\..\\config\\aruba_config.json', 'utf8'));
+        // create reusable transporter object using the default SMTP transport
+        var transporter = nodemailer.createTransport(obj);
+        // setup e-mail data with unicode symbols
+        var mailOptions = {
+            from: '"Progetto Hucare" <progetto.hucare@gmail.com>', // sender address
+            to: req.query.email, // list of receivers
+            subject: 'Neq paziente ' + req.params.id, // Subject line
+            html: '<b>Gentile referente, in allegato trova il Neq compilato dal paziente ' + req.params.id +'</b>', // html body
+            attachments : [{filename: 'neqT0.pdf', path : __dirname +'\\..\\tmp\\'+req.params.id+'neq0.pdf'}]
+        };
+
+        // send mail with defined transport object
+        transporter.sendMail(mailOptions, function(error, info){
+          fs.unlink(__dirname +'\\..\\tmp\\neq.pdf');
+          console.log(error);
+          if(error)  res.json({code : 400  ,message : "Mail non inviata"});
+          else
+            res.json({code : 200  ,message : "Informazioni salvate"});
+        });
+
+      }
     });
-
   });
 }
-
-function createHtml(patient, neq, time){
+function createEortc(name, neq, time){
   return "<html>"+
-  "<body><header><h1>VALUTAZIONE " + (time ? 0 "BASALE" : "FOLLOW-UP")+ " paziente " + patient.name +"</h1>"+
+  "<body><header style='border-style:solid;'><h1><center>VALUTAZIONE " + (time == 0 ? "BASALE" : "FOLLOW-UP")+ " paziente " + name +"</center></h1>"+
   "</header>"+
-  "<center><2>Questionario per la Valutazione dei Bisogni del Paziente</h2></center>"+
-  
+  "<center><h2>Questionario per la Valutazione della Qualità della Vita</h2></center>"+
+  "<p>Versione elettronica delle domande inserite dal paziente</p>"+
+  "<br/>"+
+  "<h2>In generale</h2>"+
+  "<table style='border-spacing:10px;border-collapse:separate' border='2'>"+
+    "<thead>"+
+      "<tr><th></th><th>Domanda</th><th>Valore segnato</th></tr>"+
+    "</thead>"+
+    "<tbody>"+
+      "<tr><td>1</td><td>Ho bisogno di avere maggiori informazioni sulla mia diagnosi</td><td>" + (neq.dom1 == 1 ? "X" : "")+ "</td><td>" + (neq.dom1 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>2</td><td>Ho bisogno di avere maggiori informazioni sulle mie condizioni future</td><td>" + (neq.dom2 == 1 ? "X" : "")+ "</td><td>" + (neq.dom2 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>3</td><td>Ho bisogno di avere maggiori informazioni sugli esami che mi stanno facendo</td><td>" + (neq.dom3 == 1 ? "X" : "")+ "</td><td>" + (neq.dom3 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>4</td><td>Ho bisogno di avere maggiori spiegazioni sui trattamenti</td><td>" + (neq.dom4 == 1 ? "X" : "")+ "</td><td>" + (neq.dom4 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>5</td><td>Ho bisogno di essere più coinvolto/a nelle scelte terapeutiche</td><td>" + (neq.dom5 == 1 ? "X" : "")+ "</td><td>" + (neq.dom5 == 2 ? "X" : "") + "</td></tr>"+
+      "</tbody>"+
+    "</table>"+
+    "<br>"+
+    "<h2>Durante gli ultimi sette giorni</h2>"+
+    "<table style='border-spacing:10px;border-collapse:separate' border='2'>"+
+      "<thead>"+
+        "<tr><th></th><th>Domanda</th><th>Valore segnato</th></tr>"+
+      "</thead>"+
+      "<tr><td>6</td><td>Ha avuto limitazioni nel fare il suo lavoro o i lavori di casa</td><td>" + (neq.dom6 == 1 ? "X" : "")+ "</td><td>" + (neq.dom6 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>7</td><td>Ha avuto limitazioni nel praticare i Suoi passatempi-hobby o altre attività di divertimento o svago</td><td>" + (neq.dom7 == 1 ? "X" : "")+ "</td><td>" + (neq.dom7 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>8</td><td>Ho bisogno di avere un dialogo maggiore con i medici</td><td>" + (neq.dom8 == 1 ? "X" : "")+ "</td><td>" + (neq.dom8 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>9</td><td>Ho bisogno che alcuni dei miei disturbi ( dolore, nausea, insonnia, ecc.) siano maggiormente controllati</td><td>" + (neq.dom9 == 1 ? "X" : "")+ "</td><td>" + (neq.dom9 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>10</td><td>Ho bisogno di maggiore aiuto per mangiare, vestirmi ed andare in bagno</td><td>" + (neq.dom10 == 1 ? "X" : "")+ "</td><td>" + (neq.dom10 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>11</td><td>Ho bisogno di maggiore rispetto della mia intimità</td><td>" + (neq.dom11 == 1 ? "X" : "")+ "</td><td>" + (neq.dom11 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>12</td><td>Ho bisogno di maggiore attenzione da parte del personale infermieristico</td><td>" + (neq.dom12 == 1 ? "X" : "")+ "</td><td>" + (neq.dom12 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>13</td><td>Ho bisogno di essere più rassicurato dai medici</td><td>" + (neq.dom13 == 1 ? "X" : "")+ "</td><td>" + (neq.dom13 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>15</td><td>Ho bisogno che i servizi offerti dall'ospedale (bagni, pasti, pulizia) siano migliori</td><td>" + (neq.dom14 == 1 ? "X" : "")+ "</td><td>" + (neq.dom14 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>15</td><td>Ho bisogno di avere maggiori informazioni economico-assicurative legate alla mia malattia (ticket, invalidità, ecc.)</td><td>" + (neq.dom15 == 1 ? "X" : "")+ "</td><td>" + (neq.dom15 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>16</td><td>Ho bisogno di un aiuto economico</td><td>" + (neq.dom16 == 1 ? "X" : "")+ "</td><td>" + (neq.dom16 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>17</td><td>Ho bisogno di parlare con uno psicologo</td><td>" + (neq.dom17 == 1 ? "X" : "")+ "</td><td>" + (neq.dom17 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>18</td><td>Ho bisogno di parlare con un assistente spirituale</td><td>" + (neq.dom18 == 1 ? "X" : "")+ "</td><td>" + (neq.dom18 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>19</td><td>Ho bisogno di parlare con persone che hanno avuto la mia stessa esperienza</td><td>" + (neq.dom19 == 1 ? "X" : "")+ "</td><td>" + (neq.dom19 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>20</td><td>Ho bisogno di essere maggiormente rassicurato dai miei famigliari</td><td>" + (neq.dom20 == 1 ? "X" : "")+ "</td><td>" + (neq.dom20 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>21</td><td>Ho bisogno di sentirmi maggiormente utile in famiglia</td><td>" + (neq.dom21 == 1 ? "X" : "")+ "</td><td>" + (neq.dom21 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>22</td><td>Ho bisogno di sentirmi meno abbandonato a me stesso</td><td>" + (neq.dom22 == 1 ? "X" : "")+ "</td><td>" + (neq.dom22 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>23</td><td>Ho bisogno di essere meno commiserato dagli altri</td><td>" + (neq.dom23 == 1 ? "X" : "")+ "</td><td>" + (neq.dom23 == 2 ? "X" : "") + "</td></tr>"+
+    "</tbody>"+
+  "</table>"+
+  "</body>"+
+  "</html>";
+}
+
+function createNeq(name, neq, time){
+  return "<html>"+
+  "<body><header style='border-style:solid;'><h1><center>VALUTAZIONE " + (time == 0 ? "BASALE" : "FOLLOW-UP")+ " paziente " + name +"</center></h1>"+
+  "</header>"+
+  "<center><h2>Questionario per la Valutazione dei Bisogni del Paziente</h2></center>"+
+  "<p>Versione elettronica delle domande inserite dal paziente</p>"+
+  "<table style='border-spacing:10px;border-collapse:separate' border='2'>"+
+    "<thead>"+
+      "<tr><th></th><th>Domanda</th><th>SI</th><th>NO</th></tr>"+
+    "</thead>"+
+    "<tbody>"+
+      "<tr><td>A</td><td>Ho bisogno di avere maggiori informazioni sulla mia diagnosi</td><td>" + (neq.dom1 == 1 ? "X" : "")+ "</td><td>" + (neq.dom1 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>B</td><td>Ho bisogno di avere maggiori informazioni sulle mie condizioni future</td><td>" + (neq.dom2 == 1 ? "X" : "")+ "</td><td>" + (neq.dom2 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>C</td><td>Ho bisogno di avere maggiori informazioni sugli esami che mi stanno facendo</td><td>" + (neq.dom3 == 1 ? "X" : "")+ "</td><td>" + (neq.dom3 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>D</td><td>Ho bisogno di avere maggiori spiegazioni sui trattamenti</td><td>" + (neq.dom4 == 1 ? "X" : "")+ "</td><td>" + (neq.dom4 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>E</td><td>Ho bisogno di essere più coinvolto/a nelle scelte terapeutiche</td><td>" + (neq.dom5 == 1 ? "X" : "")+ "</td><td>" + (neq.dom5 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>F</td><td>Ho bisogno che i medici e gli infermieri mi diano informazioni comprensibili</td><td>" + (neq.dom6 == 1 ? "X" : "")+ "</td><td>" + (neq.dom6 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>G</td><td>Ho bisogno che i medici siano più sinceri con me</td><td>" + (neq.dom7 == 1 ? "X" : "")+ "</td><td>" + (neq.dom7 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>H</td><td>Ho bisogno di avere un dialogo maggiore con i medici</td><td>" + (neq.dom8 == 1 ? "X" : "")+ "</td><td>" + (neq.dom8 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>I</td><td>Ho bisogno che alcuni dei miei disturbi ( dolore, nausea, insonnia, ecc.) siano maggiormente controllati</td><td>" + (neq.dom9 == 1 ? "X" : "")+ "</td><td>" + (neq.dom9 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>L</td><td>Ho bisogno di maggiore aiuto per mangiare, vestirmi ed andare in bagno</td><td>" + (neq.dom10 == 1 ? "X" : "")+ "</td><td>" + (neq.dom10 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>M</td><td>Ho bisogno di maggiore rispetto della mia intimità</td><td>" + (neq.dom11 == 1 ? "X" : "")+ "</td><td>" + (neq.dom11 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>N</td><td>Ho bisogno di maggiore attenzione da parte del personale infermieristico</td><td>" + (neq.dom12 == 1 ? "X" : "")+ "</td><td>" + (neq.dom12 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>O</td><td>Ho bisogno di essere più rassicurato dai medici</td><td>" + (neq.dom13 == 1 ? "X" : "")+ "</td><td>" + (neq.dom13 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>P</td><td>Ho bisogno che i servizi offerti dall'ospedale (bagni, pasti, pulizia) siano migliori</td><td>" + (neq.dom14 == 1 ? "X" : "")+ "</td><td>" + (neq.dom14 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>Q</td><td>Ho bisogno di avere maggiori informazioni economico-assicurative legate alla mia malattia (ticket, invalidità, ecc.)</td><td>" + (neq.dom15 == 1 ? "X" : "")+ "</td><td>" + (neq.dom15 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>R</td><td>Ho bisogno di un aiuto economico</td><td>" + (neq.dom16 == 1 ? "X" : "")+ "</td><td>" + (neq.dom16 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>S</td><td>Ho bisogno di parlare con uno psicologo</td><td>" + (neq.dom17 == 1 ? "X" : "")+ "</td><td>" + (neq.dom17 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>T</td><td>Ho bisogno di parlare con un assistente spirituale</td><td>" + (neq.dom18 == 1 ? "X" : "")+ "</td><td>" + (neq.dom18 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>U</td><td>Ho bisogno di parlare con persone che hanno avuto la mia stessa esperienza</td><td>" + (neq.dom19 == 1 ? "X" : "")+ "</td><td>" + (neq.dom19 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>V</td><td>Ho bisogno di essere maggiormente rassicurato dai miei famigliari</td><td>" + (neq.dom20 == 1 ? "X" : "")+ "</td><td>" + (neq.dom20 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>X</td><td>Ho bisogno di sentirmi maggiormente utile in famiglia</td><td>" + (neq.dom21 == 1 ? "X" : "")+ "</td><td>" + (neq.dom21 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>Y</td><td>Ho bisogno di sentirmi meno abbandonato a me stesso</td><td>" + (neq.dom22 == 1 ? "X" : "")+ "</td><td>" + (neq.dom22 == 2 ? "X" : "") + "</td></tr>"+
+      "<tr><td>Z</td><td>Ho bisogno di essere meno commiserato dagli altri</td><td>" + (neq.dom23 == 1 ? "X" : "")+ "</td><td>" + (neq.dom23 == 2 ? "X" : "") + "</td></tr>"+
+    "</tbody>"+
+  "</table>"+
   "</body>"+
   "</html>";
 }
