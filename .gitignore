@@ -3,5 +3,6 @@ nodemon.js
 
 npm-debug.log
 server/tmp/*
+server/config/aruba_config.json
 server/qrcodes/
 node_modules/*

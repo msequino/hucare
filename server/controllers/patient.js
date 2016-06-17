@@ -162,29 +162,32 @@ module.exports.updatePatient = function(req,res,next){
 
 module.exports.printPatient = function(req,res,next){
   console.log(req.params);
-  var html = fs.readFileSync(__dirname + '/../views/neq.html', 'utf8');
+  var html = createHtml();
   var options = { format: 'Letter' };
+  db.Patient.findOne( { where : {name:req.params.id} ,
+    include:
+      [{
+        model: db.T0Neq,
+        required: true,
+        where : {clinicId:req.body.clinic}
+      }],
 
+  }).then(function(patient){
+
+  });
   pdf.create(html, options).toFile(__dirname + '/../tmp/neq.pdf', function(err, result) {
     if (err) return console.log(err);
 
+    var obj = JSON.parse(fs.readFileSync(__dirname + '/../aruba_config.json', 'utf8'));
     // create reusable transporter object using the default SMTP transport
-    var transporter = nodemailer.createTransport({
-      host : 'smtp.aruba.it',
-      port : 465,
-      secure : true,
-      auth : {
-        user : '5859205@aruba.it',
-        pass : '8308n3dxs4'
-        }
-      });
+    var transporter = nodemailer.createTransport(obj);
 
     // setup e-mail data with unicode symbols
     var mailOptions = {
         from: '"Progetto Hucare" <progetto.hucare@gmail.com>', // sender address
         to: req.query.email, // list of receivers
-        subject: 'Neq paziente ____', // Subject line
-        html: '<b>Gentile referente, in allegato trova il Neq compilato dal paziente</b>', // html body
+        subject: 'Neq paziente ' + req.params.id, // Subject line
+        html: '<b>Gentile referente, in allegato trova il Neq compilato dal paziente ' + req.params.id +'</b>', // html body
         attachments : [{filename: __dirname + '/../tmp/neq.pdf'}]
     };
 
