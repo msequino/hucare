@@ -162,43 +162,52 @@ module.exports.updatePatient = function(req,res,next){
 
 module.exports.printPatient = function(req,res,next){
   console.log(req.params);
-  var html = createHtml();
   var options = { format: 'Letter' };
   db.Patient.findOne( { where : {name:req.params.id} ,
     include:
       [{
         model: db.T0Neq,
         required: true,
-        where : {clinicId:req.body.clinic}
+      }{
+        model: db.T1Neq,
+        required: true,
       }],
 
   }).then(function(patient){
 
-  });
-  pdf.create(html, options).toFile(__dirname + '/../tmp/neq.pdf', function(err, result) {
-    if (err) return console.log(err);
+    var html = createHtml(patient);
 
-    var obj = JSON.parse(fs.readFileSync(__dirname + '/../aruba_config.json', 'utf8'));
-    // create reusable transporter object using the default SMTP transport
-    var transporter = nodemailer.createTransport(obj);
+    pdf.create(html, options).toFile(__dirname + '/../tmp/neq.pdf', function(err, result) {
+      if (err) return console.log(err);
 
-    // setup e-mail data with unicode symbols
-    var mailOptions = {
-        from: '"Progetto Hucare" <progetto.hucare@gmail.com>', // sender address
-        to: req.query.email, // list of receivers
-        subject: 'Neq paziente ' + req.params.id, // Subject line
-        html: '<b>Gentile referente, in allegato trova il Neq compilato dal paziente ' + req.params.id +'</b>', // html body
-        attachments : [{filename: __dirname + '/../tmp/neq.pdf'}]
-    };
+      var obj = JSON.parse(fs.readFileSync(__dirname + '/../aruba_config.json', 'utf8'));
+      // create reusable transporter object using the default SMTP transport
+      var transporter = nodemailer.createTransport(obj);
 
-    // send mail with defined transport object
-    transporter.sendMail(mailOptions, function(error, info){
-      console.log(error);
-      if(error)  res.json({code : 400  ,message : "Mail non inviata"});
-      else
-        res.json({code : 200  ,message : "Informazioni salvate"});
+      // setup e-mail data with unicode symbols
+      var mailOptions = {
+          from: '"Progetto Hucare" <progetto.hucare@gmail.com>', // sender address
+          to: req.query.email, // list of receivers
+          subject: 'Neq paziente ' + req.params.id, // Subject line
+          html: '<b>Gentile referente, in allegato trova il Neq compilato dal paziente ' + req.params.id +'</b>', // html body
+          attachments : [{filename: __dirname + '/../tmp/neq.pdf'}]
+      };
+
+      // send mail with defined transport object
+      transporter.sendMail(mailOptions, function(error, info){
+        console.log(error);
+        if(error)  res.json({code : 400  ,message : "Mail non inviata"});
+        else
+          res.json({code : 200  ,message : "Informazioni salvate"});
+      });
     });
+
   });
+}
+
+function createHtml(p){
+console.log(p);
+  return "<h2>ciaoooo<h2>";
 }
 /*
 function createQRCode(args){
