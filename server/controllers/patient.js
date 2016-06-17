@@ -182,6 +182,7 @@ module.exports.printPatient = function(req,res,next){
 
       var obj = JSON.parse(fs.readFileSync(__dirname + '/../config/aruba_config.json', 'utf8'));
       // create reusable transporter object using the default SMTP transport
+console.log(obj);
       var transporter = nodemailer.createTransport(obj);
 
       // setup e-mail data with unicode symbols
