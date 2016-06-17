@@ -165,7 +165,7 @@ module.exports.printPatient = function(req,res,next){
   var html = fs.readFileSync('../views/neq.html', 'utf8');
   var options = { format: 'Letter' };
 
-  pdf.create(html, options).toFile('../tmp/neq.pdf', function(err, res) {
+  pdf.create(html, options).toFile(__dirname + '/../tmp/neq.pdf', function(err, res) {
     if (err) return console.log(err);
 
     // create reusable transporter object using the default SMTP transport
@@ -177,7 +177,7 @@ module.exports.printPatient = function(req,res,next){
         to: req.query.email, // list of receivers
         subject: 'Neq paziente ____', // Subject line
         html: '<b>Gentile referente, in allegato trova il Neq compilato dal paziente</b>', // html body
-        attachments : [{filename: '../tmp/neq.pdf'}]
+        attachments : [{filename: __dirname + '/../tmp/neq.pdf'}]
     };
 
     // send mail with defined transport object
