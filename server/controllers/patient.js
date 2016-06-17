@@ -168,7 +168,7 @@ module.exports.printPatient = function(req,res,next){
       [{
         model: db.T0Neq,
         required: true,
-      }{
+      },{
         model: db.T1Neq,
         required: true,
       }],
