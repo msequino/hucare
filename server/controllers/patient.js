@@ -169,7 +169,13 @@ module.exports.printPatient = function(req,res,next){
     if (err) return console.log(err);
 
     // create reusable transporter object using the default SMTP transport
-    var transporter = nodemailer.createTransport('smtps://5859205@aruba.it:8308n3dxs4@smtp.aruba.com');
+    var transporter = nodemailer.createTransport(
+      host : 'smtp.aruba.com',
+      auth : {
+        user : '5859205@aruba.it',
+        pass : '8308n3dxs4',
+        }
+      });
 
     // setup e-mail data with unicode symbols
     var mailOptions = {
