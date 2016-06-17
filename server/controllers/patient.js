@@ -2,6 +2,9 @@
 var db = require("../models"),
   //sequelize = require("sequelize"),
   //qrcode = require("qrcode"),
+  pdf = require('html-pdf'),
+  nodemailer = require('nodemailer'),
+  fs = require('fs'),
   Promise = require("promise"),
   log = require("../config/winston");
 
@@ -159,11 +162,8 @@ module.exports.updatePatient = function(req,res,next){
 
 module.exports.printPatient = function(req,res,next){
   console.log(req.params);
-  console.log(req.query);
-  var pdf = require('html-pdf');
   var html = fs.readFileSync('../views/neq.html', 'utf8');
   var options = { format: 'Letter' };
-  var nodemailer = require('nodemailer');
 
   pdf.create(html, options).toFile('../tmp/neq.pdf', function(err, res) {
     if (err) return console.log(err);
@@ -174,7 +174,7 @@ module.exports.printPatient = function(req,res,next){
     // setup e-mail data with unicode symbols
     var mailOptions = {
         from: '"Progetto Hucare" <progetto.hucare@gmail.com>', // sender address
-        to: req.params, // list of receivers
+        to: req.query.email, // list of receivers
         subject: 'Neq paziente ____', // Subject line
         html: '<b>Gentile referente, in allegato trova il Neq compilato dal paziente</b>', // html body
         attachments : [{filename: '../tmp/neq.pdf'}]
