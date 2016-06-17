@@ -180,7 +180,7 @@ module.exports.printPatient = function(req,res,next){
     pdf.create(html, options).toFile(__dirname + '/../tmp/neq.pdf', function(err, result) {
       if (err) return console.log(err);
 
-      var obj = JSON.parse(fs.readFileSync(__dirname + '/../aruba_config.json', 'utf8'));
+      var obj = JSON.parse(fs.readFileSync(__dirname + '/../config/aruba_config.json', 'utf8'));
       // create reusable transporter object using the default SMTP transport
       var transporter = nodemailer.createTransport(obj);
 
