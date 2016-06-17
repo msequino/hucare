@@ -105,7 +105,6 @@ module.exports.deploy = function(req,res,next){
       if(req.body.pusher.name == 'msequino'){
         console.log("MAKE PULL req");
         //require('simple-git')('C:\\Users\\sequino\\Desktop\\dispatcher\\apps\\hucare').pull();
-        require('simple-git')('C:\\Users\\sequino\\Desktop\\dispatcher\\apps\\hucare').pull();
         res.end();
       }
     }
