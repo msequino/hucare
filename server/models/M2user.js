@@ -20,6 +20,9 @@ module.exports = function(sequelize, DataTypes) {
         this.setDataValue('password',bcrypt.hashSync(password, bcrypt.genSaltSync(8), null));
       }
     },
+    rand_date: {
+      type : DataTypes.DATEONLY
+    },
 
   }, {
     classMethods: {
@@ -37,7 +40,8 @@ module.exports = function(sequelize, DataTypes) {
           id : this.getDataValue("id"),
           username : this.getDataValue("username"),
           ClinicId : this.getDataValue("ClinicId"),
-          GroupId : this.getDataValue("GroupId")
+          GroupId : this.getDataValue("GroupId"),
+          rand_date : this.getDataValue("rand_date"),
         };
       },
       isNotUser : function(){

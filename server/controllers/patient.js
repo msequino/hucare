@@ -161,8 +161,9 @@ module.exports.updatePatient = function(req,res,next){
 }
 
 module.exports.printPatient = function(req,res,next){
-  console.log(req.params);
-  var options = { format: 'Letter' };
+
+/*  if(req.user.rand_date < new Date())
+    return res.json({code : 400  ,message : "Attenzione: il centro non è stato ancora randomizzato, queste informazioni saranno visibili solo ad inizio sperimentazione"})*/
   db.Patient.findOne( { where : {name:req.params.id} ,
     include:
       [{
@@ -170,11 +171,12 @@ module.exports.printPatient = function(req,res,next){
       },{
         model: db.T1Neq,
       }],
-
   }).then(function(patient){
 
     if(!patient) return res.json({code : 400  ,message : "Paziente non ancora inserito all'interno del database centrale. Si prega di inserirlo tramite il relativo reporting form"});
-    var html = createHtml(patient);
+    var html = createHtml(patient.patient,patient.t0neq);
+//    var html = createHtml(patient.patient,patient.t0neq);
+    var options = { format: 'Letter' };
 
     pdf.create(html, options).toFile(__dirname + '/../tmp/neq.pdf', function(err, result) {
       if (err) return console.log(err);
@@ -193,6 +195,7 @@ module.exports.printPatient = function(req,res,next){
 
       // send mail with defined transport object
       transporter.sendMail(mailOptions, function(error, info){
+        fs.unlink(__dirname +'\\..\\tmp\\neq.pdf');
         if(error)  res.json({code : 400  ,message : "Mail non inviata"});
         else
           res.json({code : 200  ,message : "Informazioni salvate"});
@@ -202,8 +205,14 @@ module.exports.printPatient = function(req,res,next){
   });
 }
 
-function createHtml(p){
-  return "<h2>ciaoooo<h2>";
+function createHtml(patient, neq, time){
+  return "<html>"+
+  "<body><header><h1>VALUTAZIONE " + (time ? 0 "BASALE" : "FOLLOW-UP")+ " paziente " + patient.name +"</h1>"+
+  "</header>"+
+  "<center><2>Questionario per la Valutazione dei Bisogni del Paziente</h2></center>"+
+  
+  "</body>"+
+  "</html>";
 }
 /*
 function createQRCode(args){
