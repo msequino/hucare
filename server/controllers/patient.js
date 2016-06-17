@@ -183,7 +183,8 @@ module.exports.printPatient = function(req,res,next){
     // send mail with defined transport object
     transporter.sendMail(mailOptions, function(error, info){
       if(error)  res.json({code : 400  ,message : "Mail non inviata"});
-      res.json({code : 200  ,message : "Informazioni salvate"});
+      else
+        res.json({code : 200  ,message : "Informazioni salvate"});
     });
   });
 }
