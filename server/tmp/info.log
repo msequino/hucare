@@ -592,3 +592,48 @@
 {"level":"info","message":"USER 33 CREATED Evaluation 18 ({\"id\":18,\"date\":\"2016-06-16 10:48:04\",\"dom1\":4,\"dom2\":4,\"updatedAt\":\"2016-06-16T08:47:21.000Z\",\"createdAt\":\"2016-06-16T08:47:21.000Z\"})","timestamp":"2016-06-16T08:47:21.361Z"}
 {"level":"info","message":"USER 33 CREATED Screening 18 ({\"id\":18,\"signed\":1,\"ClinicId\":\"2\",\"consenso\":\"2016-06-16\",\"excl1\":2,\"excl2\":2,\"excl3\":2,\"excl4\":2,\"incl3\":1,\"excl5\":2,\"incl2\":1,\"excl6\":2,\"incl5\":1,\"excl7\":2,\"incl4\":1,\"incl1\":1,\"updatedAt\":\"2016-06-16T08:47:21.000Z\",\"createdAt\":\"2016-06-16T08:47:21.000Z\"})","timestamp":"2016-06-16T08:47:21.394Z"}
 {"level":"info","message":"USER 33 UPDATED patient 6 ({\"id\":6,\"sex\":2,\"birth\":\"1942-09-17\",\"metastatic\":1,\"metastatic1\":2,\"date\":\"2016-06-16\",\"metastatic2\":2,\"typetreatment3\":2,\"typetreatment2\":2,\"typetreatment5\":2,\"ecog\":0,\"typetreatment4\":2,\"typetreatment1\":1,\"name\":\"CR0002\",\"firstdateyear\":2016,\"firstdatemonth\":5,\"place\":5,\"metastatic4\":2,\"metastatic3\":2,\"metastatic6\":2,\"metastatic5\":1,\"metastatic7\":2,\"scholar\":1,\"marital\":1,\"T0EortcId\":21,\"T0HadsId\":21,\"T0NeqId\":21,\"T0ReportingId\":20,\"T0Date\":\"2016-06-16T08:47:21.395Z\",\"EvaluationId\":18,\"ScreeningId\":18,\"updatedAt\":\"2016-06-16T08:47:21.000Z\",\"createdAt\":\"2016-06-16T08:47:21.000Z\"})","timestamp":"2016-06-16T08:47:21.517Z"}
+{"level":"error","message":"LOGIN Torino NOT FOUND","timestamp":"2016-06-17T08:37:17.946Z"}
+{"level":"info","message":"LOGIN Torino log IN","timestamp":"2016-06-17T08:39:03.003Z"}
+{"level":"info","message":"LOGIN Torino log IN","timestamp":"2016-06-17T08:46:32.095Z"}
+{"level":"info","message":"LOGIN Torino log IN","timestamp":"2016-06-17T08:48:24.609Z"}
+{"level":"info","message":"LOGIN Torino log IN","timestamp":"2016-06-17T08:49:24.304Z"}
+{"level":"info","message":"LOGIN Torino log IN","timestamp":"2016-06-17T08:51:37.847Z"}
+{"level":"info","message":"LOGIN Torino log IN","timestamp":"2016-06-17T08:52:34.200Z"}
+{"level":"info","message":"LOGIN Torino log IN","timestamp":"2016-06-17T08:53:58.494Z"}
+{"level":"info","message":"LOGIN Torino log IN","timestamp":"2016-06-17T08:54:54.447Z"}
+{"level":"info","message":"LOGIN Torino log IN","timestamp":"2016-06-17T09:10:34.001Z"}
+{"level":"info","message":"LOGIN Torino log IN","timestamp":"2016-06-17T09:11:22.329Z"}
+{"level":"info","message":"LOGIN Torino log IN","timestamp":"2016-06-17T09:12:09.670Z"}
+{"level":"info","message":"LOGIN Torino log IN","timestamp":"2016-06-17T09:14:08.650Z"}
+{"level":"info","message":"LOGIN Torino log IN","timestamp":"2016-06-17T09:21:20.326Z"}
+{"level":"info","message":"LOGIN Torino log IN","timestamp":"2016-06-17T09:38:34.180Z"}
+{"level":"info","message":"LOGIN Torino log IN","timestamp":"2016-06-17T09:41:57.387Z"}
+{"level":"info","message":"LOGIN Torino log IN","timestamp":"2016-06-17T09:43:33.331Z"}
+{"level":"info","message":"LOGIN Torino log IN","timestamp":"2016-06-17T09:45:04.761Z"}
+{"level":"info","message":"LOGIN Torino log IN","timestamp":"2016-06-17T09:46:03.142Z"}
+{"level":"info","message":"LOGIN Torino log IN","timestamp":"2016-06-17T09:48:46.543Z"}
+{"level":"info","message":"LOGIN Torino log IN","timestamp":"2016-06-17T09:49:17.901Z"}
+{"level":"info","message":"LOGIN Torino log IN","timestamp":"2016-06-17T09:50:42.152Z"}
+{"level":"info","message":"LOGIN Torino log IN","timestamp":"2016-06-17T09:51:05.905Z"}
+{"level":"info","message":"LOGIN Torino log IN","timestamp":"2016-06-17T09:51:32.465Z"}
+{"level":"info","message":"LOGIN Torino log IN","timestamp":"2016-06-17T09:52:35.594Z"}
+{"level":"info","message":"LOGIN Torino log IN","timestamp":"2016-06-17T09:54:45.324Z"}
+{"level":"info","message":"LOGIN Torino log IN","timestamp":"2016-06-17T09:55:05.909Z"}
+{"level":"info","message":"LOGIN Torino log IN","timestamp":"2016-06-17T09:56:16.676Z"}
+{"level":"info","message":"LOGIN Torino log IN","timestamp":"2016-06-17T09:56:35.062Z"}
+{"level":"info","message":"LOGIN Torino log IN","timestamp":"2016-06-17T09:56:57.752Z"}
+{"level":"info","message":"LOGIN Torino log IN","timestamp":"2016-06-17T09:57:24.953Z"}
+{"level":"info","message":"LOGIN Torino log IN","timestamp":"2016-06-17T09:57:59.219Z"}
+{"level":"info","message":"LOGIN Torino log IN","timestamp":"2016-06-17T09:59:25.247Z"}
+{"level":"info","message":"LOGIN Torino log IN","timestamp":"2016-06-17T10:02:01.191Z"}
+{"level":"info","message":"LOGIN Torino log IN","timestamp":"2016-06-17T10:07:34.945Z"}
+{"level":"info","message":"USER 2 CREATED T0Eortc 1 ({\"id\":1,\"updatedAt\":\"2016-06-17T10:07:35.000Z\",\"createdAt\":\"2016-06-17T10:07:35.000Z\"})","timestamp":"2016-06-17T10:07:35.433Z"}
+{"level":"info","message":"USER 2 CREATED T0Hads 1 ({\"id\":1,\"updatedAt\":\"2016-06-17T10:07:35.000Z\",\"createdAt\":\"2016-06-17T10:07:35.000Z\"})","timestamp":"2016-06-17T10:07:35.451Z"}
+{"level":"info","message":"USER 2 CREATED T0Neq 1 ({\"id\":1,\"dom11\":1,\"dom12\":1,\"dom1\":1,\"dom10\":2,\"dom15\":2,\"dom16\":2,\"dom13\":2,\"dom14\":2,\"dom19\":1,\"dom17\":2,\"compiletime\":17224,\"dom18\":2,\"date\":\"2016-06-17 12:08:37\",\"dom9\":2,\"dom8\":2,\"dom7\":2,\"dom6\":2,\"dom23\":1,\"dom5\":2,\"dom22\":1,\"dom4\":1,\"dom21\":2,\"dom3\":1,\"dom20\":2,\"dom2\":1,\"updatedAt\":\"2016-06-17T10:07:35.000Z\",\"createdAt\":\"2016-06-17T10:07:35.000Z\"})","timestamp":"2016-06-17T10:07:35.474Z"}
+{"level":"info","message":"USER 2 CREATED T0Reporting 1 ({\"id\":1,\"dom6t\":\"\",\"dom6\":1,\"dom5\":2,\"dom4t\":\"\",\"date\":\"2016-06-17 12:08:54\",\"dom4\":1,\"updatedAt\":\"2016-06-17T10:07:35.000Z\",\"createdAt\":\"2016-06-17T10:07:35.000Z\"})","timestamp":"2016-06-17T10:07:35.489Z"}
+{"level":"info","message":"USER 2 CREATED Evaluation 1 ({\"id\":1,\"updatedAt\":\"2016-06-17T10:07:35.000Z\",\"createdAt\":\"2016-06-17T10:07:35.000Z\"})","timestamp":"2016-06-17T10:07:35.518Z"}
+{"level":"info","message":"USER 2 CREATED Screening 1 ({\"id\":1,\"signed\":1,\"ClinicId\":\"16\",\"consenso\":\"2016-06-15\",\"excl1\":2,\"excl2\":2,\"excl3\":2,\"excl4\":2,\"incl3\":1,\"excl5\":2,\"incl2\":1,\"excl6\":2,\"incl5\":1,\"excl7\":2,\"incl4\":1,\"incl1\":1,\"updatedAt\":\"2016-06-17T10:07:35.000Z\",\"createdAt\":\"2016-06-17T10:07:35.000Z\"})","timestamp":"2016-06-17T10:07:35.557Z"}
+{"level":"info","message":"USER 2 UPDATED patient 1 ({\"id\":1,\"sex\":1,\"birth\":\"1998-06-14\",\"metastatic\":2,\"date\":\"2016-06-16\",\"typetreatment3\":2,\"typetreatment2\":2,\"typetreatment5\":2,\"ecog\":2,\"typetreatment4\":2,\"typetreatment1\":2,\"name\":\"TS0001\",\"firstdateyear\":2016,\"firstdatemonth\":6,\"place\":1,\"scholar\":2,\"marital\":1,\"T0EortcId\":1,\"T0HadsId\":1,\"T0NeqId\":1,\"T0ReportingId\":1,\"T0Date\":\"2016-06-17T10:07:35.557Z\",\"EvaluationId\":1,\"ScreeningId\":1,\"updatedAt\":\"2016-06-17T10:07:35.000Z\",\"createdAt\":\"2016-06-17T10:07:35.000Z\"})","timestamp":"2016-06-17T10:07:35.601Z"}
+{"level":"info","message":"LOGIN Torino log IN","timestamp":"2016-06-17T10:07:40.581Z"}
+{"level":"info","message":"LOGIN Torino log IN","timestamp":"2016-06-17T10:10:00.432Z"}
+{"level":"info","message":"LOGIN Torino log IN","timestamp":"2016-06-17T10:10:38.597Z"}
