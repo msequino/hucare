@@ -20,7 +20,6 @@
     "email-templates": "^1.1.2",
     "express": "latest",
     "express-session": "latest",
-    "git": "^0.1.5",
     "handlebars": "~4.0.4",
     "html-pdf": "^2.0.1",
     "https": "latest",
@@ -33,7 +32,6 @@
     "promise": "^7.1.1",
     "sequelize": "latest",
     "serve-favicon": "^2.3.0",
-    "simple-git": "^1.37.0",
     "winston": "^2.2.0"
   }
 }
