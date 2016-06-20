@@ -116,8 +116,10 @@ module.exports = function(sequelize, DataTypes) {
         Patient.belongsTo(models.Screening);
         Patient.belongsTo(models.T0Eortc);
         Patient.belongsTo(models.T1Eortc);
-        Patient.belongsTo(models.T0Hads,{as: 'T0Hads'});
-        Patient.belongsTo(models.T1Hads,{as: 'T1Hads'});
+//        Patient.belongsTo(models.T0Hads,{as: 'T0Hads'});
+  //      Patient.belongsTo(models.T1Hads,{as: 'T1Hads'});
+        Patient.belongsTo(models.T0Hads);
+        Patient.belongsTo(models.T1Hads);
         Patient.belongsTo(models.T0Neq);
         Patient.belongsTo(models.T1Neq);
         Patient.belongsTo(models.T0Reporting);

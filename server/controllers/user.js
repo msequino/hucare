@@ -65,13 +65,34 @@ module.exports.getUserByUsername = function(req,res,next){
 }
 
 module.exports.insertUser = function(req,res,next){
-  db.User.create(req.body).then(function(user){
-    log.log('info',req.user.id + ' CREATE user '+ user.id);
-    res.json({id : user.getDataValue('id')});
-  }).catch(function(error){
-    log.log('error',error);
-    res.status(404).send(error.errors[0].message);
+
+  db.User.findOne({where : {username:req.body.username}}).then(function(user){
+    if(!user)
+      db.User.create(req.body).then(function(user){
+        log.log('info',req.user.id + ' CREATE user '+ user.id);
+        res.json({code : 200});
+      }).catch(function(error){
+        log.log('error',error);
+        res.json({code : 400,message:"Errore nel server"});
+      });
+    else
+      db.Patient.findAll(
+        { include:
+          [{
+            model: db.Screening,
+            where : {ClinicId:req.body.ClinicId},
+          },{model: db.T0Eortc},{model: db.T1Eortc},{model: db.T0Hads},{model: db.T1Hads},{model: db.T0Neq},{model: db.T1Neq},{model: db.T0Reporting},{model: db.T1Reporting},{model: db.Evaluation}]
+        }
+      ).then(function(patients){
+        res.json({code : 200, data : patients});
+
+      }).catch(function(error){
+        log.log('error',error);
+        console.log(error);
+        res.json({code : 400,message:"Errore nel server"});
+      });
   });
+
 }
 
 module.exports.updateUser = function(req,res,next){
@@ -91,9 +112,6 @@ module.exports.updateUser = function(req,res,next){
 }
 
 module.exports.sendApk = function(req,res,next){
-/*  var apk = fs.readFileSync('apps/hucare/server/apk/app-debug.apk');
-  res.writeHead(200, {'Content-Type': 'application/vnd.android.package-archive' });
-  res.end(apk, 'binary');*/
   res.download('apps/hucare/server/apk/app-debug.apk', 'newApp.apk');
 }
 

@@ -162,15 +162,11 @@ module.exports.updatePatient = function(req,res,next){
 
 module.exports.printPatient = function(req,res,next){
 
-/*  if(req.user.rand_date < new Date())
+  /*  if(req.user.rand_date < new Date())
     return res.json({code : 400  ,message : "Attenzione: il centro non è stato ancora randomizzato, queste informazioni saranno visibili solo ad inizio sperimentazione"})*/
   db.Patient.findOne( { where : {name:req.params.id} ,
     include:
-      [{
-        model: db.T0Neq,
-      },{
-        model: db.T1Neq,
-      }],
+    [{model: db.T0Eortc},{model: db.T1Eortc},{model: db.T0Neq},{model: db.T1Neq}],
   }).then(function(patient){
 
     if(!patient) return res.json({code : 400  ,message : "Il paziente non è stato ancora inserito nel database centrale. Si prega di inserirlo tramite il relativo reporting form"});
