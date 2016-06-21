@@ -247,10 +247,10 @@ function createEortc(name, eortc, time){
       "</thead>"+
       "<tbody>"+
         "<tr><td>1</td><td>Ho bisogno di avere maggiori informazioni sulla mia diagnosi?</td><td>" + eortc.dom1 + "</td></tr>"+
-        "<tr><td>2</td><td>Ho bisogno di avere maggiori informazioni sulle mie condizioni future?</td><td>" + (eortc.dom2 == 1 ? "X" : "")+ "</td></tr>"+
-        "<tr><td>3</td><td>Ho bisogno di avere maggiori informazioni sugli esami che mi stanno facendo?</td><td>" + (eortc.dom3 == 1 ? "X" : "")+ "</td></tr>"+
-        "<tr><td>4</td><td>Ho bisogno di avere maggiori spiegazioni sui trattamenti?</td><td>" + (eortc.dom4 == 1 ? "X" : "")+ "</td></tr>"+
-        "<tr><td>5</td><td>Ho bisogno di essere più coinvolto/a nelle scelte terapeutiche?</td><td>" + (eortc.dom5 == 1 ? "X" : "")+ "</td></tr>"+
+        "<tr><td>2</td><td>Ho bisogno di avere maggiori informazioni sulle mie condizioni future?</td><td>" + eortc.dom2 + "</td></tr>"+
+        "<tr><td>3</td><td>Ho bisogno di avere maggiori informazioni sugli esami che mi stanno facendo?</td><td>" + eortc.dom3 + "</td></tr>"+
+        "<tr><td>4</td><td>Ho bisogno di avere maggiori spiegazioni sui trattamenti?</td><td>" + eortc.dom4 + "</td></tr>"+
+        "<tr><td>5</td><td>Ho bisogno di essere più coinvolto/a nelle scelte terapeutiche?</td><td>" + eortc.dom5 + "</td></tr>"+
         "</tbody>"+
       "</table>"+
       "<br>"+
@@ -259,31 +259,31 @@ function createEortc(name, eortc, time){
         "<thead>"+
           "<tr><th></th><th>Domanda</th><th>Valore segnato</th></tr>"+
         "</thead>"+
-        "<tr><td>6</td><td>Ha avuto limitazioni nel fare il suo lavoro o i lavori di casa?</td><td>" + (eortc.dom6 == 1 ? "X" : "")+ "</td></tr>"+
-        "<tr><td>7</td><td>Ha avuto limitazioni nel praticare i Suoi passatempi-hobby o altre attività di divertimento o svago?</td><td>" + (eortc.dom7 == 1 ? "X" : "")+ "</td></tr>"+
-        "<tr><td>8</td><td>Le è mancato il fiato?</td><td>" + (eortc.dom8 == 1 ? "X" : "")+ "</td></tr>"+
-        "<tr><td>9</td><td>Ha avuto dolore?</td><td>" + (eortc.dom9 == 1 ? "X" : "")+ "</td></tr>"+
-        "<tr><td>10</td><td>Ha avuto bisogno di riposo?</td><td>" + (eortc.dom10 == 1 ? "X" : "")+ "</td></tr>"+
-        "<tr><td>11</td><td>Ha avuto difficoltà a dormire?</td><td>" + (eortc.dom11 == 1 ? "X" : "")+ "</td></tr>"+
-        "<tr><td>12</td><td>Ha sentito debolezza?</td><td>" + (eortc.dom12 == 1 ? "X" : "")+ "</td></tr>"+
-        "<tr><td>13</td><td>Le è mancato l'appetito?</td><td>" + (eortc.dom13 == 1 ? "X" : "")+ "</td></tr>"+
-        "<tr><td>14</td><td>Ha avuto un senso di nausea?</td><td>" + (eortc.dom14 == 1 ? "X" : "")+ "</td></tr>"+
-        "<tr><td>15</td><td>Ha vomitato?</td><td>" + (eortc.dom15 == 1 ? "X" : "")+ "</td></tr>"+
-        "<tr><td>16</td><td>Ha avuto problemi di stitichezza?</td><td>" + (eortc.dom16 == 1 ? "X" : "")+ "</td></tr>"+
-        "<tr><td>17</td><td>Ha avuto problemi di diarrea?</td><td>" + (eortc.dom17 == 1 ? "X" : "")+ "</td></tr>"+
-        "<tr><td>18</td><td>Ha sentito stanchezza?</td><td>" + (eortc.dom18 == 1 ? "X" : "")+ "</td></tr>"+
-        "<tr><td>19</td><td>Il dolore ha interferito con le Sue attività quotidiane?</td><td>" + (eortc.dom19 == 1 ? "X" : "")+ "</td></tr>"+
-        "<tr><td>20</td><td>Ha avuto difficoltà a concentrarsi su cose come leggere un giornale o guardare la televisione?</td><td>" + (eortc.dom20 == 1 ? "X" : "")+ "</td></tr>"+
-        "<tr><td>21</td><td>Si è sentito/a teso/a?</td><td>" + (eortc.dom21 == 1 ? "X" : "")+ "</td></tr>"+
-        "<tr><td>22</td><td>Ha avuto preoccupazioni?</td><td>" + (eortc.dom22 == 1 ? "X" : "")+ "</td></tr>"+
-        "<tr><td>23</td><td>Ha avuto manifestazioni di irritabilità?</td><td>" + (eortc.dom23 == 1 ? "X" : "")+ "</td></tr>"+
-        "<tr><td>24</td><td>Ha avvertito uno stato di depressione?</td><td>" + (eortc.dom24 == 1 ? "X" : "")+ "</td></tr>"+
-        "<tr><td>25</td><td>Ha avuto difficoltà a ricordare le cose?</td><td>" + (eortc.dom25 == 1 ? "X" : "")+ "</td></tr>"+
-        "<tr><td>26</td><td>Le Sue condizioni fisiche o il Suo trattamento medico hanno interferito con le Sua vita familiare?</td><td>" + (eortc.dom26 == 1 ? "X" : "")+ "</td></tr>"+
-        "<tr><td>27</td><td>Le Sue condizioni fisiche o il Suo trattamento medico hanno interferito con le Sue attività sociali?</td><td>" + (eortc.dom27 == 1 ? "X" : "")+ "</td></tr>"+
-        "<tr><td>28</td><td>Le Sue condizioni fisiche o il Suo trattamento medico Le hanno causato difficoltà finanziarie?</td><td>" + (eortc.dom28 == 1 ? "X" : "")+ "</td></tr>"+
-        "<tr><td>29</td><td>Come valuterebbe in generale la Sua salute durante gli ultimi sette giorni?</td><td>" + (eortc.dom29 == 1 ? "X" : "")+ "</td></tr>"+
-        "<tr><td>30</td><td>Come valuterebbe in generale la Sua qualità di vita durante gli ultimi sette giorni?</td><td>" + (eortc.dom30 == 1 ? "X" : "")+ "</td></tr>"+
+        "<tr><td>6</td><td>Ha avuto limitazioni nel fare il suo lavoro o i lavori di casa?</td><td>" + eortc.dom6 + "</td></tr>"+
+        "<tr><td>7</td><td>Ha avuto limitazioni nel praticare i Suoi passatempi-hobby o altre attività di divertimento o svago?</td><td>" + eortc.dom7 + "</td></tr>"+
+        "<tr><td>8</td><td>Le è mancato il fiato?</td><td>" + eortc.dom8 + "</td></tr>"+
+        "<tr><td>9</td><td>Ha avuto dolore?</td><td>" + eortc.dom9 + "</td></tr>"+
+        "<tr><td>10</td><td>Ha avuto bisogno di riposo?</td><td>" + eortc.dom10 + "</td></tr>"+
+        "<tr><td>11</td><td>Ha avuto difficoltà a dormire?</td><td>" + eortc.dom11 + "</td></tr>"+
+        "<tr><td>12</td><td>Ha sentito debolezza?</td><td>" + eortc.dom12 + "</td></tr>"+
+        "<tr><td>13</td><td>Le è mancato l'appetito?</td><td>" + eortc.dom13 + "</td></tr>"+
+        "<tr><td>14</td><td>Ha avuto un senso di nausea?</td><td>" + eortc.dom14 + "</td></tr>"+
+        "<tr><td>15</td><td>Ha vomitato?</td><td>" + eortc.dom15 + "</td></tr>"+
+        "<tr><td>16</td><td>Ha avuto problemi di stitichezza?</td><td>" + eortc.dom16 + "</td></tr>"+
+        "<tr><td>17</td><td>Ha avuto problemi di diarrea?</td><td>" + eortc.dom17 + "</td></tr>"+
+        "<tr><td>18</td><td>Ha sentito stanchezza?</td><td>" + eortc.dom18 + "</td></tr>"+
+        "<tr><td>19</td><td>Il dolore ha interferito con le Sue attività quotidiane?</td><td>" + eortc.dom19 + "</td></tr>"+
+        "<tr><td>20</td><td>Ha avuto difficoltà a concentrarsi su cose come leggere un giornale o guardare la televisione?</td><td>" + eortc.dom20 + "</td></tr>"+
+        "<tr><td>21</td><td>Si è sentito/a teso/a?</td><td>" + eortc.dom21 + "</td></tr>"+
+        "<tr><td>22</td><td>Ha avuto preoccupazioni?</td><td>" + eortc.dom22 + "</td></tr>"+
+        "<tr><td>23</td><td>Ha avuto manifestazioni di irritabilità?</td><td>" + eortc.dom23+ "</td></tr>"+
+        "<tr><td>24</td><td>Ha avvertito uno stato di depressione?</td><td>" + eortc.dom24 + "</td></tr>"+
+        "<tr><td>25</td><td>Ha avuto difficoltà a ricordare le cose?</td><td>" + eortc.dom25 + "</td></tr>"+
+        "<tr><td>26</td><td>Le Sue condizioni fisiche o il Suo trattamento medico hanno interferito con le Sua vita familiare?</td><td>" + eortc.dom26 + "</td></tr>"+
+        "<tr><td>27</td><td>Le Sue condizioni fisiche o il Suo trattamento medico hanno interferito con le Sue attività sociali?</td><td>" + eortc.dom27 + "</td></tr>"+
+        "<tr><td>28</td><td>Le Sue condizioni fisiche o il Suo trattamento medico Le hanno causato difficoltà finanziarie?</td><td>" + eortc.dom28 + "</td></tr>"+
+        "<tr><td>29</td><td>Come valuterebbe in generale la Sua salute durante gli ultimi sette giorni?</td><td>" + eortc.dom29 + "</td></tr>"+
+        "<tr><td>30</td><td>Come valuterebbe in generale la Sua qualità di vita durante gli ultimi sette giorni?</td><td>" + eortc.dom30 + "</td></tr>"+
       "</tbody>"+
     "</table>"+
     "</body>"+
