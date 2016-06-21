@@ -7,8 +7,8 @@ module.exports = function(sequelize, DataTypes) {
     },
     dom1: {
       type : DataTypes.INTEGER(1),
-      validate : {min : 0 , max : 5},
-      comment : "compState = 1 => questionari compilati; compSta = 2 => almeno un questionario risulta non compilato "
+      validate : {min : 1 , max : 6},
+      comment : "ECOG = 0 => 1 ; ECOG = 5 => 6"
     },
     dom2: {
       type : DataTypes.INTEGER(1),
