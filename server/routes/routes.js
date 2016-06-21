@@ -62,8 +62,8 @@ module.exports = function(app) {
   app.route("/questionaires/:id").put(isAuthenticated,Patient.updatePatient);
   app.route("/questionaires").post(isAuthenticated,Patient.insertPatient);
 
-  app.route("/questionaires/t0/:patientId").post(isAuthenticated,Questionaire.insertAllT0);
-  app.route("/questionaires/t1/:patientId").post(isAuthenticated,Questionaire.insertAllT1);
+  //app.route("/questionaires/t0/:patientId").post(isAuthenticated,Questionaire.insertAllT0);
+  //app.route("/questionaires/t1/:patientId").post(isAuthenticated,Questionaire.insertAllT1);
 
   app.route("/questionaires/insertall/t0/").post(isAuthenticated,Questionaire.insertAllRowT0);
   app.route("/questionaires/insertall/t1/:patientName").post(isAuthenticated,Questionaire.insertAllRowT1);
