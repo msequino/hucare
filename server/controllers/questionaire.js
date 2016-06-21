@@ -12,7 +12,7 @@ module.exports.insertAllT0 = function(req,res,next){
   db.sequelize.transaction(function(t){
     return db.T0Eortc.create(req.body.Eortc, {transaction : t}).then(function(e){
       log.log('info',"USER " + req.user.id + " CREATED T0Eortc " + e.id + ' ('+ JSON.stringify(e) + ')');
-      return db.T0Hads.create(req.body.Hads, {transaction : t}).then(function(h){
+      return db.T0Hads.create(req.body.Had, {transaction : t}).then(function(h){
         log.log('info',"USER " + req.user.id + " CREATED T0Hads " + h.id + ' ('+ JSON.stringify(h) + ')');
         return db.T0Neq.create(req.body.Neq, {transaction : t}).then(function(n){
           log.log('info',"USER " + req.user.id + " CREATED T0Neq " + n.id + ' ('+ JSON.stringify(n) + ')');
@@ -49,7 +49,7 @@ module.exports.insertAllRowT0 = function(req,res,next){
   db.sequelize.transaction(function(t){
     return db.T0Eortc.create(req.body.Eortc, {transaction : t}).then(function(e){
       log.log('info',"USER " + req.user.id + " CREATED T0Eortc " + e.id + ' ('+ JSON.stringify(e) + ')');
-      return db.T0Hads.create(req.body.Hads, {transaction : t}).then(function(h){
+      return db.T0Hads.create(req.body.Had, {transaction : t}).then(function(h){
         log.log('info',"USER " + req.user.id + " CREATED T0Hads " + h.id + ' ('+ JSON.stringify(h) + ')');
         return db.T0Neq.create(req.body.Neq, {transaction : t}).then(function(n){
           log.log('info',"USER " + req.user.id + " CREATED T0Neq " + n.id + ' ('+ JSON.stringify(n) + ')');
