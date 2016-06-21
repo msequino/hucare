@@ -62,7 +62,7 @@ module.exports.insertAllRowT1 = function(req,res,next){
               if (patient) { // if the record exists in the db
                 patient.updateAttributes({T1EortcId: e.id,T1HadId: h.id,T1NeqId: n.id,
                                           T1ReportingId: r.id,T1Date : new Date()});
-              }
+              }sadas
             });
           });
         });
