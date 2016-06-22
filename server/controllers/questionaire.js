@@ -30,7 +30,7 @@ module.exports.insertAllRowT0 = function(req,res,next){
                 req.body.Patient.ScreeningId = sc.id;
 
                 return db.Patient.create(req.body.Patient, {transaction : t}).then(function(patient){
-                  log.log('info',"USER " + req.user.id + " UPDATED patient " + patient.id + ' ('+ JSON.stringify(patient) + ')');
+                  log.log('info',"USER " + req.user.id + " CREATED patient " + patient.id + ' ('+ JSON.stringify(patient) + ')');
                 });
               });
             });
@@ -79,8 +79,6 @@ module.exports.insertAllRowT1 = function(req,res,next){
 /*--------------ALTRI------------------*/
 
 module.exports.insertAllT0 = function(req,res,next){
-  console.log(req.body);
-  console.log(req.params);
 
   db.sequelize.transaction(function(t){
     return db.T0Eortc.create(req.body.Eortc, {transaction : t}).then(function(e){
