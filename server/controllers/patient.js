@@ -143,6 +143,41 @@ module.exports.insertNoEligiblePatients = function(req,res,next){
   });
 }
 
+module.exports.countRecluted = function(req,res,next){
+  db.Screening.findAll({
+    attributes : ['Clinic.name',[db.sequelize.fn('count',db.sequelize.col('ClinicId')), 'ClinicCount']],
+    include : [db.Clinic],
+    group : ['ClinicId']}).then(function(result){
+
+      db.Patient.findAll({
+        include : [
+          {attributes : ['ClinicId',[db.sequelize.fn('count',db.sequelize.col('ClinicId')), 'ClinicCount']],
+          model : db.Screening }],
+        where : {'T1Date' : {$ne : null}},
+        group : ['Screening.ClinicId']
+      }).then(function(result){
+        console.log(result);
+        res.json({code : 200 , data: result});
+      }).catch(function(error){
+        log.log('error',error);
+        res.json({code :404});
+      });
+
+  }).catch(function(error){
+    log.log('error',error);
+    res.json({code :404});
+  });
+}
+
+module.exports.countFU = function(req,res,next){
+  db.Screening.findAll({group : ['ClinicId']}).then(function(result){
+    res.json({code : 200 , data: result});
+  }).catch(function(error){
+    log.log('error',error);
+    res.status(404).send({message : "No Screening inserted"});
+  });
+}
+
 module.exports.updatePatient = function(req,res,next){
   db.Patient.findOne({where : {id : req.params.id}}).then(function(patient){
 

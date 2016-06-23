@@ -56,6 +56,7 @@ module.exports = function(app) {
   app.route("/patients").post(isAuthenticated,Patient.insertPatient);
   app.route("/patient/login").post(Patient.isValidPatient);
   app.route("/screening").post(isAuthenticated,Patient.insertNoEligiblePatients);
+  app.route("/stats").get(isAuthenticated,Patient.countRecluted);
 
   app.route("/questionaires/bypatient/:id").get(isAuthenticated,Patient.getPatient);
   app.route("/questionaires").get(isAuthenticated,Patient.getPatients);

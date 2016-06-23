@@ -5,8 +5,8 @@
         .module('app')
         .controller('HomeController', HomeController);
 
-    HomeController.$inject = ['UserService', 'PatientService', 'DoctorService', 'AuthenticationService', 'OptionService', 'StudyService', '$rootScope', '$location', '$timeout', '$window'];
-    function HomeController(UserService, PatientService, DoctorService, AuthenticationService, OptionService, StudyService, $rootScope, $location, $timeout, window) {
+    HomeController.$inject = ['UserService', 'PatientService', 'StatisticService', 'AuthenticationService', 'OptionService', 'StudyService', '$rootScope', '$location', '$timeout', '$window'];
+    function HomeController(UserService, PatientService, StatisticService, AuthenticationService, OptionService, StudyService, $rootScope, $location, $timeout, window) {
 
         var vm = this;
         vm.Math = window.Math;
@@ -58,7 +58,7 @@
                   vm.clinics = response;
                 });
 
-                changeView('components/home/homepage.html',3);
+                changeView('components/home/statsPatients.html',2);
               }
             });
         }
@@ -87,8 +87,9 @@
             });
           else{
             if(loadItems == 2) //Load doctors
-              DoctorService.GetAll().then(function (response) {
-                vm.doctors = response;
+              StatisticService.GetAll().then(function (response) {
+                vm.patientPage = "components/home/editPatientPage1.html";
+                vm.clinicCounter = response.data;
               });
               else{
                 if(loadItems == 3) //Load patients
