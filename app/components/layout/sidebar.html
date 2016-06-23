@@ -12,6 +12,12 @@
     <li>
         <a class="mouse-over" ng-show="vm.user.GroupId == 1" ng-click="vm.changeView('components/home/editUsers.html',1)"><span class="glyphicon glyphicon-user"/> Lista utenti</a>
     </li>
+    <li>
+        <a class="mouse-over" ng-show="vm.user.GroupId == 1" ng-click="vm.changeView('components/home/statsPatients.html',2)"><span class="glyphicon glyphicon-stats"/> Stat pazienti</a>
+    </li>
+    <li>
+        <a class="mouse-over" ng-show="vm.user.GroupId == 1" ng-click="vm.changeView('components/home/statsQuest.html',3)"><span class="glyphicon glyphicon-stats"/> Questionari</a>
+    </li>
   </ul>
 </div>
 <!-- /#sidebar-wrapper -->
