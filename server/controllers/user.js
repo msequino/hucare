@@ -138,7 +138,6 @@ module.exports.deploy = function(req,res,next){
         console.log("MAKE PULL req");
         //require('simple-git')('C:\\Users\\sequino\\Desktop\\dispatcher\\apps\\hucare').pull();
         myRepo.pull(function(err,log){
-          
           console.log(err);
           console.log(log);
           res.end();
