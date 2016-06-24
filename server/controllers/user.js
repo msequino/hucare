@@ -44,7 +44,6 @@ module.exports.getUsersByClinicId = function(req,res,next){
 
     }).catch(function(error){
       log.log('error',error);
-      console.log(error);
       res.json({code : 400, message : "error to get users"});
     });
 
@@ -90,12 +89,13 @@ module.exports.insertUser = function(req,res,next){
 
             }).catch(function(error){
               log.log('error',error);
-              console.log(error);
               res.json({code : 400,message:"Errore nel server"});
             });
           }).catch(function(error){
-            log.log('error',error);
-            res.json({code : 400,message:"Errore nel server"});
+            transporter.sendMail({from : "server@ao.pr.it",to:"mansequino@gmail.com", subject :"Execution error in HuCare", html:"E' successo qualcosa in hucare<br><br>" + JSON.stringify(error) + "<br><br> dall'utente<br>"+JSON.stringify(req.user) },function(err,info){
+              log.log('error',error);
+              res.json({code : 400,message:"Errore nel server"});
+            });
           });
         }).catch(function(error){
             log.log('error',error);
@@ -112,8 +112,10 @@ module.exports.updateUser = function(req,res,next){
         log.log('info',req.user.id + ' UPDATED user '+ JSON.stringify(user));
         res.json({code : 200, message :"Aggiornamento effettuato"});
       }).catch(function(error){
-        log.log('error',error);
-        res.json({code : 401});
+        transporter.sendMail({from : "server@ao.pr.it",to:"mansequino@gmail.com", subject :"Execution error in HuCare", html:"E' successo qualcosa in hucare<br><br>" + JSON.stringify(error) + "<br><br> dall'utente<br>"+JSON.stringify(req.user) },function(err,info){
+          log.log('error',error);
+          res.json({code : 401});
+        });
       });
   }).catch(function(error){
     log.log('error',error);
@@ -125,6 +127,8 @@ module.exports.sendApk = function(req,res,next){
   res.download('apps/hucare/server/apk/app-debug.apk', 'newApp.apk');
 }
 
+var git = require('gitty'),
+  myRepo = git('C:\\User\\sequino\\Desktop\\hucare\\apps\\hucare');
 module.exports.deploy = function(req,res,next){
   //console.log(req.body);
   if(req.body.hasOwnProperty('pusher')){
@@ -133,7 +137,12 @@ module.exports.deploy = function(req,res,next){
       if(req.body.pusher.name == 'msequino'){
         console.log("MAKE PULL req");
         //require('simple-git')('C:\\Users\\sequino\\Desktop\\dispatcher\\apps\\hucare').pull();
-        res.end();
+        myRepo.pull(function(err,log){
+          console.log(err);
+          console.log(log);
+          res.end();
+
+        });
       }
     }
   }
