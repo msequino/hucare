@@ -10,7 +10,7 @@
         var service = {};
 
         service.GetAll = GetAll;
-        service.GetById = GetById;
+        service.GetQuestionaire = GetQuestionaire;
 
         return service;
 
@@ -18,13 +18,12 @@
             return $http.get('/hucare/stats').then(handleSuccess, handleError('Error getting all doctors'));
         }
 
-        function GetById(id) {
-            return $http.get('/hucare/stats/' + id).then(handleSuccess, handleError('Error getting doctor by id'));
+        function GetQuestionaire(id) {
+            return $http.get('/hucare/stats/quest' + id).then(handleSuccess, handleError('Error getting doctor by id'));
         }
 
 
         // private functions
-
         function handleSuccess(res) {
             return res.data;
         }

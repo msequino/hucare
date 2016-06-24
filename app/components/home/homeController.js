@@ -88,7 +88,7 @@
           else{
             if(loadItems == 2) //Load doctors
               StatisticService.GetAll().then(function (response) {
-                vm.patientPage = "components/home/editPatientPage1.html";
+//                vm.patientPage = "components/home/editPatientPage1.html";
                 vm.clinicCounter = response.data;
               });
               else{
@@ -123,17 +123,11 @@
                     }
                     else{
                       if(loadItems == 5) //Load patient with id
-                        UserService.GetByUsername(vm.user.username).then(function (response) {
-                          vm.data = response;
+                        StatisticService.GetQuestionaire(vm.ChosenClinic ? "/"+vm.ChosenClinic : "/0").then(function (response) {
+                          vm.questCounter = response.data;
+
                         });
-                      else{
-                        if(loadItems == 6) //Load study with id
-                          StudyService.GetByPatient(id).then(function (response) {
-                            vm.showSidebar = true;
-                            vm.data = response;
-                            vm.data['id'] = id;
-                          });
-                      }
+
                     }
                   }
               }

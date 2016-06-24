@@ -1,0 +1,295 @@
+<div class="form-group col-md-12">
+  <label for="clinicId">Clinica</label>
+  <select class="form-control" name="clinicId" ng-change="vm.changeView('components/home/statsQuest.html',5)" ng-model="vm.ChosenClinic" ng-options="item.id as item.name for item in vm.clinics"/>
+</div>
+
+<p><h2>Dati relativi a tutte le cliniche, cambia la clinica sopra e vedrai i relativi valori</h2></p>
+<div class="row">
+  <table class="table">
+    <thead><th colspan="2">Eortc</th><th colspan="3">T0</th><th colspan="3">T1</th></thead>
+    <thead><th>id</th><th>Domanda</th><th>Risposte presenti</th><th>Mancanti</th><th>NULL (ossia che non è stato compilato il questionario)</th><th>Risposte presenti</th><th>Mancanti</th><th>NULL (ossia che non è stato compilato il questionario)</th></thead>
+    <tbody>
+      <tr><td>1</td><td>Ha difficoltà nel fare lavori faticosi come portare una borsa della spesa pesante o una valigia?</td>
+
+        <td>{{vm.questCounter[0].TOTE0DOM1}}</td><td>{{vm.questCounter[0].MISSE0DOM1}}</td><td>{{vm.questCounter[0].NULLE0DOM1}}</td>
+        <td>{{vm.questCounter[0].TOTE1DOM1}}</td><td>{{vm.questCounter[0].MISSE1DOM1}}</td><td>{{vm.questCounter[0].NULLE1DOM1}}</td></tr>
+
+      <tr><td>2</td><td>Ha difficoltà nel fare una lunga passeggiata?</td>
+        <td>{{vm.questCounter[0].TOTE0DOM2}}</td><td>{{vm.questCounter[0].MISSE0DOM2}}</td><td>{{vm.questCounter[0].NULLE0DOM2}}</td>
+        <td>{{vm.questCounter[0].TOTE1DOM2}}</td><td>{{vm.questCounter[0].MISSE1DOM2}}</td><td>{{vm.questCounter[0].NULLE1DOM2}}</td></tr>
+
+      <tr><td>3</td><td>Ha difficoltà nel fare una breve passeggiata fuori casa</td>
+        <td>{{vm.questCounter[0].TOTE0DOM3}}</td><td>{{vm.questCounter[0].MISSE0DOM3}}</td><td>{{vm.questCounter[0].NULLE0DOM3}}</td>
+        <td>{{vm.questCounter[0].TOTE1DOM3}}</td><td>{{vm.questCounter[0].MISSE1DOM3}}</td><td>{{vm.questCounter[0].NULLE1DOM3}}</td></tr>
+
+      <tr><td>4</td><td>Ha bisogno di stare a letto o su una sedia durante il giorno?</td>
+        <td>{{vm.questCounter[0].TOTE0DOM4}}</td><td>{{vm.questCounter[0].MISSE0DOM4}}</td><td>{{vm.questCounter[0].NULLE0DOM4}}</td>
+        <td>{{vm.questCounter[0].TOTE1DOM4}}</td><td>{{vm.questCounter[0].MISSE1DOM4}}</td><td>{{vm.questCounter[0].NULLE1DOM4}}</td></tr>
+
+      <tr><td>5</td><td>Ha bisongo di aiuto per mangiare, vestirsi, lavarsi o andare in bagno?</td>
+        <td>{{vm.questCounter[0].TOTE0DOM5}}</td><td>{{vm.questCounter[0].MISSE0DOM5}}</td><td>{{vm.questCounter[0].NULLE0DOM5}}</td>
+        <td>{{vm.questCounter[0].TOTE1DOM5}}</td><td>{{vm.questCounter[0].MISSE1DOM5}}</td><td>{{vm.questCounter[0].NULLE1DOM5}}</td></tr>
+
+      <tr><td>6</td><td>Ha avuto limitazioni nel fare il suo lavoro o i lavori di casa?</td>
+        <td>{{vm.questCounter[0].TOTE0DOM6}}</td><td>{{vm.questCounter[0].MISSE0DOM6}}</td><td>{{vm.questCounter[0].NULLE0DOM6}}</td>
+        <td>{{vm.questCounter[0].TOTE1DOM6}}</td><td>{{vm.questCounter[0].MISSE1DOM6}}</td><td>{{vm.questCounter[0].NULLE1DOM6}}</td></tr>
+
+      <tr><td>7</td><td>Ha avuto limitazioni nel praticare i Suoi passatempi-hobby o altre attività di divertimento o svago?</td>
+        <td>{{vm.questCounter[0].TOTE0DOM7}}</td><td>{{vm.questCounter[0].MISSE0DOM7}}</td><td>{{vm.questCounter[0].NULLE0DOM7}}</td>
+        <td>{{vm.questCounter[0].TOTE1DOM7}}</td><td>{{vm.questCounter[0].MISSE1DOM7}}</td><td>{{vm.questCounter[0].NULLE1DOM7}}</td></tr>
+
+      <tr><td>8</td><td>Le è mancato il fiato?</td>
+        <td>{{vm.questCounter[0].TOTE0DOM8}}</td><td>{{vm.questCounter[0].MISSE0DOM8}}</td><td>{{vm.questCounter[0].NULLE0DOM8}}</td>
+        <td>{{vm.questCounter[0].TOTE1DOM8}}</td><td>{{vm.questCounter[0].MISSE1DOM8}}</td><td>{{vm.questCounter[0].NULLE1DOM8}}</td></tr>
+
+      <tr><td>9</td><td>Ha avuto dolore?</td>
+        <td>{{vm.questCounter[0].TOTE0DOM9}}</td><td>{{vm.questCounter[0].MISSE0DOM9}}</td><td>{{vm.questCounter[0].NULLE0DOM9}}</td>
+        <td>{{vm.questCounter[0].TOTE1DOM9}}</td><td>{{vm.questCounter[0].MISSE1DOM9}}</td><td>{{vm.questCounter[0].NULLE1DOM9}}</td></tr>
+
+      <tr><td>10</td><td>Ha avuto bisogno di riposo?</td>
+        <td>{{vm.questCounter[0].TOTE0DOM10}}</td><td>{{vm.questCounter[0].MISSE0DOM10}}</td><td>{{vm.questCounter[0].NULLE0DOM10}}</td>
+        <td>{{vm.questCounter[0].TOTE1DOM10}}</td><td>{{vm.questCounter[0].MISSE1DOM10}}</td><td>{{vm.questCounter[0].NULLE1DOM10}}</td></tr>
+
+      <tr><td>11</td><td>Ha avuto difficoltà a dormire?</td>
+        <td>{{vm.questCounter[0].TOTE0DOM11}}</td><td>{{vm.questCounter[0].MISSE0DOM11}}</td><td>{{vm.questCounter[0].NULLE0DOM11}}</td>
+        <td>{{vm.questCounter[0].TOTE1DOM11}}</td><td>{{vm.questCounter[0].MISSE1DOM11}}</td><td>{{vm.questCounter[0].NULLE1DOM11}}</td></tr>
+
+      <tr><td>12</td><td>Ha sentito debolezza?</td>
+        <td>{{vm.questCounter[0].TOTE0DOM12}}</td><td>{{vm.questCounter[0].MISSE0DOM12}}</td><td>{{vm.questCounter[0].NULLE0DOM12}}</td>
+        <td>{{vm.questCounter[0].TOTE1DOM12}}</td><td>{{vm.questCounter[0].MISSE1DOM12}}</td><td>{{vm.questCounter[0].NULLE1DOM12}}</td></tr>
+
+      <tr><td>13</td><td>Le è mancato l'appetito?</td>
+        <td>{{vm.questCounter[0].TOTE0DOM13}}</td><td>{{vm.questCounter[0].MISSE0DOM13}}</td><td>{{vm.questCounter[0].NULLE0DOM13}}</td>
+        <td>{{vm.questCounter[0].TOTE1DOM13}}</td><td>{{vm.questCounter[0].MISSE1DOM13}}</td><td>{{vm.questCounter[0].NULLE1DOM13}}</td></tr>
+
+      <tr><td>14</td><td>Ha avuto un senso di nausea?</td>
+        <td>{{vm.questCounter[0].TOTE0DOM14}}</td><td>{{vm.questCounter[0].MISSE0DOM14}}</td><td>{{vm.questCounter[0].NULLE0DOM14}}</td>
+        <td>{{vm.questCounter[0].TOTE1DOM14}}</td><td>{{vm.questCounter[0].MISSE1DOM14}}</td><td>{{vm.questCounter[0].NULLE1DOM14}}</td></tr>
+
+      <tr><td>15</td><td>Ha vomitato?</td>
+        <td>{{vm.questCounter[0].TOTE0DOM15}}</td><td>{{vm.questCounter[0].MISSE0DOM15}}</td><td>{{vm.questCounter[0].NULLE0DOM15}}</td>
+        <td>{{vm.questCounter[0].TOTE1DOM15}}</td><td>{{vm.questCounter[0].MISSE1DOM15}}</td><td>{{vm.questCounter[0].NULLE1DOM15}}</td></tr>
+
+      <tr><td>16</td><td>Ha avuto problemi di stitichezza?</td>
+        <td>{{vm.questCounter[0].TOTE0DOM16}}</td><td>{{vm.questCounter[0].MISSE0DOM16}}</td><td>{{vm.questCounter[0].NULLE0DOM16}}</td>
+        <td>{{vm.questCounter[0].TOTE1DOM16}}</td><td>{{vm.questCounter[0].MISSE1DOM16}}</td><td>{{vm.questCounter[0].NULLE1DOM16}}</td></tr>
+
+      <tr><td>17</td><td>Ha avuto problemi di diarrea?</td>
+        <td>{{vm.questCounter[0].TOTE0DOM17}}</td><td>{{vm.questCounter[0].MISSE0DOM17}}</td><td>{{vm.questCounter[0].NULLE0DOM17}}</td>
+        <td>{{vm.questCounter[0].TOTE1DOM17}}</td><td>{{vm.questCounter[0].MISSE1DOM17}}</td><td>{{vm.questCounter[0].NULLE1DOM17}}</td></tr>
+
+      <tr><td>18</td><td>Ha sentito stanchezza?</td>
+        <td>{{vm.questCounter[0].TOTE0DOM18}}</td><td>{{vm.questCounter[0].MISSE0DOM18}}</td><td>{{vm.questCounter[0].NULLE0DOM18}}</td>
+        <td>{{vm.questCounter[0].TOTE1DOM18}}</td><td>{{vm.questCounter[0].MISSE1DOM18}}</td><td>{{vm.questCounter[0].NULLE1DOM18}}</td></tr>
+
+      <tr><td>19</td><td>Il dolore ha interferito con le Sue attività quotidiane?</td>
+        <td>{{vm.questCounter[0].TOTE0DOM19}}</td><td>{{vm.questCounter[0].MISSE0DOM19}}</td><td>{{vm.questCounter[0].NULLE0DOM19}}</td>
+        <td>{{vm.questCounter[0].TOTE1DOM19}}</td><td>{{vm.questCounter[0].MISSE1DOM19}}</td><td>{{vm.questCounter[0].NULLE1DOM19}}</td></tr>
+
+      <tr><td>20</td><td>Ha avuto difficoltà a concentrarsi su cose come leggere un giornale o guardare la televisione?</td>
+        <td>{{vm.questCounter[0].TOTE0DOM20}}</td><td>{{vm.questCounter[0].MISSE0DOM20}}</td><td>{{vm.questCounter[0].NULLE0DOM20}}</td>
+        <td>{{vm.questCounter[0].TOTE1DOM20}}</td><td>{{vm.questCounter[0].MISSE1DOM20}}</td><td>{{vm.questCounter[0].NULLE1DOM20}}</td></tr>
+
+      <tr><td>21</td><td>Si è sentito/a teso/a?</td>
+        <td>{{vm.questCounter[0].TOTE0DOM21}}</td><td>{{vm.questCounter[0].MISSE0DOM21}}</td><td>{{vm.questCounter[0].NULLE0DOM21}}</td>
+        <td>{{vm.questCounter[0].TOTE1DOM21}}</td><td>{{vm.questCounter[0].MISSE1DOM21}}</td><td>{{vm.questCounter[0].NULLE1DOM21}}</td></tr>
+
+      <tr><td>22</td><td>Ha avuto preoccupazioni?</td>
+        <td>{{vm.questCounter[0].TOTE0DOM22}}</td><td>{{vm.questCounter[0].MISSE0DOM22}}</td><td>{{vm.questCounter[0].NULLE0DOM22}}</td>
+        <td>{{vm.questCounter[0].TOTE1DOM22}}</td><td>{{vm.questCounter[0].MISSE1DOM22}}</td><td>{{vm.questCounter[0].NULLE1DOM22}}</td></tr>
+
+      <tr><td>23</td><td>Ha avuto manifestazioni di irritabilità?</td>
+        <td>{{vm.questCounter[0].TOTE0DOM23}}</td><td>{{vm.questCounter[0].MISSE0DOM23}}</td><td>{{vm.questCounter[0].NULLE0DOM23}}</td>
+        <td>{{vm.questCounter[0].TOTE1DOM23}}</td><td>{{vm.questCounter[0].MISSE1DOM23}}</td><td>{{vm.questCounter[0].NULLE1DOM23}}</td></tr>
+
+      <tr><td>24</td><td>Ha avvertito uno stato di depressione?</td>
+        <td>{{vm.questCounter[0].TOTE0DOM24}}</td><td>{{vm.questCounter[0].MISSE0DOM24}}</td><td>{{vm.questCounter[0].NULLE0DOM24}}</td>
+        <td>{{vm.questCounter[0].TOTE1DOM24}}</td><td>{{vm.questCounter[0].MISSE1DOM24}}</td><td>{{vm.questCounter[0].NULLE1DOM24}}</td></tr>
+
+      <tr><td>25</td><td>Ha avuto difficoltà a ricordare le cose?</td>
+        <td>{{vm.questCounter[0].TOTE0DOM25}}</td><td>{{vm.questCounter[0].MISSE0DOM25}}</td><td>{{vm.questCounter[0].NULLE0DOM25}}</td>
+        <td>{{vm.questCounter[0].TOTE1DOM25}}</td><td>{{vm.questCounter[0].MISSE1DOM25}}</td><td>{{vm.questCounter[0].NULLE1DOM25}}</td></tr>
+
+      <tr><td>26</td><td>Le Sue condizioni fisiche o il Suo trattamento medico hanno interferito con le Sua vita familiare?</td>
+        <td>{{vm.questCounter[0].TOTE0DOM26}}</td><td>{{vm.questCounter[0].MISSE0DOM26}}</td><td>{{vm.questCounter[0].NULLE0DOM26}}</td>
+        <td>{{vm.questCounter[0].TOTE1DOM26}}</td><td>{{vm.questCounter[0].MISSE1DOM26}}</td><td>{{vm.questCounter[0].NULLE1DOM26}}</td></tr>
+
+      <tr><td>27</td><td>Le Sue condizioni fisiche o il Suo trattamento medico hanno interferito con le Sue attività sociali?</td>
+        <td>{{vm.questCounter[0].TOTE0DOM27}}</td><td>{{vm.questCounter[0].MISSE0DOM27}}</td><td>{{vm.questCounter[0].NULLE0DOM27}}</td>
+        <td>{{vm.questCounter[0].TOTE1DOM27}}</td><td>{{vm.questCounter[0].MISSE1DOM27}}</td><td>{{vm.questCounter[0].NULLE1DOM27}}</td></tr>
+
+      <tr><td>28</td><td>Le Sue condizioni fisiche o il Suo trattamento medico Le hanno causato difficoltà finanziarie?</td>
+        <td>{{vm.questCounter[0].TOTE0DOM28}}</td><td>{{vm.questCounter[0].MISSE0DOM28}}</td><td>{{vm.questCounter[0].NULLE0DOM28}}</td>
+        <td>{{vm.questCounter[0].TOTE1DOM28}}</td><td>{{vm.questCounter[0].MISSE1DOM28}}</td><td>{{vm.questCounter[0].NULLE1DOM28}}</td></tr>
+
+      <tr><td>29</td><td>Come valuterebbe in generale la Sua salute durante gli ultimi sette giorni?</td>
+        <td>{{vm.questCounter[0].TOTE0DOM29}}</td><td>{{vm.questCounter[0].MISSE0DOM29}}</td><td>{{vm.questCounter[0].NULLE0DOM29}}</td>
+        <td>{{vm.questCounter[0].TOTE1DOM29}}</td><td>{{vm.questCounter[0].MISSE1DOM29}}</td><td>{{vm.questCounter[0].NULLE1DOM29}}</td></tr>
+
+      <tr><td>30</td><td>Come valuterebbe in generale la Sua qualità di vita durante gli ultimi sette giorni?</td>
+        <td>{{vm.questCounter[0].TOTE0DOM30}}</td><td>{{vm.questCounter[0].MISSE0DOM30}}</td><td>{{vm.questCounter[0].NULLE0DOM30}}</td>
+        <td>{{vm.questCounter[0].TOTE1DOM30}}</td><td>{{vm.questCounter[0].MISSE1DOM30}}</td><td>{{vm.questCounter[0].NULLE1DOM30}}</td></tr>
+    </tbody>
+  </table>
+
+  <table class="table">
+    <thead><th colspan="2">Hads</th><th colspan="3">T0</th><th colspan="3">T1</th></thead>
+    <thead><th>id</th><th>Domanda</th><th>Risposte presenti</th><th>Mancanti</th><th>NULL (ossia che non è stato compilato il questionario)</th><th>Risposte presenti</th><th>Mancanti</th><th>NULL (ossia che non è stato compilato il questionario)</th></thead>
+    <tbody>
+      <tr><td>1</td><td>Mi sono sentito/a teso/a o molto nervoso/a</td>
+        <td>{{vm.questCounter[0].TOTH0DOM1}}</td><td>{{vm.questCounter[0].MISSH0DOM1}}</td><td>{{vm.questCounter[0].NULLH0DOM1}}</td>
+        <td>{{vm.questCounter[0].TOTH1DOM1}}</td><td>{{vm.questCounter[0].MISSH1DOM1}}</td><td>{{vm.questCounter[0].NULLH1DOM1}}</td></tr>
+
+      <tr><td>2</td><td>Ho continuato a provare piacere per le stesse cose che mi piacevano prima</td>
+        <td>{{vm.questCounter[0].TOTH0DOM2}}</td><td>{{vm.questCounter[0].MISSH0DOM2}}</td><td>{{vm.questCounter[0].NULLH0DOM2}}</td>
+        <td>{{vm.questCounter[0].TOTH1DOM2}}</td><td>{{vm.questCounter[0].MISSH1DOM2}}</td><td>{{vm.questCounter[0].NULLH1DOM2}}</td></tr>
+
+      <tr><td>3</td><td>Mi sono sentito/a come rallentato/a</td>
+        <td>{{vm.questCounter[0].TOTH0DOM3}}</td><td>{{vm.questCounter[0].MISSH0DOM3}}</td><td>{{vm.questCounter[0].NULLH0DOM3}}</td>
+        <td>{{vm.questCounter[0].TOTH1DOM3}}</td><td>{{vm.questCounter[0].MISSH1DOM3}}</td><td>{{vm.questCounter[0].NULLH1DOM3}}</td></tr>
+
+      <tr><td>4</td><td>Ho provato una sensazione di paura, come un senso di tensione allo stomaco</td>
+        <td>{{vm.questCounter[0].TOTH0DOM4}}</td><td>{{vm.questCounter[0].MISSH0DOM4}}</td><td>{{vm.questCounter[0].NULLH0DOM4}}</td>
+        <td>{{vm.questCounter[0].TOTH1DOM4}}</td><td>{{vm.questCounter[0].MISSH1DOM4}}</td><td>{{vm.questCounter[0].NULLH1DOM4}}</td></tr>
+
+      <tr><td>5</td><td>Ho provato una sensazione di paura come se stesse per accadere qualcosa di terribile</td>
+        <td>{{vm.questCounter[0].TOTH0DOM5}}</td><td>{{vm.questCounter[0].MISSH0DOM5}}</td><td>{{vm.questCounter[0].NULLH0DOM5}}</td>
+        <td>{{vm.questCounter[0].TOTH1DOM5}}</td><td>{{vm.questCounter[0].MISSH1DOM5}}</td><td>{{vm.questCounter[0].NULLH1DOM5}}</td></tr>
+
+      <tr><td>6</td><td>Sono riuscito/a a ridere e a vedere il lato divertente delle cose</td>
+        <td>{{vm.questCounter[0].TOTH0DOM6}}</td><td>{{vm.questCounter[0].MISSH0DOM6}}</td><td>{{vm.questCounter[0].NULLH0DOM6}}</td>
+        <td>{{vm.questCounter[0].TOTH1DOM6}}</td><td>{{vm.questCounter[0].MISSH1DOM6}}</td><td>{{vm.questCounter[0].NULLH1DOM6}}</td></tr>
+
+      <tr><td>7</td><td>Ho perso interesse per il mio aspetto fisico</td>
+        <td>{{vm.questCounter[0].TOTH0DOM7}}</td><td>{{vm.questCounter[0].MISSH0DOM7}}</td><td>{{vm.questCounter[0].NULLH0DOM7}}</td>
+        <td>{{vm.questCounter[0].TOTH1DOM7}}</td><td>{{vm.questCounter[0].MISSH1DOM7}}</td><td>{{vm.questCounter[0].NULLH1DOM7}}</td></tr>
+
+      <tr><td>8</td><td>Mi sono sentito/a irrequieto/a e incapace di stare fermo</td>
+        <td>{{vm.questCounter[0].TOTH0DOM8}}</td><td>{{vm.questCounter[0].MISSH0DOM8}}</td><td>{{vm.questCounter[0].NULLH0DOM8}}</td>
+        <td>{{vm.questCounter[0].TOTH1DOM8}}</td><td>{{vm.questCounter[0].MISSH1DOM8}}</td><td>{{vm.questCounter[0].NULLH1DOM8}}</td></tr>
+
+      <tr><td>9</td><td>Mi sono venuti in mente pensieri preoccupanti</td>
+        <td>{{vm.questCounter[0].TOTH0DOM9}}</td><td>{{vm.questCounter[0].MISSH0DOM9}}</td><td>{{vm.questCounter[0].NULLH0DOM9}}</td>
+        <td>{{vm.questCounter[0].TOTH1DOM9}}</td><td>{{vm.questCounter[0].MISSH1DOM9}}</td><td>{{vm.questCounter[0].NULLH1DOM9}}</td></tr>
+
+      <tr><td>10</td><td>Mi sono sentito/a di buon umore</td>
+        <td>{{vm.questCounter[0].TOTH0DOM10}}</td><td>{{vm.questCounter[0].MISSH0DOM10}}</td><td>{{vm.questCounter[0].NULLH0DOM10}}</td>
+        <td>{{vm.questCounter[0].TOTH1DOM10}}</td><td>{{vm.questCounter[0].MISSH1DOM10}}</td><td>{{vm.questCounter[0].NULLH1DOM10}}</td></tr>
+
+      <tr><td>11</td><td>Ho pensato al futuro con ottimismo</td>
+        <td>{{vm.questCounter[0].TOTH0DOM11}}</td><td>{{vm.questCounter[0].MISSH0DOM11}}</td><td>{{vm.questCounter[0].NULLH0DOM11}}</td>
+        <td>{{vm.questCounter[0].TOTH1DOM11}}</td><td>{{vm.questCounter[0].MISSH1DOM11}}</td><td>{{vm.questCounter[0].NULLH1DOM11}}</td></tr>
+
+      <tr><td>12</td><td>Ho avuto improvvise sensazioni di panico</td>
+        <td>{{vm.questCounter[0].TOTH0DOM12}}</td><td>{{vm.questCounter[0].MISSH0DOM12}}</td><td>{{vm.questCounter[0].NULLH0DOM12}}</td>
+        <td>{{vm.questCounter[0].TOTH1DOM12}}</td><td>{{vm.questCounter[0].MISSH1DOM12}}</td><td>{{vm.questCounter[0].NULLH1DOM12}}</td></tr>
+
+      <tr><td>13</td><td>Sono riuscito/a stare seduto fermo/a e a sentirmi rilassato/a</td>
+        <td>{{vm.questCounter[0].TOTH0DOM13}}</td><td>{{vm.questCounter[0].MISSH0DOM13}}</td><td>{{vm.questCounter[0].NULLH0DOM13}}</td>
+        <td>{{vm.questCounter[0].TOTH1DOM13}}</td><td>{{vm.questCounter[0].MISSH1DOM13}}</td><td>{{vm.questCounter[0].NULLH1DOM13}}</td></tr>
+
+      <tr><td>14</td><td>Sono riuscito/a godermi un buon libro o un buon programma alla radio o alla televisione</td>
+        <td>{{vm.questCounter[0].TOTH0DOM14}}</td><td>{{vm.questCounter[0].MISSH0DOM14}}</td><td>{{vm.questCounter[0].NULLH0DOM14}}</td>
+        <td>{{vm.questCounter[0].TOTH1DOM14}}</td><td>{{vm.questCounter[0].MISSH1DOM14}}</td><td>{{vm.questCounter[0].NULLH1DOM14}}</td></tr>
+    </tbody>
+  </table>
+
+  <table class="table">
+    <thead><th colspan="2">Neq</th><th colspan="3">T0</th><th colspan="3">T1</th></thead>
+    <thead><th>id</th><th>Domanda</th><th>Risposte presenti</th><th>Mancanti</th><th>NULL (ossia che non è stato compilato il questionario)</th><th>Risposte presenti</th><th>Mancanti</th><th>NULL (ossia che non è stato compilato il questionario)</th></thead>
+    <tbody>
+      <tr><td>1</td><td>Ho bisogno di avere maggiori informazioni sulla mia diagnosi</td>
+        <td>{{vm.questCounter[0].TOTN0DOM1}}</td><td>{{vm.questCounter[0].MISSN0DOM1}}</td><td>{{vm.questCounter[0].NULLN0DOM1}}</td>
+        <td>{{vm.questCounter[0].TOTN1DOM1}}</td><td>{{vm.questCounter[0].MISSN1DOM1}}</td><td>{{vm.questCounter[0].NULLN1DOM1}}</td></tr>
+
+      <tr><td>2</td><td>Ho bisogno di avere maggiori informazioni sulle mie condizioni future?</td>
+        <td>{{vm.questCounter[0].TOTN0DOM2}}</td><td>{{vm.questCounter[0].MISSN0DOM2}}</td><td>{{vm.questCounter[0].NULLN0DOM2}}</td>
+        <td>{{vm.questCounter[0].TOTN1DOM2}}</td><td>{{vm.questCounter[0].MISSN1DOM2}}</td><td>{{vm.questCounter[0].NULLN1DOM2}}</td></tr>
+
+      <tr><td>3</td><td>Ho bisogno di avere maggiori informazioni sugli esami che mi stanno facendo?</td>
+        <td>{{vm.questCounter[0].TOTN0DOM3}}</td><td>{{vm.questCounter[0].MISSN0DOM3}}</td><td>{{vm.questCounter[0].NULLN0DOM3}}</td>
+        <td>{{vm.questCounter[0].TOTN1DOM3}}</td><td>{{vm.questCounter[0].MISSN1DOM3}}</td><td>{{vm.questCounter[0].NULLN1DOM3}}</td></tr>
+
+      <tr><td>4</td><td>Ho bisogno di avere maggiori spiegazioni sui trattamenti?</td>
+        <td>{{vm.questCounter[0].TOTN0DOM4}}</td><td>{{vm.questCounter[0].MISSN0DOM4}}</td><td>{{vm.questCounter[0].NULLN0DOM4}}</td>
+        <td>{{vm.questCounter[0].TOTN1DOM4}}</td><td>{{vm.questCounter[0].MISSN1DOM4}}</td><td>{{vm.questCounter[0].NULLN1DOM4}}</td></tr>
+
+      <tr><td>5</td><td>Ho bisogno di essere più coinvolto/a nelle scelte terapeutiche?</td>
+        <td>{{vm.questCounter[0].TOTN0DOM5}}</td><td>{{vm.questCounter[0].MISSN0DOM5}}</td><td>{{vm.questCounter[0].NULLN0DOM5}}</td>
+        <td>{{vm.questCounter[0].TOTN1DOM5}}</td><td>{{vm.questCounter[0].MISSN1DOM5}}</td><td>{{vm.questCounter[0].NULLN1DOM5}}</td></tr>
+
+      <tr><td>6</td><td>Ho bisogno che i medici e gli infermieri mi diano informazioni comprensibili</td>
+        <td>{{vm.questCounter[0].TOTN0DOM6}}</td><td>{{vm.questCounter[0].MISSN0DOM6}}</td><td>{{vm.questCounter[0].NULLN0DOM6}}</td>
+        <td>{{vm.questCounter[0].TOTN1DOM6}}</td><td>{{vm.questCounter[0].MISSN1DOM6}}</td><td>{{vm.questCounter[0].NULLN1DOM6}}</td></tr>
+
+      <tr><td>7</td><td>Ho bisogno che i medici siano più sinceri con me</td>
+        <td>{{vm.questCounter[0].TOTN0DOM7}}</td><td>{{vm.questCounter[0].MISSN0DOM7}}</td><td>{{vm.questCounter[0].NULLN0DOM7}}</td>
+        <td>{{vm.questCounter[0].TOTN1DOM7}}</td><td>{{vm.questCounter[0].MISSN1DOM7}}</td><td>{{vm.questCounter[0].NULLN1DOM7}}</td></tr>
+
+      <tr><td>8</td><td>Ho bisogno di avere un dialogo maggiore con i medici</td>
+        <td>{{vm.questCounter[0].TOTN0DOM8}}</td><td>{{vm.questCounter[0].MISSN0DOM8}}</td><td>{{vm.questCounter[0].NULLN0DOM8}}</td>
+        <td>{{vm.questCounter[0].TOTN1DOM8}}</td><td>{{vm.questCounter[0].MISSN1DOM8}}</td><td>{{vm.questCounter[0].NULLN1DOM8}}</td></tr>
+
+      <tr><td>9</td><td>Ho bisogno che alcuni dei miei disturbi ( dolore, nausea, insonnia, ecc.) siano maggiormente controllati</td>
+        <td>{{vm.questCounter[0].TOTN0DOM9}}</td><td>{{vm.questCounter[0].MISSN0DOM9}}</td><td>{{vm.questCounter[0].NULLN0DOM9}}</td>
+        <td>{{vm.questCounter[0].TOTN1DOM9}}</td><td>{{vm.questCounter[0].MISSN1DOM9}}</td><td>{{vm.questCounter[0].NULLN1DOM9}}</td></tr>
+
+      <tr><td>10</td><td>Ho bisogno di maggiore aiuto per mangiare, vestirmi ed andare in bagno</td>
+        <td>{{vm.questCounter[0].TOTN0DOM10}}</td><td>{{vm.questCounter[0].MISSN0DOM10}}</td><td>{{vm.questCounter[0].NULLN0DOM10}}</td>
+        <td>{{vm.questCounter[0].TOTN1DOM10}}</td><td>{{vm.questCounter[0].MISSN1DOM10}}</td><td>{{vm.questCounter[0].NULLN1DOM10}}</td></tr>
+
+      <tr><td>11</td><td>Ho bisogno di maggiore rispetto della mia intimità</td>
+        <td>{{vm.questCounter[0].TOTN0DOM11}}</td><td>{{vm.questCounter[0].MISSN0DOM11}}</td><td>{{vm.questCounter[0].NULLN0DOM11}}</td>
+        <td>{{vm.questCounter[0].TOTN1DOM11}}</td><td>{{vm.questCounter[0].MISSN1DOM11}}</td><td>{{vm.questCounter[0].NULLN1DOM11}}</td></tr>
+
+      <tr><td>12</td><td>Ho bisogno di maggiore attenzione da parte del personale infermieristico</td>
+        <td>{{vm.questCounter[0].TOTN0DOM12}}</td><td>{{vm.questCounter[0].MISSN0DOM12}}</td><td>{{vm.questCounter[0].NULLN0DOM12}}</td>
+        <td>{{vm.questCounter[0].TOTN1DOM12}}</td><td>{{vm.questCounter[0].MISSN1DOM12}}</td><td>{{vm.questCounter[0].NULLN1DOM12}}</td></tr>
+
+      <tr><td>13</td><td>Ho bisogno di essere più rassicurato dai medici</td>
+        <td>{{vm.questCounter[0].TOTN0DOM13}}</td><td>{{vm.questCounter[0].MISSN0DOM13}}</td><td>{{vm.questCounter[0].NULLN0DOM13}}</td>
+        <td>{{vm.questCounter[0].TOTN1DOM13}}</td><td>{{vm.questCounter[0].MISSN1DOM13}}</td><td>{{vm.questCounter[0].NULLN1DOM13}}</td></tr>
+
+      <tr><td>14</td><td>Ho bisogno che i servizi offerti dall'ospedale (bagni, pasti, pulizia) siano migliori</td>
+        <td>{{vm.questCounter[0].TOTN0DOM14}}</td><td>{{vm.questCounter[0].MISSN0DOM14}}</td><td>{{vm.questCounter[0].NULLN0DOM14}}</td>
+        <td>{{vm.questCounter[0].TOTN1DOM14}}</td><td>{{vm.questCounter[0].MISSN1DOM14}}</td><td>{{vm.questCounter[0].NULLN1DOM14}}</td></tr>
+
+      <tr><td>15</td><td>Ho bisogno di avere maggiori informazioni economico-assicurative legate alla mia malattia (ticket, invalidità, ecc.)</td>
+        <td>{{vm.questCounter[0].TOTN0DOM15}}</td><td>{{vm.questCounter[0].MISSN0DOM15}}</td><td>{{vm.questCounter[0].NULLN0DOM15}}</td>
+        <td>{{vm.questCounter[0].TOTN1DOM15}}</td><td>{{vm.questCounter[0].MISSN1DOM15}}</td><td>{{vm.questCounter[0].NULLN1DOM15}}</td></tr>
+
+      <tr><td>16</td><td>Ho bisogno di un aiuto economico</td>
+        <td>{{vm.questCounter[0].TOTN0DOM16}}</td><td>{{vm.questCounter[0].MISSN0DOM16}}</td><td>{{vm.questCounter[0].NULLN0DOM16}}</td>
+        <td>{{vm.questCounter[0].TOTN1DOM16}}</td><td>{{vm.questCounter[0].MISSN1DOM16}}</td><td>{{vm.questCounter[0].NULLN1DOM16}}</td></tr>
+
+      <tr><td>17</td><td>Ho bisogno di parlare con uno psicologo</td>
+        <td>{{vm.questCounter[0].TOTN0DOM17}}</td><td>{{vm.questCounter[0].MISSN0DOM17}}</td><td>{{vm.questCounter[0].NULLN0DOM17}}</td>
+        <td>{{vm.questCounter[0].TOTN1DOM17}}</td><td>{{vm.questCounter[0].MISSN1DOM17}}</td><td>{{vm.questCounter[0].NULLN1DOM17}}</td></tr>
+
+      <tr><td>18</td><td>Ho bisogno di parlare con un assistente spirituale</td>
+        <td>{{vm.questCounter[0].TOTN0DOM18}}</td><td>{{vm.questCounter[0].MISSN0DOM18}}</td><td>{{vm.questCounter[0].NULLN0DOM18}}</td>
+        <td>{{vm.questCounter[0].TOTN1DOM18}}</td><td>{{vm.questCounter[0].MISSN1DOM18}}</td><td>{{vm.questCounter[0].NULLN1DOM18}}</td></tr>
+
+      <tr><td>19</td><td>Ho bisogno di parlare con persone che hanno avuto la mia stessa esperienza</td>
+        <td>{{vm.questCounter[0].TOTN0DOM19}}</td><td>{{vm.questCounter[0].MISSN0DOM19}}</td><td>{{vm.questCounter[0].NULLN0DOM19}}</td>
+        <td>{{vm.questCounter[0].TOTN1DOM19}}</td><td>{{vm.questCounter[0].MISSN1DOM19}}</td><td>{{vm.questCounter[0].NULLN1DOM19}}</td></tr>
+
+      <tr><td>20</td><td>Ho bisogno di essere maggiormente rassicurato dai miei famigliari</td>
+        <td>{{vm.questCounter[0].TOTN0DOM20}}</td><td>{{vm.questCounter[0].MISSN0DOM20}}</td><td>{{vm.questCounter[0].NULLN0DOM20}}</td>
+        <td>{{vm.questCounter[0].TOTN1DOM20}}</td><td>{{vm.questCounter[0].MISSN1DOM20}}</td><td>{{vm.questCounter[0].NULLN1DOM20}}</td></tr>
+
+      <tr><td>21</td><td>Ho bisogno di sentirmi maggiormente utile in famiglia</td>
+        <td>{{vm.questCounter[0].TOTN0DOM21}}</td><td>{{vm.questCounter[0].MISSN0DOM21}}</td><td>{{vm.questCounter[0].NULLN0DOM21}}</td>
+        <td>{{vm.questCounter[0].TOTN1DOM21}}</td><td>{{vm.questCounter[0].MISSN1DOM21}}</td><td>{{vm.questCounter[0].NULLN1DOM21}}</td></tr>
+
+      <tr><td>22</td><td>Ho bisogno di sentirmi meno abbandonato a me stesso</td>
+        <td>{{vm.questCounter[0].TOTN0DOM22}}</td><td>{{vm.questCounter[0].MISSN0DOM22}}</td><td>{{vm.questCounter[0].NULLN0DOM22}}</td>
+        <td>{{vm.questCounter[0].TOTN1DOM22}}</td><td>{{vm.questCounter[0].MISSN1DOM22}}</td><td>{{vm.questCounter[0].NULLN1DOM22}}</td></tr>
+
+      <tr><td>23</td><td>Ho bisogno di essere meno commiserato dagli altri</td>
+        <td>{{vm.questCounter[0].TOTN0DOM23}}</td><td>{{vm.questCounter[0].MISSN0DOM23}}</td><td>{{vm.questCounter[0].NULLN0DOM23}}</td>
+        <td>{{vm.questCounter[0].TOTN1DOM23}}</td><td>{{vm.questCounter[0].MISSN1DOM23}}</td><td>{{vm.questCounter[0].NULLN1DOM23}}</td></tr>
+    </tbody>
+  </table>
+
+</div>

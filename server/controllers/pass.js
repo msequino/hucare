@@ -17,7 +17,6 @@ module.exports = function(req,res,next){
     },
     function(req, username, password, done) {
       // check in mongo if a user with username exists or not
-      console.log(req.query);
       db.User.findOne({where : { 'username' :  username }}).then(
         function(user) {
           // Username does not exist, log error & redirect back
