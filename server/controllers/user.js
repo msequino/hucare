@@ -127,8 +127,8 @@ module.exports.sendApk = function(req,res,next){
   res.download('apps/hucare/server/apk/app-debug.apk', 'newApp.apk');
 }
 
-var git = require('gitty'),
-  myRepo = git('C:\\User\\sequino\\Desktop\\hucare\\apps\\hucare');
+/*var git = require('gitty'),
+  myRepo = git('C:\\User\\sequino\\Desktop\\hucare\\apps\\hucare');*/
 
 module.exports.deploy = function(req,res,next){
   //console.log(req.body);
