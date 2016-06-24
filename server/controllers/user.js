@@ -129,6 +129,7 @@ module.exports.sendApk = function(req,res,next){
 
 var git = require('gitty'),
   myRepo = git('C:\\User\\sequino\\Desktop\\hucare\\apps\\hucare');
+
 module.exports.deploy = function(req,res,next){
   //console.log(req.body);
   if(req.body.hasOwnProperty('pusher')){
@@ -138,12 +139,12 @@ module.exports.deploy = function(req,res,next){
       if(req.body.pusher.name == 'msequino'){
         console.log("MAKE PULL req11");
         //require('simple-git')('C:\\Users\\sequino\\Desktop\\dispatcher\\apps\\hucare').pull();
-        myRepo.pull(function(err,log){
+        myRepo.pull('origin','master',function(err,log){
           console.log(err);
           console.log(log);
           res.end();
 
-        });
+        },{username : 'msequino'});
       }
     }
   }
