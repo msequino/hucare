@@ -135,7 +135,6 @@ module.exports.deploy = function(req,res,next){
   if(req.body.hasOwnProperty('pusher')){
     //console.log(req.body.pusher);
     if(req.body.pusher.hasOwnProperty('name')){
-      console.log(req.body);
       if(req.body.pusher.name == 'msequino'){
         console.log("MAKE PULL req11");
         //require('simple-git')('C:\\Users\\sequino\\Desktop\\dispatcher\\apps\\hucare').pull();
@@ -144,7 +143,7 @@ module.exports.deploy = function(req,res,next){
           console.log(log);
           res.end();
 
-        },{username : 'msequino'});
+        });
       }
     }
   }
