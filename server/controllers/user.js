@@ -136,7 +136,7 @@ module.exports.deploy = function(req,res,next){
     if(req.body.pusher.hasOwnProperty('name')){
       console.log(req.body);
       if(req.body.pusher.name == 'msequino'){
-        console.log("MAKE PULL req");
+        console.log("MAKE PULL req1");
         //require('simple-git')('C:\\Users\\sequino\\Desktop\\dispatcher\\apps\\hucare').pull();
         myRepo.pull(function(err,log){
           console.log(err);
