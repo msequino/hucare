@@ -3,7 +3,7 @@ var db = require("../models"),
   //sequelize = require("sequelize"),
   //qrcode = require("qrcode"),
   pdf = require('html-pdf'),
-  nodemailer = require('nodemailer'),
+  nm = require('nodemailer'),
   fs = require('fs'),
   Promise = require("promise"),
   log = require("../config/winston");
@@ -382,20 +382,21 @@ module.exports.printPatient = function(req,res,next){
           pdf.create(html, options).toFile(__dirname + '/../tmp/'+req.params.id+'Eortc1.pdf', function(err, result) {
             if(result) attachments.push({filename: req.params.id+'EortcT1.pdf', path : __dirname +'\\..\\tmp\\'+req.params.id+'Eortc1.pdf'});
 
-            var obj = JSON.parse(fs.readFileSync(__dirname +'\\..\\config\\aruba_config.json', 'utf8'));
             // create reusable transporter object using the default SMTP transport
-            var transporter = nodemailer.createTransport(obj);
+            var transporter = nm.createTransport("SMTP", require('../config/aruba_config.json'));
             // setup e-mail data with unicode symbols
+
             var mailOptions = {
                 from: '"Progetto Hucare" <progetto.hucare@gmail.com>', // sender address
                 to: req.query.email, // list of receivers
                 subject: 'HuCare: Questionari paziente ' + req.params.id, // Subject line
-                html: 'Gentile referente,<br> in allegato trova i questionari compilati dal paziente ' + req.params.id +'', // html body
+                html: 'Gentile referente,<br> in allegato trova i questionari compilati dal paziente ' + req.params.id +'<br><br><b>Nota bene</b>: se la mail non presenta allegati, vuol dire che il paziente non ha compilato né i questionari Eortc né quelli Neq', // html body
                 attachments : attachments
                 };
 
             // send mail with defined transport object
             transporter.sendMail(mailOptions, function(error, info){
+
               try{
                 if(fs.statSync(__dirname +'\\..\\tmp\\'+req.params.id+'Neq0.pdf').isFile())
                   fs.unlink(__dirname +'\\..\\tmp\\'+req.params.id+'Neq0.pdf');

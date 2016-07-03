@@ -4,9 +4,10 @@ var db = require("../models"),
   //qrcode = require("qrcode"),
   Promise = require("promise"),
   nm = require('nodemailer'),
+  fs = require('fs'),
   log = require("../config/winston");
 
-var transporter = nm.createTransport('smtp://5859205%40aruba.it:8308n3dxs4@smtp.aruba.it');
+var transporter = nm.createTransport("SMTP", require('../config/aruba_config.json'));
 
 module.exports.insertAllRowT0 = function(req,res,next){
 
@@ -44,7 +45,7 @@ module.exports.insertAllRowT0 = function(req,res,next){
   }).then(function(result){
     res.json({code : 200 , message : "Informazioni salvate"});
   }).catch(function(error){
-    transporter.sendMail({from : "server@ao.pr.it",to:"mansequino@gmail.com", subject :"Execution error in HuCare", html:"E' successo qualcosa in hucare<br><br>" + JSON.stringify(error) + "<br><br> dall'utente<br>"+JSON.stringify(req.user) },function(err,info){
+    transporter.sendMail({from : "server@ao.pr.it",to:"mansequino@gmail.com", subject :"Execution error in HuCare", html:"E' successo qualcosa in hucare<br><br><b>" + error + "</b><br><br> dall'utente <b>"+JSON.stringify(req.user.username) + "</b>" },function(err,info){
       log.log('error',"USER " + req.user.id + " ERROR ("+ JSON.stringify(error) +")");
       res.json({code: 400, message : "Error in inserting"});
     });
@@ -76,7 +77,7 @@ module.exports.insertAllRowT1 = function(req,res,next){
   }).then(function(result){
       res.json({code : 200 , message : "Informazioni salvate"});
   }).catch(function(error){
-    transporter.sendMail({from : "server@ao.pr.it",to:"mansequino@gmail.com", subject :"Execution error in HuCare", html:"E' successo qualcosa in hucare<br><br>" + JSON.stringify(error) + "<br><br> dall'utente<br>"+JSON.stringify(req.user) },function(err,info){
+    transporter.sendMail({from : "server@ao.pr.it",to:"mansequino@gmail.com", subject :"Execution error in HuCare", html:"E' successo qualcosa in hucare<br><br><b>" + error + "</b><br><br> dall'utente <b>"+JSON.stringify(req.user.username) + "</b>" },function(err,info){
       log.log('error',"USER " + req.user.id + " ERROR ("+ JSON.stringify(error) +")");
       res.json({code: 400, message : "Error in inserting"});
     });
