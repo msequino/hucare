@@ -115,3 +115,4 @@
 {"level":"error","message":"USER 39 ERROR ({})","timestamp":"2016-07-03T11:41:14.192Z"}
 {"level":"error","message":"USER 39 ERROR ({})","timestamp":"2016-07-03T11:41:58.908Z"}
 {"level":"error","message":"USER 39 ERROR ({})","timestamp":"2016-07-03T11:42:40.300Z"}
+{"level":"error","message":"USER 33 ERROR ({\"name\":\"SequelizeValidationError\",\"message\":\"Validation error: Validation min failed,\\nValidation error: Validation min failed\",\"errors\":[{\"message\":\"Validation min failed\",\"type\":\"Validation error\",\"path\":\"dom4\",\"value\":{},\"__raw\":{}},{\"message\":\"Validation min failed\",\"type\":\"Validation error\",\"path\":\"dom5\",\"value\":{},\"__raw\":{}}]})","timestamp":"2016-08-20T07:59:44.505Z"}
