@@ -5,17 +5,17 @@ module.exports = function(sequelize, DataTypes) {
     incl1: {
       type : DataTypes.INTEGER(1),
       validate : {min : 1 , max : 2},
-      comment : "Età >= 18 e <= 75 anni"
+      comment : "Età > 18"
     },
     incl2: {
       type : DataTypes.INTEGER(1),
       validate : {min : 1 , max : 2},
-      comment : "Diagnosi di tumore solido da non più di un mese"
+      comment : "Diagnosi di tumore solido da non più di due mesi"
     },
     incl3: {
       type : DataTypes.INTEGER(1),
       validate : {min : 1 , max : 2},
-      comment : "Deve iniziare un primo trattamento medico..."
+      comment : "Che devono iniziare un nuovo trattamento medico: chemioterapia, (sia e.v. Che con farmaci orali), farmaci a target molecolare, ormonoterapia, immunoterapia"
     },
     incl4: {
       type : DataTypes.INTEGER(1),

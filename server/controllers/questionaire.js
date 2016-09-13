@@ -3,6 +3,8 @@ var db = require("../models"),
   //sequelize = require("sequelize"),
   //qrcode = require("qrcode"),
   Promise = require("promise"),
+  Patient = require("./patient"),
+  pdf = require('html-pdf'),
   nm = require('nodemailer'),
   fs = require('fs'),
   log = require("../config/winston");
@@ -21,8 +23,8 @@ module.exports.insertAllRowT0 = function(req,res,next){
           return db.T0Reporting.create(req.body.Reporting, {transaction : t}).then(function(r){
             log.log('info',"USER " + req.user.id + " CREATED T0Reporting " + r.id + ' ('+ JSON.stringify(r) + ')');
             /*TODO Nello studio normale, devi togliere le valutazioni */
-            return db.Evaluation.create(req.body.Evaluation, {transaction : t}).then(function(ev){
-              log.log('info',"USER " + req.user.id + " CREATED Evaluation " + ev.id + ' ('+ JSON.stringify(ev) + ')');
+            //return db.Evaluation.create(req.body.Evaluation, {transaction : t}).then(function(ev){
+            //  log.log('info',"USER " + req.user.id + " CREATED Evaluation " + ev.id + ' ('+ JSON.stringify(ev) + ')');
               return db.Screening.create(req.body.Screening, {transaction : t}).then(function(sc){
                 log.log('info',"USER " + req.user.id + " CREATED Screening " + sc.id + ' ('+ JSON.stringify(sc) + ')');
                 req.body.Patient.T0EortcId = e.id;
@@ -30,14 +32,14 @@ module.exports.insertAllRowT0 = function(req,res,next){
                 req.body.Patient.T0NeqId = n.id;
                 req.body.Patient.T0ReportingId = r.id;
                 req.body.Patient.T0Date = new Date();
-                req.body.Patient.EvaluationId = ev.id;
+                //req.body.Patient.EvaluationId = ev.id;
                 req.body.Patient.ScreeningId = sc.id;
 
                 return db.Patient.create(req.body.Patient, {transaction : t}).then(function(patient){
                   log.log('info',"USER " + req.user.id + " CREATED patient " + patient.id + ' ('+ JSON.stringify(patient) + ')');
                 });
               });
-            });
+            //});
           });
         });
       });
@@ -75,7 +77,77 @@ module.exports.insertAllRowT1 = function(req,res,next){
       });
     })
   }).then(function(result){
-      res.json({code : 200 , message : "Informazioni salvate"});
+    db.Patient.findOne( { where : {name:req.params.patientName} ,
+      include:
+      [{model: db.T0Eortc},{model: db.T1Eortc},{model: db.T0Neq},{model: db.T1Neq}],
+    }).then(function(patient){
+
+      if(req.query.email){
+        if(patient)
+        {
+          var options = {format : "Letter"};
+          var attachments = [];
+
+          var html = Patient.createNeq(patient.name,patient.T0Neq,0);
+
+          pdf.create(html, options).toFile(__dirname + '/../tmp/'+patient.name+'Neq0.pdf', function(err, result) {
+            if(result) attachments.push({filename: patient.name+'NeqT0.pdf', path : __dirname +'\\..\\tmp\\'+patient.name+'Neq0.pdf'});
+            var html = Patient.createNeq(patient.name,patient.T1Neq,1);
+            pdf.create(html, options).toFile(__dirname + '/../tmp/'+patient.name+'Neq1.pdf', function(err, result) {
+              if(result) attachments.push({filename: patient.name+'NeqT1.pdf', path : __dirname +'\\..\\tmp\\'+patient.name+'Neq1.pdf'});
+              var html = Patient.createEortc(patient.name,patient.T0Eortc,0);
+              pdf.create(html, options).toFile(__dirname + '/../tmp/'+patient.name+'Eortc0.pdf', function(err, result) {
+                if(result) attachments.push({filename: patient.name+'EortcT0.pdf', path : __dirname +'\\..\\tmp\\'+patient.name+'Eortc0.pdf'});
+                var html = Patient.createEortc(patient.name,patient.T1Eortc,1);
+                pdf.create(html, options).toFile(__dirname + '/../tmp/'+patient.name+'Eortc1.pdf', function(err, result) {
+                  if(result) attachments.push({filename: patient.name+'EortcT1.pdf', path : __dirname +'\\..\\tmp\\'+patient.name+'Eortc1.pdf'});
+
+                  // create reusable transporter object using the default SMTP transport
+                  var transporter = nm.createTransport("SMTP", require('../config/aruba_config.json'));
+                  // setup e-mail data with unicode symbols
+
+                  var mailOptions = {
+                      from: '"Progetto Hucare" <progetto.hucare@gmail.com>', // sender address
+                      to: req.query.email, // list of receivers
+                      subject: 'HuCare: Questionari paziente ' + patient.name, // Subject line
+                      html: 'Gentile referente,<br> in allegato trova i questionari compilati dal paziente ' + patient.name +'<br><br><b>Nota bene</b>: se la mail non presenta allegati, vuol dire che il paziente non ha compilato né i questionari Eortc né quelli Neq', // html body
+                      attachments : attachments
+                      };
+
+                  // send mail with defined transport object
+                  transporter.sendMail(mailOptions, function(error, info){
+
+                    try{
+                      if(fs.statSync(__dirname +'\\..\\tmp\\'+patient.name+'Neq0.pdf').isFile())
+                        fs.unlink(__dirname +'\\..\\tmp\\'+patient.name+'Neq0.pdf');
+                    }catch(err){}
+                    try{
+                      if(fs.statSync(__dirname +'\\..\\tmp\\'+patient.name+'Neq1.pdf').isFile())
+                        fs.unlink(__dirname +'\\..\\tmp\\'+patient.name+'Neq1.pdf');
+                    }catch(err){}
+                    try{
+                      if(fs.statSync(__dirname +'\\..\\tmp\\'+patient.name+'Eortc0.pdf').isFile())
+                        fs.unlink(__dirname +'\\..\\tmp\\'+patient.name+'Eortc0.pdf');
+                    }catch(err){}
+                    try{
+                      if(fs.statSync(__dirname +'\\..\\tmp\\'+patient.name+'Eortc1.pdf').isFile())
+                        fs.unlink(__dirname +'\\..\\tmp\\'+patient.name+'Eortc1.pdf');
+                    }catch(err){}
+
+                    res.json({code : 200 , message : "Informazioni salvate"});
+                    /*if(error)  res.json({code : 400  ,message : "Mail non inviata"});
+                    else
+                      res.json({code : 200  ,message : "Informazioni salvate"});*/
+                  });
+
+                });
+              });
+
+            });
+          });
+        }else res.json({code : 200 , message : "Informazioni salvate"});
+      }else res.json({code : 200 , message : "Informazioni salvate"});
+    });
   }).catch(function(error){
     transporter.sendMail({from : "server@ao.pr.it",to:"mansequino@gmail.com", subject :"Execution error in HuCare", html:"E' successo qualcosa in hucare<br><br><b>" + error + "</b><br><br> dall'utente <b>"+JSON.stringify(req.user.username) + "</b>" },function(err,info){
       log.log('error',"USER " + req.user.id + " ERROR ("+ JSON.stringify(error) +")");

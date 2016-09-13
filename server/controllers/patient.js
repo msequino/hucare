@@ -361,7 +361,7 @@ module.exports.printPatient = function(req,res,next){
     return res.json({code : 400  ,message : "Attenzione: il centro non è stato ancora randomizzato, queste informazioni saranno visibili solo ad inizio sperimentazione"})*/
   db.Patient.findOne( { where : {name:req.params.id} ,
     include:
-    [{model: db.T0Eortc},{model: db.T1Eortc},{model: db.T0Neq},{model: db.T1Neq}],
+    [{model: db.T0Eortc},{model: db.T1Eortc},{model: db.T0Neq},{model: db.T1Neq},{model: db.Screening}],
   }).then(function(patient){
 
     if(!patient) return res.json({code : 400  ,message : "Il paziente non è stato ancora inserito nel database centrale. Si prega di inserirlo tramite il relativo reporting form"});
@@ -369,16 +369,16 @@ module.exports.printPatient = function(req,res,next){
     var options = {format : "Letter"};
     var attachments = [];
 
-    var html = createNeq(patient.name,patient.T0Neq,0);
+    var html = module.exports.createNeq(patient.name,patient.T0Neq,0);
     pdf.create(html, options).toFile(__dirname + '/../tmp/'+req.params.id+'Neq0.pdf', function(err, result) {
       if(result) attachments.push({filename: req.params.id+'NeqT0.pdf', path : __dirname +'\\..\\tmp\\'+req.params.id+'Neq0.pdf'});
-      var html = createNeq(patient.name,patient.T1Neq,1);
+      var html = module.exports.createNeq(patient.name,patient.T1Neq,1);
       pdf.create(html, options).toFile(__dirname + '/../tmp/'+req.params.id+'Neq1.pdf', function(err, result) {
         if(result) attachments.push({filename: req.params.id+'NeqT1.pdf', path : __dirname +'\\..\\tmp\\'+req.params.id+'Neq1.pdf'});
-        var html = createEortc(patient.name,patient.T0Eortc,0);
+        var html = module.exports.createEortc(patient.name,patient.T0Eortc,0);
         pdf.create(html, options).toFile(__dirname + '/../tmp/'+req.params.id+'Eortc0.pdf', function(err, result) {
           if(result) attachments.push({filename: req.params.id+'EortcT0.pdf', path : __dirname +'\\..\\tmp\\'+req.params.id+'Eortc0.pdf'});
-          var html = createEortc(patient.name,patient.T1Eortc,1);
+          var html = module.exports.createEortc(patient.name,patient.T1Eortc,1);
           pdf.create(html, options).toFile(__dirname + '/../tmp/'+req.params.id+'Eortc1.pdf', function(err, result) {
             if(result) attachments.push({filename: req.params.id+'EortcT1.pdf', path : __dirname +'\\..\\tmp\\'+req.params.id+'Eortc1.pdf'});
 
@@ -386,37 +386,41 @@ module.exports.printPatient = function(req,res,next){
             var transporter = nm.createTransport("SMTP", require('../config/aruba_config.json'));
             // setup e-mail data with unicode symbols
 
-            var mailOptions = {
-                from: '"Progetto Hucare" <progetto.hucare@gmail.com>', // sender address
-                to: req.query.email, // list of receivers
-                subject: 'HuCare: Questionari paziente ' + req.params.id, // Subject line
-                html: 'Gentile referente,<br> in allegato trova i questionari compilati dal paziente ' + req.params.id +'<br><br><b>Nota bene</b>: se la mail non presenta allegati, vuol dire che il paziente non ha compilato né i questionari Eortc né quelli Neq', // html body
-                attachments : attachments
-                };
+            db.User.findOne({where : {ClinicId:patient.Screening.ClinicId}, attributes:['mail']}).then(function(user){
 
-            // send mail with defined transport object
-            transporter.sendMail(mailOptions, function(error, info){
+              var mailOptions = {
+                  from: '"Progetto Hucare" <progetto.hucare@gmail.com>', // sender address
+                  //to: req.query.email, // list of receivers
+                  to: user.mail, // list of receivers
+                  subject: 'HuCare: Questionari paziente ' + req.params.id, // Subject line
+                  html: 'Gentile referente,<br> in allegato trova i questionari compilati dal paziente ' + req.params.id +'<br><br><b>Nota bene</b>: se la mail non presenta allegati, vuol dire che il paziente non ha compilato né i questionari Eortc né quelli Neq', // html body
+                  attachments : attachments
+                  };
+                  //console.log(attachments);
+              // send mail with defined transport object
+              transporter.sendMail(mailOptions, function(error, info){
 
-              try{
-                if(fs.statSync(__dirname +'\\..\\tmp\\'+req.params.id+'Neq0.pdf').isFile())
-                  fs.unlink(__dirname +'\\..\\tmp\\'+req.params.id+'Neq0.pdf');
-              }catch(err){}
-              try{
-                if(fs.statSync(__dirname +'\\..\\tmp\\'+req.params.id+'Neq1.pdf').isFile())
-                  fs.unlink(__dirname +'\\..\\tmp\\'+req.params.id+'Neq1.pdf');
-              }catch(err){}
-              try{
-                if(fs.statSync(__dirname +'\\..\\tmp\\'+req.params.id+'Eortc0.pdf').isFile())
-                  fs.unlink(__dirname +'\\..\\tmp\\'+req.params.id+'Eortc0.pdf');
-              }catch(err){}
-              try{
-                if(fs.statSync(__dirname +'\\..\\tmp\\'+req.params.id+'Eortc1.pdf').isFile())
-                  fs.unlink(__dirname +'\\..\\tmp\\'+req.params.id+'Eortc1.pdf');
-              }catch(err){}
+                try{
+                  if(fs.statSync(__dirname +'\\..\\tmp\\'+req.params.id+'Neq0.pdf').isFile())
+                    fs.unlink(__dirname +'\\..\\tmp\\'+req.params.id+'Neq0.pdf');
+                }catch(err){}
+                try{
+                  if(fs.statSync(__dirname +'\\..\\tmp\\'+req.params.id+'Neq1.pdf').isFile())
+                    fs.unlink(__dirname +'\\..\\tmp\\'+req.params.id+'Neq1.pdf');
+                }catch(err){}
+                try{
+                  if(fs.statSync(__dirname +'\\..\\tmp\\'+req.params.id+'Eortc0.pdf').isFile())
+                    fs.unlink(__dirname +'\\..\\tmp\\'+req.params.id+'Eortc0.pdf');
+                }catch(err){}
+                try{
+                  if(fs.statSync(__dirname +'\\..\\tmp\\'+req.params.id+'Eortc1.pdf').isFile())
+                    fs.unlink(__dirname +'\\..\\tmp\\'+req.params.id+'Eortc1.pdf');
+                }catch(err){}
 
-              if(error)  res.json({code : 400  ,message : "Mail non inviata"});
-              else
-                res.json({code : 200  ,message : "Informazioni salvate"});
+                if(error)  res.json({code : 400  ,message : "Mail non inviata"});
+                else
+                  res.json({code : 200  ,message : "Informazioni salvate"});
+              });
             });
 
           });
@@ -428,7 +432,7 @@ module.exports.printPatient = function(req,res,next){
 
 }
 
-function createEortc(name, eortc, time){
+module.exports.createEortc = function(name, eortc, time){
   if(eortc)
     return "<html>"+
     "<body><header style='border-style:solid;'><h1><center>VALUTAZIONE " + (time == 0 ? "BASALE" : "FOLLOW-UP")+ " paziente " + name +"</center></h1>"+
@@ -488,7 +492,7 @@ function createEortc(name, eortc, time){
     return " ";
 }
 
-function createNeq(name, neq, time){
+module.exports.createNeq = function(name, neq, time){
   if(neq)
     return "<html>"+
     "<body><header style='border-style:solid;'><h1><center>VALUTAZIONE " + (time == 0 ? "BASALE" : "FOLLOW-UP")+ " paziente " + name +"</center></h1>"+

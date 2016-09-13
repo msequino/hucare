@@ -10,6 +10,9 @@ module.exports = function(sequelize, DataTypes) {
     surname: {
       type : DataTypes.STRING,
     },
+    mail: {
+      type : DataTypes.STRING,
+    },
     username: {
       type : DataTypes.STRING,
       unique : true
@@ -39,6 +42,7 @@ module.exports = function(sequelize, DataTypes) {
         return {
           id : this.getDataValue("id"),
           username : this.getDataValue("username"),
+          mail : this.getDataValue("mail"),
           ClinicId : this.getDataValue("ClinicId"),
           GroupId : this.getDataValue("GroupId"),
           rand_date : this.getDataValue("rand_date"),
