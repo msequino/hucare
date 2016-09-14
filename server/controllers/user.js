@@ -67,15 +67,18 @@ module.exports.insertUser = function(req,res,next){
 
   db.User.findOne({where : {username:req.body.username}}).then(function(user){
     if(!user)
-      db.User.create(req.body).then(function(user){
-        log.log('info',req.user.id + ' CREATE user '+ user.id);
-        res.json({code : 200});
-      }).catch(function(error){
-        log.log('error',error);
-        res.json({code : 400,message:"Errore nel server"});
-      });
+    db.User.findOne({where : {ClinicId:req.body.ClinicId}}).then(function(userbyClinic){
+      if(!userbyClinic)
+        db.User.create(req.body).then(function(user){
+          log.log('info',req.user.id + ' CREATE user '+ user.id);
+          res.json({code : 200});
+        }).catch(function(error){
+          log.log('error',error);
+          res.json({code : 400,message:"Errore nel server"});
+        });
+    });
     else
-      db.User.findOne({where : {username : req.body.username}}).then(function(user){
+      db.User.findOne({where : {name : req.body.name,surname : req.body.surname,username : req.body.username, clinicId : req.body.ClinicId}}).then(function(user){
           user.update({password : req.body.password}).then(function(u){
             db.Patient.findAll(
               { include:
