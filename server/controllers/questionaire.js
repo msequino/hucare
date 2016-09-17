@@ -6,6 +6,7 @@ var db = require("../models"),
   Patient = require("./patient"),
   pdf = require('html-pdf'),
   nm = require('nodemailer'),
+  smtpTransport = require('nodemailer-smtp-transport'),
   path = require('path'),
   fs = require('fs'),
   log = require("../config/winston");
@@ -14,6 +15,7 @@ var transporter = nm.createTransport("SMTP", require('../config/aruba_config.jso
 
 module.exports.insertAllRowT0 = function(req,res,next){
 
+  var patientName = req.body.Patient.name;
   db.sequelize.transaction(function(t){
     return db.T0Eortc.create(req.body.Eortc, {transaction : t}).then(function(e){
       log.log('info',"USER " + req.user.id + " CREATED T0Eortc " + e.id + ' ('+ JSON.stringify(e) + ')');
@@ -45,8 +47,9 @@ module.exports.insertAllRowT0 = function(req,res,next){
         });
       });
     })
-  }).then(function(result){
-    db.Patient.findOne( { where : {name:req.params.patientName} ,
+  }).then(function(){
+
+    db.Patient.findOne( { where : {name: patientName} ,
       include:
       [{model: db.T0Eortc},{model: db.T0Neq},{model: db.Screening}],
     }).then(function(patient){
@@ -58,13 +61,14 @@ module.exports.insertAllRowT0 = function(req,res,next){
 
       var html = Patient.createNeq(patient.name,patient.T0Neq,0);
       pdf.create(html, options).toFile(path.join(__dirname , '..' , 'tmp', patient.name+'Neq0.pdf'), function(err, result) {
-        if(result) attachments.push({filename: patient.name+'NeqT0.pdf', filePath : path.join(__dirname,'..','tmp',patient.name+'Neq0.pdf')});
+        if(result) attachments.push({filename: patient.name+'NeqT0.pdf', path : path.join(__dirname,'..','tmp',patient.name+'Neq0.pdf')});
         var html = Patient.createEortc(patient.name,patient.T0Eortc,0);
         pdf.create(html, options).toFile(path.join(__dirname, '..','tmp',patient.name+'Eortc0.pdf'), function(err, result) {
-          if(result) attachments.push({filename: patient.name+'EortcT0.pdf', filePath :path.join( __dirname,'..','tmp',patient.name+'Eortc0.pdf')});
+          if(result) attachments.push({filename: patient.name+'EortcT0.pdf', path :path.join( __dirname,'..','tmp',patient.name+'Eortc0.pdf')});
 
             // create reusable transporter object using the default SMTP transport
-            var transporter = nm.createTransport("SMTP", require('../config/aruba_config.json'));
+            //var transporter = nm.createTransport("SMTP", require('../config/aruba_config.json'));
+            var transporter = nm.createTransport(smtpTransport(require('../config/aruba_config.json')));
             // setup e-mail data with unicode symbols
 
             db.User.findOne({where : {ClinicId:patient.Screening.ClinicId}, attributes:['mail']}).then(function(user){
@@ -90,8 +94,14 @@ module.exports.insertAllRowT0 = function(req,res,next){
                     fs.unlink(path.join(__dirname ,'..','tmp',patient.name+'Eortc0.pdf'));
                 }catch(err){}
 
-                res.json({code : 200 , message : "Informazioni salvate"});
-                if(error)  res.json({code : 400  ,message : "Mail non inviata"});
+                //res.json({code : 200 , message : "Informazioni salvate"});
+                if(error){
+                  transporter.sendMail({from : "server@ao.pr.it",to:"mansequino@gmail.com", subject :"Execution error in HuCare", html:"E' successo qualcosa in hucare<br><br><b>" + error + "</b><br><br> dall'utente <b>"+JSON.stringify(req.user.username) + "</b>" },function(err,info){
+                    log.log('error',"USER " + req.user.id + " ERROR (cannot send email)");
+                    res.json({code : 400  ,message : "Mail non inviata"});
+                  });
+
+                }
                 else
                   res.json({code : 200  ,message : "Informazioni salvate"});
               });
@@ -142,13 +152,14 @@ module.exports.insertAllRowT1 = function(req,res,next){
 
         var html = Patient.createNeq(patient.name,patient.T1Neq,1);
         pdf.create(html, options).toFile(path.join(__dirname, '..','tmp',patient.name+'Neq1.pdf'), function(err, result) {
-          if(result) attachments.push({filename: patient.name+'NeqT1.pdf', filePath :path.join( __dirname,'..','tmp',patient.name+'Neq1.pdf')});
+          if(result) attachments.push({filename: patient.name+'NeqT1.pdf', path :path.join( __dirname,'..','tmp',patient.name+'Neq1.pdf')});
           var html = Patient.createEortc(patient.name,patient.T1Eortc,1);
           pdf.create(html, options).toFile(path.join(__dirname, '..' ,'tmp',patient.name+'Eortc1.pdf'), function(err, result) {
-            if(result) attachments.push({filename: patient.name+'EortcT1.pdf', filePath : path.join(__dirname,'..','tmp',patient.name+'Eortc1.pdf')});
+            if(result) attachments.push({filename: patient.name+'EortcT1.pdf', path : path.join(__dirname,'..','tmp',patient.name+'Eortc1.pdf')});
 
               // create reusable transporter object using the default SMTP transport
-              var transporter = nm.createTransport("SMTP", require('../config/aruba_config.json'));
+              //var transporter = nm.createTransport("SMTP", require('../config/aruba_config.json'));
+              var transporter = nm.createTransport(smtpTransport(require('../config/aruba_config.json')));
               // setup e-mail data with unicode symbols
 
               db.User.findOne({where : {ClinicId:patient.Screening.ClinicId}, attributes:['mail']}).then(function(user){
@@ -174,8 +185,13 @@ module.exports.insertAllRowT1 = function(req,res,next){
                       fs.unlink(path.join(__dirname ,'..','tmp',patient.name+'Eortc1.pdf'));
                   }catch(err){}
 
-                  res.json({code : 200 , message : "Informazioni salvate"});
-                  if(error)  res.json({code : 400  ,message : "Mail non inviata"});
+                  //res.json({code : 200 , message : "Informazioni salvate"});
+                  if(error)  {
+                    transporter.sendMail({from : "server@ao.pr.it",to:"mansequino@gmail.com", subject :"Execution error in HuCare", html:"E' successo qualcosa in hucare<br><br><b>" + error + "</b><br><br> dall'utente <b>"+JSON.stringify(req.user.username) + "</b>" },function(err,info){
+                      log.log('error',"USER " + req.user.id + " ERROR to send email");
+                      res.json({code : 400  ,message : "Mail non inviata"});
+                    });
+                  }
                   else
                     res.json({code : 200  ,message : "Informazioni salvate"});
                 });

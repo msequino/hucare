@@ -4,6 +4,7 @@ var db = require("../models"),
   //qrcode = require("qrcode"),
   pdf = require('html-pdf'),
   nm = require('nodemailer'),
+  smtpTransport = require('nodemailer-smtp-transport'),
   fs = require('fs'),
   path = require('path'),
   Promise = require("promise"),
@@ -372,19 +373,20 @@ module.exports.printPatient = function(req,res,next){
 
     var html = module.exports.createNeq(patient.name,patient.T0Neq,0);
     pdf.create(html, options).toFile(path.join(__dirname, '..','tmp',req.params.id+'Neq0.pdf'), function(err, result) {
-      if(result) attachments.push({filename: req.params.id+'NeqT0.pdf', filePath : path.join(__dirname,'..','tmp',req.params.id+'Neq0.pdf')});
+      if(result) attachments.push({filename: req.params.id+'NeqT0.pdf', path : path.join(__dirname,'..','tmp',req.params.id+'Neq0.pdf')});
       var html = module.exports.createNeq(patient.name,patient.T1Neq,1);
       pdf.create(html, options).toFile(path.join(__dirname, '..','tmp',req.params.id+'Neq1.pdf'), function(err, result) {
-        if(result) attachments.push({filename: req.params.id+'NeqT1.pdf', filePath : path.join(__dirname,'..','tmp',req.params.id+'Neq1.pdf')});
+        if(result) attachments.push({filename: req.params.id+'NeqT1.pdf', path : path.join(__dirname,'..','tmp',req.params.id+'Neq1.pdf')});
         var html = module.exports.createEortc(patient.name,patient.T0Eortc,0);
         pdf.create(html, options).toFile(path.join(__dirname, '..','tmp',req.params.id+'Eortc0.pdf'), function(err, result) {
-          if(result) attachments.push({filePath : path.join(__dirname,'..','tmp',req.params.id+'Eortc0.pdf')});
+          if(result) attachments.push({filename: req.params.id+'EortcT0.pdf', path : path.join(__dirname,'..','tmp',req.params.id+'Eortc0.pdf')});
           var html = module.exports.createEortc(patient.name,patient.T1Eortc,1);
           pdf.create(html, options).toFile(path.join(__dirname, '..','tmp',req.params.id+'Eortc1.pdf'), function(err, result) {
-            if(result) attachments.push({filename: req.params.id+'EortcT1.pdf', filePath : path.join(__dirname,'..','tmp',req.params.id+'Eortc1.pdf')});
+            if(result) attachments.push({filename: req.params.id+'EortcT1.pdf', path : path.join(__dirname,'..','tmp',req.params.id+'Eortc1.pdf')});
 
             // create reusable transporter object using the default SMTP transport
-            var transporter = nm.createTransport("SMTP", require('../config/aruba_config.json'));
+            //var transporter = nm.createTransport("SMTP", require('../config/aruba_config.json'));
+            var transporter = nm.createTransport(smtpTransport(require('../config/aruba_config.json')));
             // setup e-mail data with unicode symbols
 
             db.User.findOne({where : {ClinicId:patient.Screening.ClinicId}, attributes:['mail']}).then(function(user){
@@ -392,8 +394,8 @@ module.exports.printPatient = function(req,res,next){
               var mailOptions = {
                   from: '"Progetto Hucare" <progetto.hucare@gmail.com>', // sender address
                   //to: req.query.email, // list of receivers
-                  //to: user.mail, // list of receivers
-                  to: 'mansequino@gmail.com', // list of receivers
+                  to: user.mail, // list of receivers
+                  //to: 'mansequino@gmail.com', // list of receivers
                   subject: 'HuCare: Questionari paziente ' + req.params.id, // Subject line
                   html: 'Gentile referente,<br> in allegato trova tutti i questionari compilati dal paziente ' + req.params.id +'<br><br><b>Nota bene</b>: se la mail non presenta allegati, vuol dire che il paziente non ha compilato né i questionari Eortc né quelli Neq', // html body
                   attachments : attachments
@@ -436,8 +438,9 @@ module.exports.printPatient = function(req,res,next){
 
 module.exports.createEortc = function(name, eortc, time){
   if(eortc)
+    if(eortc.date)
     return "<html>"+
-    "<body style='width:90%;margin-left:40px;margin-right:50px;font-size:9'><header style='border-style:solid;'><h1><center>VALUTAZIONE " + (time == 0 ? "BASALE" : "FOLLOW-UP")+ " paziente " + name +"</center></h1>"+
+    "<body style='width:90%;margin-left:40px;margin-top:10px;margin-right:50px;font-size:9'><header style='border-style:solid;'><h1><center>VALUTAZIONE " + (time == 0 ? "BASALE" : "FOLLOW-UP")+ " paziente " + name +"</center></h1>"+
     "</header>"+
     "<center><h2>Questionario per la Valutazione della Qualità della Vita</h2></center>"+
     "<p>Versione elettronica delle domande inserite dal paziente</p>"+
@@ -445,7 +448,7 @@ module.exports.createEortc = function(name, eortc, time){
     "<h2>In generale</h2>"+
     "<table style='border-spacing:10px;border-collapse:separate;font-size:9' border='2'>"+
       "<thead>"+
-        "<tr><th></th><th>Domanda</th><th>Risposta ( 1 = No; 4 = Moltissimo )</th></tr>"+
+        "<tr><th></th><th>Domanda</th><th>Risposta ( 0 = NA ; 1 = No; 4 = Moltissimo )</th></tr>"+
       "</thead>"+
       "<tbody>"+
         "<tr><td>1</td><td>Ha difficoltà nel fare lavori faticosi come portare una borsa della spesa pesante o una valigia?</td><td>" + eortc.dom1 + "</td></tr>"+
@@ -459,7 +462,7 @@ module.exports.createEortc = function(name, eortc, time){
       "<h2>Durante gli ultimi sette giorni</h2>"+
       "<table style='border-spacing:10px;border-collapse:separate;font-size:9' border='2'>"+
         "<thead>"+
-          "<tr><th></th><th>Domanda</th><th>Risposta ( 1 = No; 4 = Moltissimo )</th></tr>"+
+          "<tr><th></th><th>Domanda</th><th>Risposta ( 0 = NA ; 1 = No; 4 = Moltissimo )</th></tr>"+
         "</thead>"+
         "<tbody>"+
         "<tr><td>6</td><td>Ha avuto limitazioni nel fare il suo lavoro o i lavori di casa?</td><td>" + eortc.dom6 + "</td></tr>"+
@@ -479,7 +482,7 @@ module.exports.createEortc = function(name, eortc, time){
         "<br><br>"+
         "<table style='border-spacing:10px;border-collapse:separate;font-size:9' border='2'>"+
           "<thead>"+
-            "<tr><th></th><th>Domanda</th><th>Risposta ( 1 = No; 4 = Moltissimo )</th></tr>"+
+            "<tr><th></th><th>Domanda</th><th>Risposta ( 0 = NA ; 1 = No; 4 = Moltissimo )</th></tr>"+
           "</thead>"+
           "<tbody>"+
           "<tr><td>16</td><td>Ha avuto problemi di stitichezza?</td><td>" + eortc.dom16 + "</td></tr>"+
@@ -510,12 +513,13 @@ module.exports.createEortc = function(name, eortc, time){
     "</table>"+
     "</body>"+
     "</html>";
-  else
+//  else
     return " ";
 }
 
 module.exports.createNeq = function(name, neq, time){
   if(neq)
+    if(neq.date)
     return "<html>"+
     "<body style='width:90%;margin-left:40px;margin-right:50px;font-size:9'><header style='border-style:solid;'><h1><center>VALUTAZIONE " + (time == 0 ? "BASALE" : "FOLLOW-UP")+ " paziente " + name +"</center></h1>"+
     "</header>"+
@@ -553,7 +557,7 @@ module.exports.createNeq = function(name, neq, time){
     "</table>"+
     "</body>"+
     "</html>";
-  else
+  //else
     return " ";
 }
 
