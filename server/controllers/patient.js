@@ -180,7 +180,6 @@ module.exports.countRecluted = function(req,res,next){
 module.exports.countQuest = function(req,res,next){
 
   var where = req.params.clinic.indexOf("0") == -1 ? "WHERE c.id = " + req.params.clinic : "";
-  console.log(where);
   db.sequelize.query("SELECT c.name,"+
   //eortc t0
   "count(e0.dom1) TOTE0DOM1, sum(if(e0.dom1 = 0,1,0)) MISSE0DOM1, sum(if(e0.dom1 is null,1,0)) NULLE0DOM1, "+
@@ -397,7 +396,7 @@ module.exports.printPatient = function(req,res,next){
                   to: user.mail, // list of receivers
                   //to: 'mansequino@gmail.com', // list of receivers
                   subject: 'HuCare: Questionari paziente ' + req.params.id, // Subject line
-                  html: 'Gentile referente,<br> in allegato trova tutti i questionari compilati dal paziente ' + req.params.id +'<br><br><b>Nota bene</b>: se la mail non presenta allegati, vuol dire che il paziente non ha compilato né i questionari Eortc né quelli Neq', // html body
+                  html: 'Gentile partecipante allo Studio HuCARE,<br> in allegato trova tutti i questionari compilati dal paziente ' + req.params.id +'<br><br><b>NB</b>: se la mail non presenta allegati, vuol dire che il paziente non ha compilato né i questionari Eortc né quelli Neq', // html body
                   attachments : attachments
                   };
                   //console.log(attachments);
@@ -436,79 +435,88 @@ module.exports.printPatient = function(req,res,next){
 
 }
 
+function getRealValue(val){
+  switch(val){
+    case 0 : return "NA"; break;
+    case 1 : return "No"; break;
+    case 2 : return "Un po'"; break;
+    case 3 : return "Parecchio"; break;
+    case 4 : return "Moltissimo"; break;
+  }
+}
 module.exports.createEortc = function(name, eortc, time){
   if(eortc)
     if(eortc.date)
     return "<html>"+
-    "<body style='width:90%;margin-left:40px;margin-top:10px;margin-right:50px;font-size:9'><header style='border-style:solid;'><h1><center>VALUTAZIONE " + (time == 0 ? "BASALE" : "FOLLOW-UP")+ " paziente " + name +"</center></h1>"+
+    "<body style='width:90%;margin-left:40px;margin-top:50px;margin-right:50px;font-size:15'><header style='border-style:solid;'><h1><center>VALUTAZIONE " + (time == 0 ? "BASALE" : "FOLLOW-UP")+ " paziente " + name +"</center></h1>"+
     "</header>"+
     "<center><h2>Questionario per la Valutazione della Qualità della Vita</h2></center>"+
     "<p>Versione elettronica delle domande inserite dal paziente</p>"+
     "<br/>"+
     "<h2>In generale</h2>"+
-    "<table style='border-spacing:10px;border-collapse:separate;font-size:9' border='2'>"+
+    "<table style='border-spacing:8px;border-collapse:separate;font-size:12' border='2'>"+
       "<thead>"+
-        "<tr><th></th><th>Domanda</th><th>Risposta ( 0 = NA ; 1 = No; 4 = Moltissimo )</th></tr>"+
+        "<tr><th></th><th>Domanda</th><th>Risposta</th></tr>"+
       "</thead>"+
       "<tbody>"+
-        "<tr><td>1</td><td>Ha difficoltà nel fare lavori faticosi come portare una borsa della spesa pesante o una valigia?</td><td>" + eortc.dom1 + "</td></tr>"+
-        "<tr><td>2</td><td>Ha difficoltà nel fare una lunga passeggiata?</td><td>" + eortc.dom2 + "</td></tr>"+
-        "<tr><td>3</td><td>Ha difficoltà nel fare una breve passeggiata fuori casa</td><td>" + eortc.dom3 + "</td></tr>"+
-        "<tr><td>4</td><td>Ha bisogno di stare a letto o su una sedia durante il giorno?</td><td>" + eortc.dom4 + "</td></tr>"+
-        "<tr><td>5</td><td>Ha bisongo di aiuto per mangiare, vestirsi, lavarsi o andare in bagno?</td><td>" + eortc.dom5 + "</td></tr>"+
+        "<tr><td>1</td><td>Ha difficoltà nel fare lavori faticosi come portare una borsa della spesa pesante o una valigia?</td><td align='center'>" + getRealValue(eortc.dom1) + "</td></tr>"+
+        "<tr><td>2</td><td>Ha difficoltà nel fare una lunga passeggiata?</td><td align='center'>" + getRealValue(eortc.dom2) + "</td></tr>"+
+        "<tr><td>3</td><td>Ha difficoltà nel fare una breve passeggiata fuori casa</td><td align='center'>" + getRealValue(eortc.dom3) + "</td></tr>"+
+        "<tr><td>4</td><td>Ha bisogno di stare a letto o su una sedia durante il giorno?</td><td align='center'>" + getRealValue(eortc.dom4) + "</td></tr>"+
+        "<tr><td>5</td><td>Ha bisongo di aiuto per mangiare, vestirsi, lavarsi o andare in bagno?</td><td align='center'>" + getRealValue(eortc.dom5) + "</td></tr>"+
         "</tbody>"+
       "</table>"+
       "<br>"+
       "<h2>Durante gli ultimi sette giorni</h2>"+
-      "<table style='border-spacing:10px;border-collapse:separate;font-size:9' border='2'>"+
+      "<table style='border-spacing:8px;border-collapse:separate;font-size:12' border='2'>"+
         "<thead>"+
-          "<tr><th></th><th>Domanda</th><th>Risposta ( 0 = NA ; 1 = No; 4 = Moltissimo )</th></tr>"+
+          "<tr><th></th><th>Domanda</th><th>Risposta</th></tr>"+
         "</thead>"+
         "<tbody>"+
-        "<tr><td>6</td><td>Ha avuto limitazioni nel fare il suo lavoro o i lavori di casa?</td><td>" + eortc.dom6 + "</td></tr>"+
-        "<tr><td>7</td><td>Ha avuto limitazioni nel praticare i Suoi passatempi-hobby o altre attività di divertimento o svago?</td><td>" + eortc.dom7 + "</td></tr>"+
-        "<tr><td>8</td><td>Le è mancato il fiato?</td><td>" + eortc.dom8 + "</td></tr>"+
-        "<tr><td>9</td><td>Ha avuto dolore?</td><td>" + eortc.dom9 + "</td></tr>"+
-        "<tr><td>10</td><td>Ha avuto bisogno di riposo?</td><td>" + eortc.dom10 + "</td></tr>"+
-        "<tr><td>11</td><td>Ha avuto difficoltà a dormire?</td><td>" + eortc.dom11 + "</td></tr>"+
-        "<tr><td>12</td><td>Ha sentito debolezza?</td><td>" + eortc.dom12 + "</td></tr>"+
-        "<tr><td>13</td><td>Le è mancato l'appetito?</td><td>" + eortc.dom13 + "</td></tr>"+
-        "<tr><td>14</td><td>Ha avuto un senso di nausea?</td><td>" + eortc.dom14 + "</td></tr>"+
-        "<tr><td>15</td><td>Ha vomitato?</td><td>" + eortc.dom15 + "</td></tr>"+
-          "</tbody>"+
+        "<tr><td>6</td><td>Ha avuto limitazioni nel fare il suo lavoro o i lavori di casa?</td><td align='center'>" + getRealValue(eortc.dom6) + "</td></tr>"+
+        "<tr><td>7</td><td>Ha avuto limitazioni nel praticare i Suoi passatempi-hobby o altre attività di divertimento o svago?</td><td align='center'>" + getRealValue(eortc.dom7) + "</td></tr>"+
+        "<tr><td>8</td><td>Le è mancato il fiato?</td><td align='center'>" + getRealValue(eortc.dom8) + "</td></tr>"+
+        "<tr><td>9</td><td>Ha avuto dolore?</td><td align='center'>" + getRealValue(eortc.dom9) + "</td></tr>"+
+        "<tr><td>10</td><td>Ha avuto bisogno di riposo?</td><td align='center'>" + getRealValue(eortc.dom10) + "</td></tr>"+
+        "<tr><td>11</td><td>Ha avuto difficoltà a dormire?</td><td align='center'>" + getRealValue(eortc.dom11) + "</td></tr>"+
+        "<tr><td>12</td><td>Ha sentito debolezza?</td><td align='center'>" + getRealValue(eortc.dom12) + "</td></tr>"+
+        "<tr><td>13</td><td>Le è mancato l'appetito?</td><td align='center'>" + getRealValue(eortc.dom13) + "</td></tr>"+
+        "<tr><td>14</td><td>Ha avuto un senso di nausea?</td><td align='center'>" + getRealValue(eortc.dom14) + "</td></tr>"+
+        "<tr><td>15</td><td>Ha vomitato?</td><td align='center'>" + getRealValue(eortc.dom15) + "</td></tr>"+
+        "<tr><td>16</td><td>Ha avuto problemi di stitichezza?</td><td align='center'>" + getRealValue(eortc.dom16) + "</td></tr>"+
+        "<tr><td>17</td><td>Ha avuto problemi di diarrea?</td><td align='center'>" + getRealValue(eortc.dom17) + "</td></tr>"+
+        "<tr><td>18</td><td>Ha sentito stanchezza?</td><td align='center'>" + getRealValue(eortc.dom18) + "</td></tr>"+
+        "</tbody>"+
         "</table>"+
         "<br><br>"+
         "<br><br>"+
         "<br><br>"+
-        "<table style='border-spacing:10px;border-collapse:separate;font-size:9' border='2'>"+
-          "<thead>"+
-            "<tr><th></th><th>Domanda</th><th>Risposta ( 0 = NA ; 1 = No; 4 = Moltissimo )</th></tr>"+
-          "</thead>"+
-          "<tbody>"+
-          "<tr><td>16</td><td>Ha avuto problemi di stitichezza?</td><td>" + eortc.dom16 + "</td></tr>"+
-        "<tr><td>17</td><td>Ha avuto problemi di diarrea?</td><td>" + eortc.dom17 + "</td></tr>"+
-        "<tr><td>18</td><td>Ha sentito stanchezza?</td><td>" + eortc.dom18 + "</td></tr>"+
-        "<tr><td>19</td><td>Il dolore ha interferito con le Sue attività quotidiane?</td><td>" + eortc.dom19 + "</td></tr>"+
-        "<tr><td>20</td><td>Ha avuto difficoltà a concentrarsi su cose come leggere un giornale o guardare la televisione?</td><td>" + eortc.dom20 + "</td></tr>"+
-        "<tr><td>21</td><td>Si è sentito/a teso/a?</td><td>" + eortc.dom21 + "</td></tr>"+
-        "<tr><td>22</td><td>Ha avuto preoccupazioni?</td><td>" + eortc.dom22 + "</td></tr>"+
-        "<tr><td>23</td><td>Ha avuto manifestazioni di irritabilità?</td><td>" + eortc.dom23+ "</td></tr>"+
-        "<tr><td>24</td><td>Ha avvertito uno stato di depressione?</td><td>" + eortc.dom24 + "</td></tr>"+
-        "<tr><td>25</td><td>Ha avuto difficoltà a ricordare le cose?</td><td>" + eortc.dom25 + "</td></tr>"+
-        "<tr><td>26</td><td>Le Sue condizioni fisiche o il Suo trattamento medico hanno interferito con le Sua vita familiare?</td><td>" + eortc.dom26 + "</td></tr>"+
-        "<tr><td>27</td><td>Le Sue condizioni fisiche o il Suo trattamento medico hanno interferito con le Sue attività sociali?</td><td>" + eortc.dom27 + "</td></tr>"+
-        "<tr><td>28</td><td>Le Sue condizioni fisiche o il Suo trattamento medico Le hanno causato difficoltà finanziarie?</td><td>" + eortc.dom28 + "</td></tr>"+
-          "</tbody>"+
-        "</table>"+
-        "<br><br>"+
-        "<br><br>"+
-        "<table style='border-spacing:10px;border-collapse:separate;font-size:9' border='2'>"+
+        "<table style='border-spacing:8px;border-collapse:separate;font-size:12' border='2'>"+
           "<thead>"+
             "<tr><th></th><th>Domanda</th><th>Risposta ( 1 = Pessimo; 7 = Ottimo )</th></tr>"+
           "</thead>"+
           "<tbody>"+
-        "<tr><td>29</td><td>Come valuterebbe in generale la Sua salute durante gli ultimi sette giorni?</td><td>" + eortc.dom29 + "</td></tr>"+
-        "<tr><td>30</td><td>Come valuterebbe in generale la Sua qualità di vita durante gli ultimi sette giorni?</td><td>" + eortc.dom30 + "</td></tr>"+
+          "<tr><td>19</td><td>Il dolore ha interferito con le Sue attività quotidiane?</td><td align='center'>" + getRealValue(eortc.dom19) + "</td></tr>"+
+        "<tr><td>20</td><td>Ha avuto difficoltà a concentrarsi su cose come leggere un giornale o guardare la televisione?</td><td align='center'>" + getRealValue(eortc.dom20) + "</td></tr>"+
+        "<tr><td>21</td><td>Si è sentito/a teso/a?</td><td align='center'>" + getRealValue(eortc.dom21) + "</td></tr>"+
+        "<tr><td>22</td><td>Ha avuto preoccupazioni?</td><td align='center'>" + getRealValue(eortc.dom22) + "</td></tr>"+
+        "<tr><td>23</td><td>Ha avuto manifestazioni di irritabilità?</td><td align='center'>" + getRealValue(eortc.dom23)+ "</td></tr>"+
+        "<tr><td>24</td><td>Ha avvertito uno stato di depressione?</td><td align='center'>" + getRealValue(eortc.dom24) + "</td></tr>"+
+        "<tr><td>25</td><td>Ha avuto difficoltà a ricordare le cose?</td><td align='center'>" + getRealValue(eortc.dom25) + "</td></tr>"+
+        "<tr><td>26</td><td>Le Sue condizioni fisiche o il Suo trattamento medico hanno interferito con le Sua vita familiare?</td><td align='center'>" + getRealValue(eortc.dom26) + "</td></tr>"+
+        "<tr><td>27</td><td>Le Sue condizioni fisiche o il Suo trattamento medico hanno interferito con le Sue attività sociali?</td><td align='center'>" + getRealValue(eortc.dom27) + "</td></tr>"+
+        "<tr><td>28</td><td>Le Sue condizioni fisiche o il Suo trattamento medico Le hanno causato difficoltà finanziarie?</td><td align='center'>" + getRealValue(eortc.dom28) + "</td></tr>"+
+          "</tbody>"+
+        "</table>"+
+        "<br><br>"+
+        "<br><br>"+
+        "<table style='border-spacing:8px;border-collapse:separate;font-size:12' border='2'>"+
+          "<thead>"+
+            "<tr><th></th><th>Domanda</th><th>Risposta ( 1 = Pessimo; 7 = Ottimo )</th></tr>"+
+          "</thead>"+
+          "<tbody>"+
+        "<tr><td>29</td><td>Come valuterebbe in generale la Sua salute durante gli ultimi sette giorni?</td><td align='center'>" + (eortc.dom29 == 0? "NA" : eortc.dom29) + "</td></tr>"+
+        "<tr><td>30</td><td>Come valuterebbe in generale la Sua qualità di vita durante gli ultimi sette giorni?</td><td align='center'>" + (eortc.dom30 == 0 ? "NA" : eortc.dom30) + "</td></tr>"+
       "</tbody>"+
     "</table>"+
     "</body>"+
@@ -521,11 +529,11 @@ module.exports.createNeq = function(name, neq, time){
   if(neq)
     if(neq.date)
     return "<html>"+
-    "<body style='width:90%;margin-left:40px;margin-right:50px;font-size:9'><header style='border-style:solid;'><h1><center>VALUTAZIONE " + (time == 0 ? "BASALE" : "FOLLOW-UP")+ " paziente " + name +"</center></h1>"+
+    "<body style='width:90%;margin-left:40px;margin-right:50px;margin-top:60px;font-size:15'><header style='border-style:solid;'><h1><center>VALUTAZIONE " + (time == 0 ? "BASALE" : "FOLLOW-UP")+ " paziente " + name +"</center></h1>"+
     "</header>"+
     "<center><h2>Questionario per la Valutazione dei Bisogni del Paziente</h2></center>"+
     "<p>Versione elettronica delle domande inserite dal paziente</p>"+
-    "<table style='font-size:9;border-spacing:8px;border-collapse:separate' border='2'>"+
+    "<table style='font-size:12;border-spacing:8px;border-collapse:separate' border='2'>"+
       "<thead>"+
         "<tr><th></th><th>Domanda</th><th>SI</th><th>NO</th></tr>"+
       "</thead>"+

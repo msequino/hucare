@@ -81,10 +81,12 @@ module.exports.insertUser = function(req,res,next){
       db.User.findOne({where : {name : req.body.name,surname : req.body.surname,username : req.body.username, clinicId : req.body.ClinicId}}).then(function(user){
           user.update({password : req.body.password}).then(function(u){
             db.Patient.findAll(
-              { include:
+              { order : [['id']],
+                include:
                 [{
                   model: db.Screening,
                   where : {ClinicId:req.body.ClinicId},
+
                 },{model: db.T0Eortc},{model: db.T1Eortc},{model: db.T0Hads},{model: db.T1Hads},{model: db.T0Neq},{model: db.T1Neq},{model: db.T0Reporting},{model: db.T1Reporting},{model: db.Evaluation}]
               }
             ).then(function(patients){

@@ -32,10 +32,10 @@ module.exports = function(sequelize, DataTypes) {
     },
     firstdateyear: {
       type : DataTypes.INTEGER,
-      validate : {
+      /*validate : {
         min : 1990,
         max : 2018
-      }
+      }*/
     },
     metastatic: {
       type : DataTypes.INTEGER(1),
