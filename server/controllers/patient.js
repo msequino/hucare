@@ -408,11 +408,10 @@ module.exports.countQuest = function(req,res,next){
   "count(n1.dom22) TOTN1DOM22, sum(if(n1.dom22 = 0,1,0)) MISSN1DOM22, sum(if(n1.dom22 is null,1,0)) NULLN1DOM22, "+
   "count(n1.dom23) TOTN1DOM23, sum(if(n1.dom23 = 0,1,0)) MISSN1DOM23, sum(if(n1.dom23 is null,1,0)) NULLN1DOM23 "+
 
-//TODO questa parte non deve essere committata
-  "FROM Patients p LEFT JOIN T0Eortcs e0 ON p.t0eortcid=e0.id LEFT JOIN T1Eortcs e1 ON p.t1eortcid=e1.id " +
-  "LEFT JOIN T0Hads h0 ON p.t0hadid=h0.id LEFT JOIN T1Hads h1 ON p.t1hadid=h1.id " +
-  "LEFT JOIN T0Neqs n0 ON p.t0neqid=n0.id LEFT JOIN T1Neqs n1 ON p.t1neqid=n1.id " +
-  "LEFT JOIN Screenings s ON p.screeningid=s.id INNER JOIN Clinics c ON c.id=s.ClinicId " + where ,{type : db.sequelize.QueryTypes.SELECT}).then(function(result){
+  "FROM patients p LEFT JOIN t0eortcs e0 ON p.T0eortcId=e0.id LEFT JOIN t1eortcs e1 ON p.T1EortcId=e1.id " +
+  "LEFT JOIN t0hads h0 ON p.T0hadId=h0.id LEFT JOIN t1hads h1 ON p.T1HadId=h1.id " +
+  "LEFT JOIN t0neqs n0 ON p.T0neqId=n0.id LEFT JOIN t1neqs n1 ON p.T1NeqId=n1.id " +
+  "LEFT JOIN screenings s ON p.ScreeningId=s.id INNER JOIN clinics c ON c.id=s.ClinicId " + where ,{type : db.sequelize.QueryTypes.SELECT}).then(function(result){
     res.json({code : 200 , data: result});
   }).catch(function(error){
     console.log(error);
