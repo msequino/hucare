@@ -251,3 +251,9 @@ th.header{
 td.no-border{
   border-top: none!important;
 }
+tr.red{
+  background-color: #ffcccc
+}
+tr.green{
+  background-color: #e6ffcc
+}

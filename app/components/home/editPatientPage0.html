@@ -1,4 +1,4 @@
-<h3>Screening Paziente {{vm.data.Screening.Clinic.abbr + vm.data.Patient.name}}</h3>
+<h3>Screening Paziente {{vm.data.Patient.name}}</h3>
 <div class="panel panel-success">
   <div class="panel-heading">
     Criteri di inclusione
@@ -10,7 +10,7 @@
           <td><label>Età &ge; 18 e &le; 75 anni</label></td>
           <td class="col-md-2">
             <label for="ScreeningIncl1{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Si',2: 'No'}">
-              <input type="radio" name="ScreeningIncl1" ng-disabled="vm.finalized" ng-model="vm.data.Screening.incl1" value="{{key}}" required>{{item}}
+              <input type="radio" name="ScreeningIncl1" disabled ng-model="vm.data.Screening.incl1" value="{{key}}" required>{{item}}
             </label>
           </td>
         </tr>
@@ -18,7 +18,7 @@
           <td><label>Diagnosi (istologica o citologica) di tumore solido da non più di un mese</label></td>
           <td>
             <label for="ScreeningIncl2{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Si',2: 'No'}">
-              <input type="radio" name="ScreeningIncl2" ng-disabled="vm.finalized" ng-model="vm.data.Screening.incl2" value="{{key}}" required>{{item}}
+              <input type="radio" name="ScreeningIncl2" disabled ng-model="vm.data.Screening.incl2" value="{{key}}" required>{{item}}
             </label>
           </td>
         </tr>
@@ -26,7 +26,7 @@
           <td><label>Deve iniziare un primo trattamento medico: chemioterapia EV, farmaci orali, farmaci a target molecolari</label></td>
           <td>
             <label for="ScreeningIncl3{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Si',2: 'No'}">
-              <input type="radio" name="ScreeningIncl3" ng-disabled="vm.finalized" ng-model="vm.data.Screening.incl3" value="{{key}}" required>{{item}}
+              <input type="radio" name="ScreeningIncl3" disabled ng-model="vm.data.Screening.incl3" value="{{key}}" required>{{item}}
             </label>
           </td>
         </tr>
@@ -34,7 +34,7 @@
           <td><label>Sopravvivenza attesa &gt; 3 mesi</label></td>
           <td>
             <label for="ScreeningIncl4{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Si',2: 'No'}">
-              <input type="radio" name="ScreeningIncl4" ng-disabled="vm.finalized" ng-model="vm.data.Screening.incl4" value="{{key}}" required>{{item}}
+              <input type="radio" name="ScreeningIncl4" disabled ng-model="vm.data.Screening.incl4" value="{{key}}" required>{{item}}
             </label>
           </td>
         </tr>
@@ -42,7 +42,7 @@
           <td><label>Buona comprensione della lingua italiana</label></td>
           <td>
             <label for="ScreeningIncl5{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Si',2: 'No'}">
-              <input type="radio" name="ScreeningIncl5" ng-disabled="vm.finalized" ng-model="vm.data.Screening.incl5" value="{{key}}" required>{{item}}
+              <input type="radio" name="ScreeningIncl5" disabled ng-model="vm.data.Screening.incl5" value="{{key}}" required>{{item}}
             </label>
           </td>
         </tr>
@@ -62,7 +62,7 @@
           <td class="col-md-10"><label>Pregressa chemioterapia o altro trattamento medico per tumore</label></td>
           <td class="col-md-2">
             <label for="ScreeningExcl1{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Si',2: 'No'}">
-              <input type="radio" name="ScreeningExcl1" ng-disabled="vm.finalized" ng-model="vm.data.Screening.excl1" value="{{key}}" required>{{item}}
+              <input type="radio" name="ScreeningExcl1" disabled ng-model="vm.data.Screening.excl1" value="{{key}}" required>{{item}}
             </label>
           </td>
         </tr>
@@ -70,7 +70,7 @@
           <td><label>Arruolato nel medesimo trial in un periodo precedente</label></td>
           <td>
             <label for="ScreeningExcl2{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Si',2: 'No'}">
-              <input type="radio" name="ScreeningExcl2" ng-disabled="vm.finalized" ng-model="vm.data.Screening.excl2" value="{{key}}" required>{{item}}
+              <input type="radio" name="ScreeningExcl2" disabled ng-model="vm.data.Screening.excl2" value="{{key}}" required>{{item}}
             </label>
           </td>
         </tr>
@@ -78,7 +78,7 @@
           <td><label>Partecipazione in atto ad altri trial che prevedono la misura di PRO</label></td>
           <td>
             <label for="ScreeningExcl3{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Si',2: 'No'}">
-              <input type="radio" name="ScreeningExcl3" ng-disabled="vm.finalized" ng-model="vm.data.Screening.excl3" value="{{key}}" required>{{item}}
+              <input type="radio" name="ScreeningExcl3" disabled ng-model="vm.data.Screening.excl3" value="{{key}}" required>{{item}}
             </label>
           </td>
         </tr>
@@ -86,7 +86,7 @@
           <td><label>In trattamento da uno psicologo o psichiatra o con anti-depressivi</label></td>
           <td>
             <label for="ScreeningExcl4{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Si',2: 'No'}">
-              <input type="radio" name="ScreeningExcl4" ng-disabled="vm.finalized" ng-model="vm.data.Screening.excl4" value="{{key}}" required>{{item}}
+              <input type="radio" name="ScreeningExcl4" disabled ng-model="vm.data.Screening.excl4" value="{{key}}" required>{{item}}
             </label>
           </td>
         </tr>
@@ -94,7 +94,7 @@
           <td><label>Ricoverato in degenza ordinaria</label></td>
           <td>
             <label for="ScreeningExcl5{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Si',2: 'No'}">
-              <input type="radio" name="ScreeningExcl5" ng-disabled="vm.finalized" ng-model="vm.data.Screening.excl5" value="{{key}}" required>{{item}}
+              <input type="radio" name="ScreeningExcl5" disabled ng-model="vm.data.Screening.excl5" value="{{key}}" required>{{item}}
             </label>
           </td>
         </tr>
@@ -103,7 +103,7 @@
             che interferiscono con lo stato di coscienza o con la capacità di giudizio</label></td>
           <td>
             <label for="ScreeningExcl6{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Si',2: 'No'}">
-              <input type="radio" name="ScreeningExcl6" ng-disabled="vm.finalized" ng-model="vm.data.Screening.excl6" value="{{key}}" required>{{item}}
+              <input type="radio" name="ScreeningExcl6" disabled ng-model="vm.data.Screening.excl6" value="{{key}}" required>{{item}}
             </label>
           </td>
         </tr>
@@ -111,7 +111,7 @@
           <td><label>Impossibilità a completare il questionario o a garantire il follow-up a 3 mesi</label></td>
           <td>
             <label for="ScreeningExcl7{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Si',2: 'No'}">
-              <input type="radio" name="ScreeningExcl7" ng-disabled="vm.finalized" ng-model="vm.data.Screening.excl7" value="{{key}}" required>{{item}}
+              <input type="radio" name="ScreeningExcl7" disabled ng-model="vm.data.Screening.excl7" value="{{key}}" required>{{item}}
             </label>
           </td>
         </tr>
@@ -128,19 +128,11 @@
 <p>Paziente ha firmato il consenso informato?</p>
 <div>
   <label for="ScreeningSigned{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Si',2: 'No'}">
-    <input type="radio" ng-change=" vm.data.Screening.consenso = '';vm.data.Screening.tablet = null;" name="ScreeningSigned" ng-disabled="vm.finalized" ng-model="vm.data.Screening.signed" value="{{key}}" required>{{item}}
+    <input type="radio" ng-change=" vm.data.Screening.consenso = '';vm.data.Screening.tablet = null;" name="ScreeningSigned" disabled ng-model="vm.data.Screening.signed" value="{{key}}" required>{{item}}
   </label>
 </div>
 <br/>
 <div ng-show="vm.data.Screening.signed == 1">
   <p>Se il paziente è eleggibile, si prega di informarlo esaustivamente sulle finalità dello studio, di far firmare l'apposito modulo del consenso informato scritto e di riportare la data in basso</p>
-  <p class="showInline"><input type="text" name="consenso" disabled finalized="vm.finalized" class="form-control small" max-date="vm.today" ng-model="vm.data.Screening.consenso" datepicker/></p>
-</div>
-
-<!-- TODO cancella quando finisce studio di fattibilità-->
-<div ng-show="vm.data.Screening.signed == 2">
-  <p class="lead">Quale è la motivazione per cui non intende partecipare allo studio?</p>
-  <label for="ScreeningTablet{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Utilizzo del tablet per la raccolta dati',2: 'Altro'}">
-    <input type="radio" name="ScreeningTablet" ng-disabled="vm.finalized" ng-model="vm.data.Screening.tablet" value="{{key}}" required>{{item}}
-  </label>
+  <p class="showInline"><input type="text" name="consenso" disabled class="form-control small" max-date="vm.today" ng-model="vm.data.Screening.consenso" /></p>
 </div>

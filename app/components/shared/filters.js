@@ -3,6 +3,7 @@
 
     angular
         .module('app')
+
         .filter('byRole', function(){
           return function(doctors,filters){
             var out = [];

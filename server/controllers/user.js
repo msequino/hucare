@@ -51,7 +51,7 @@ module.exports.getUsersByClinicId = function(req,res,next){
 }
 
 module.exports.getUser = function(req,res,next){
-  db.User.findOne({where : {id:req.params.id}, attributes:['id','name','surname','username','GroupId','ClinicId']}).then(function(user){
+  db.User.findOne({where : {id:req.params.id}, attributes:['id','name','surname','mail','username','GroupId','ClinicId']}).then(function(user){
     res.json(user);
   });
 }
@@ -111,10 +111,10 @@ module.exports.insertUser = function(req,res,next){
 }
 
 module.exports.updateUser = function(req,res,next){
-  db.User.findOne({where : {username : req.params.id}}).then(function(user){
+  db.User.findOne({where : {id : req.params.id}}).then(function(user){
     if(user)
-      user.updateAttributes(req.body).then(function(u){
-        log.log('info',req.user.id + ' UPDATED user '+ JSON.stringify(user));
+      user.update(req.body).then(function(u){
+        log.log('info',req.user.id + ' UPDATED user '+ JSON.stringify(u));
         res.json({code : 200, message :"Aggiornamento effettuato"});
       }).catch(function(error){
         transporter.sendMail({from : "server@ao.pr.it",to:"mansequino@gmail.com", subject :"Execution error in HuCare", html:"E' successo qualcosa in hucare<br><br>" + JSON.stringify(error) + "<br><br> dall'utente<br>"+JSON.stringify(req.user) },function(err,info){

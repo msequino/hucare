@@ -5,8 +5,8 @@
         .module('app')
         .controller('HomeController', HomeController);
 
-    HomeController.$inject = ['UserService', 'PatientService', 'StatisticService', 'AuthenticationService', 'OptionService', 'StudyService', '$rootScope', '$location', '$timeout', '$window'];
-    function HomeController(UserService, PatientService, StatisticService, AuthenticationService, OptionService, StudyService, $rootScope, $location, $timeout, window) {
+    HomeController.$inject = ['FileUploaderService','UserService', 'PatientService', 'StatisticService', 'AuthenticationService', 'OptionService', 'StudyService', '$rootScope', '$location', '$timeout', '$window'];
+    function HomeController(FileUploaderService, UserService, PatientService, StatisticService, AuthenticationService, OptionService, StudyService, $rootScope, $location, $timeout, window) {
 
         var vm = this;
         vm.Math = window.Math;
@@ -23,6 +23,15 @@
         vm.check[2] = true;
         vm.check[3] = true;
 
+        vm.documents = [{id:0,name:''},{id:1,name:'Utilizzo app (video in formato mp4)'},{id:2,name:'Esempio clinico (video in formato mp4)'},
+        {id:3,name:'FAQ'},{id:4,name:'Protocollo'},{id:5,name:'Sinossi'},{id:6,name:'Eortc'},{id:7,name:'Hads'},
+        {id:8,name:'Neq'},{id:9,name:'Fogli informativi *'},{id:10,name:'Consenso informato *'}];
+
+        vm.timeInterval = [{id:0,name:'Tutto - dal 2016-10-17 al 2018-07-27'},{id:1,name:'Periodo 1 - dal 2016-10-17 al 2017-01-27'},{id:2,name:'Periodo 2 - dal 2017-02-06 al 2017-05-19'},
+        {id:3,name:'Periodo 3 - dal 2017-06-12 al 2017-09-22'},{id:4,name:'Periodo 4 - dal 2017-12-04 al 2018-03-16'},{id:5,name:'Periodo 5 - dal 2018-04-16 al 2018-07-27'}];
+
+        vm.myFile = "";
+
         vm.showTab = 1;
         vm.showModal = false;
         vm.showPatientModal = false;
@@ -33,16 +42,18 @@
         vm.logout = logout;
         vm.changeView = changeView;
         vm.cleanForm = cleanForm;
+        vm.changeResource = changeResource;
         //Submits
         vm.submitUser = submitUser;
-        vm.submitPatient = submitPatient;
+
+        vm.uploadFile = uploadFile;
 
         vm.backToHomepage = backToHomepage;
         vm.change = change;
-        vm.cleanMet = cleanMet;
 
-        vm.isEligible = isEligible;
-        vm.printDiv = printDiv;
+        vm.isActive = 1;
+        vm.pdf = false;
+        vm.resource_name = '';
 
         initController();
 
@@ -57,8 +68,10 @@
                 OptionService.Get('clinics').then(function(response){
                   vm.clinics = response;
                 });
-
-                changeView('components/home/statsPatients.html',2);
+                if(vm.user.ClinicId)
+                  changeView('components/home/documentation.html',6);
+                else
+                  changeView('components/home/statsPatients.html',2);
               }
             });
         }
@@ -74,7 +87,16 @@
             UserService.GetById(id)
                 .then(function (user) {
                     vm.data = user;
+                    if(user.test_date)
+                      vm.data.test_date = user.test_date.substr(0,user.test_date.indexOf("T"));
                 });
+        }
+
+
+        //Upload File
+        function uploadFile() {
+            FileUploaderService.uploadFileToUrl(vm.data.myFile,vm.data.documentName,vm.data.ClinicId);
+
         }
 
         //USER functionality
@@ -87,9 +109,10 @@
             });
           else{
             if(loadItems == 2) //Load doctors
-              StatisticService.GetAll().then(function (response) {
+              StatisticService.GetAll("/"+(vm.periodStat ? vm.periodStat : "0")).then(function (response) {
 //                vm.patientPage = "components/home/editPatientPage1.html";
                 vm.clinicCounter = response.data;
+                //vm.clinicCounter = [{username :"TO"},{username :"BR"},{username :"NU"},{username :"TG"},{username :"VR"},{username :"PA"},{username :"MI"},{username :"BR"},{username :"NU"}];
               });
               else{
                 if(loadItems == 3) //Load patients
@@ -123,18 +146,24 @@
                     }
                     else{
                       if(loadItems == 5) //Load patient with id
-                        StatisticService.GetQuestionaire(vm.ChosenClinic ? "/"+vm.ChosenClinic : "/0").then(function (response) {
+                        StatisticService.GetQuestionaire("/"+(vm.ChosenClinic ? vm.ChosenClinic : "0")+ "/"+(vm.periodQuest ? vm.periodQuest : "0")).then(function (response) {
                           vm.questCounter = response.data;
 
                         });
+                      else{
+                        if(loadItems == 6){
+                          vm.isActive = 1;
+                          vm.pdf = false;
+                          vm.resource_name = 'resources/commons/registrazione1.mp4';
+                        }
 
+                      }
                     }
                   }
               }
           }
           cleanForm();
           vm.template = next;
-
         }
 
         function cleanForm(){
@@ -144,17 +173,11 @@
             vm.form.$setPristine();
         }
 
-        function cleanMet(){
-          if(vm.data.Patient.metastatic == 2){
-            vm.data.Patient.metastatic1 = null;
-            vm.data.Patient.metastatic2 = null;
-            vm.data.Patient.metastatic3 = null;
-            vm.data.Patient.metastatic4 = null;
-            vm.data.Patient.metastatic5 = null;
-            vm.data.Patient.metastatic6 = null;
-            vm.data.Patient.metastatic7 = null;
-            vm.data.Patient.metastaticother = null;
-          }
+
+        function changeResource(view,resource,buttonId){
+          vm.pdf = view;
+          vm.resource_name = resource;
+          vm.isActive = buttonId;
         }
 
         function change(id){
@@ -165,6 +188,8 @@
         function submitUser(changePage){
           if(!vm.data.ClinicId) vm.data.ClinicId = vm.user.ClinicId;
           if(!vm.data.GroupId) vm.data.GroupId = 2;
+          if(vm.data.test_date) vm.data.test_date = vm.data.test_date.split("-")[0] +"-"+ vm.data.test_date.split("-")[1] +"-"+ vm.data.test_date.split("-")[2];
+
           //vm.data.password =
           if(!vm.data.id)
             UserService.Create(vm.data).then(function(response){
@@ -205,52 +230,6 @@
           }
         }
 
-        function submitPatient(savable){
-          var isEligible = vm.isEligible(vm.data.Screening);
-          if(!(isEligible || savable))
-          {
-            vm.showPatientModal = true;
-            vm.data.Patient = {};
-            return;
-          }
-
-          vm.data.Patient = vm.data.Patient || {};
-          vm.data.Screening = vm.data.Screening || {};
-
-          if(missingItems(vm.data.Screening)){
-            alert("Compilare i criteri di eleggibilità");
-            return;
-          }
-
-          if(vm.form.$invalid && vm.data.Patient.finalized){
-            alert("Paziente non finalizzabile, controllare i campi bordati di rosso");
-            return;
-          }
-
-          vm.data.Screening.ClinicId = vm.user.ClinicId;
-          if(!vm.data.Patient.id)
-            PatientService.Create(vm.data,isEligible).then(function(response){
-              if(("success" in response)){
-                vm.error = !response.success;
-                vm.message = response.message.data;
-                return;
-              }
-              //vm.data.Patient.id = response.id;
-              //vm.patients.push({id : vm.data.id});
-              vm.backToHomepage();
-            });
-          else
-            PatientService.Update(vm.data.Patient).then(function(response){
-              if(("success" in response)){
-                vm.error = !response.success;
-                vm.message = response.message.data;
-                return;
-              }
-              vm.backToHomepage();
-            });
-
-        }
-
         function backToHomepage(){
           vm.showPatientModal = false;
           vm.success = true;
@@ -266,66 +245,6 @@
             vm.error = false;
             if(mChangeView)  changeView('components/home/homepage.html',3);
           }, 3000);
-        }
-        // TEMPLATE
-        function isEligible(obj){
-          if(obj === undefined)
-            return false;
-          return (obj.incl1 == 1 && obj.incl2 == 1 && obj.incl3 == 1 && obj.incl4 == 1 && obj.incl5 == 1)
-            &&
-            (obj.excl1 == 2 && obj.excl2 == 2 && obj.excl3 == 2 && obj.excl4 == 2 && obj.excl5 == 2 && obj.excl6 == 2 && obj.excl7 == 2)
-            &&(
-            ((obj.signed == 1 && obj.consenso != "")) || ((obj.signed == 2 && obj.tablet)));
-        }
-
-        function missingItems(obj){
-          return (!obj.incl1 || !obj.incl2 || !obj.incl3 || !obj.incl4 || !obj.incl5) ||
-             (!obj.excl1 || !obj.excl2 || !obj.excl3 || !obj.excl4 || !obj.excl5 || !obj.excl6 || !obj.excl7) ||
-             (!obj.signed);
-        }
-
-        function printDiv(data) {
-
-          var canvas = angular.element(document.querySelector("canvas"))[0];
-          var pngUrl = canvas.toDataURL();
-          var body = buildBody(data.Patient,data.Screening,pngUrl);
-          var popupWin = window.open('', '_blank', 'width=300,height=300');
-          popupWin.document.open();
-          popupWin.document.write('<html><head><style>* {margin:0;padding:0;} html, body {height: 100%;}#wrap {min-height: 100%;}#main {  overflow:auto;  padding-bottom: 180px; }#footer {  position: relative;  margin-top: -180px; /* negative value of footer height */  height: 180px;  clear:both;} </style></head><body onload="window.print()">' + body + '</body></html>');
-          popupWin.document.close();
-        }
-
-        function buildBody(patient,screening,canvas){
-          var body = "<header>"+
-            "<table border='1' style='width:100%'><tbody>"+
-            "<tr><td>Codice Paziente</td><td>Centro</td><td>Data inclusione</td></tr>"+
-            "<tr><td>" + screening.Clinic.abbr+patient.name + "</td><td>" + screening.Clinic.name + "</td><td>"+ new Date(screening.consenso).getDate()+"/" + ("0" + (new Date(screening.consenso).getMonth()+1)).substr(("0" + (new Date(screening.consenso).getMonth()+1)).length-2)+ "/" + new Date(screening.consenso).getFullYear()+ "</td></tr>"+
-            "</tbody></table>"+
-            "</header>"+
-
-            "<br><br>"+
-            "<div id='wrap'>"+
-            "<div id='main'>"+
-            "<table><tbody>"+
-            "<tr><td>Codice Paziente</td><td>" + screening.Clinic.abbr+patient.name + "</td></tr>"+
-            "<tr><td>Data di nascita</td><td>" + patient.birth.substr(0,10) + "</td></tr>"+
-            "<tr><td>Sesso</td><td>" + (patient.sex == 1 ? "Uomo" : "Donna") + "</td></tr>"+
-            "<tr><td>Stato civile</td><td>" + (patient.marital == 1 ? "Coniugato/a o convive stabilmente" : "Altro") + "</td></tr>"+
-            "<tr><td>Istruzione</td><td>" + (patient.scholar == 1 ? "Primario (nessuna/elementare/media)" : (patient.scholar == 2 ? "Secondario (diploma scuola superiore)" : "Universitario (laurea/post-laurea)")) + "</td></tr>"+
-            "</tbody></table>"+
-
-            "<br><br><img height='100' width='100' src='" + canvas + "'/>"+
-            "</div>"+
-            "</div>"+
-
-            "<div id='footer'>"+
-              "<table border='1' style='width:100%'><tbody>"+
-              "<tr><td>Città</td><td>Firma medico</td><td>Data</td></tr>"+
-              "<tr><td>" + screening.Clinic.city + "</td><td>_________________</td><td>"+ new Date().getDate()+"/" + ("0" + (new Date().getMonth()+1)).substr(("0" + (new Date().getMonth()+1)).length-2)+ "/" + new Date().getFullYear()+ "</td></tr>"+
-              "</tbody></table>"+
-            "</div>";
-
-          return body;
         }
 
         String.prototype.hashCode = function(){

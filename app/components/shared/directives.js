@@ -3,20 +3,35 @@
 
     angular
         .module('app')
+        .directive('fileModel', ['$parse', function ($parse) {
+            return {
+               restrict: 'A',
+               link: function(scope, element, attrs) {
+                  var model = $parse(attrs.fileModel);
+                  var modelSetter = model.assign;
+
+                  element.bind('change', function(){
+                     scope.$apply(function(){
+                        modelSetter(scope, element[0].files[0]);
+                     });
+                  });
+               }
+            };
+         }])
         .directive('metastatic', function() {
           return {
             require: 'ngModel',
             link: function(scope, elm, attrs, ctrl) {
 
               ctrl.$parsers.unshift(function(viewValue) {
-                console.log( ctrl.$name + " " + ctrl.$error.metastatic + " " + ctrl.$viewValue );
+                //console.log( ctrl.$name + " " + ctrl.$error.metastatic + " " + ctrl.$viewValue );
 
                 ctrl.$setValidity('metastatic', angular.element.find("input#finalized")[0].checked ? viewValue != null : true);
                 return viewValue != null ? viewValue : undefined;
               });
 
               scope.$watch('vm.data.Patient.metastatic',function(value){
-                console.log("1) -> " + value + " ---> " +ctrl.$name + " " + ctrl.$error.metastatic + " " + ctrl.$viewValue );
+                //console.log("1) -> " + value + " ---> " +ctrl.$name + " " + ctrl.$error.metastatic + " " + ctrl.$viewValue );
                 if(value == 2){
                   ctrl.$setValidity('metastatic', true);
                   return ctrl.$viewValue;
@@ -27,7 +42,7 @@
               });
 
               scope.$watch('vm.data.Patient.finalized',function(value){
-                console.log("2)-> " + value + " ---> " +ctrl.$name + " " + ctrl.$error.metastatic + " " + ctrl.$viewValue );
+                //console.log("2)-> " + value + " ---> " +ctrl.$name + " " + ctrl.$error.metastatic + " " + ctrl.$viewValue );
                 ctrl.$setValidity('metastatic', value ? ctrl.$viewValue != null : true);
                 return ctrl.$viewValue != null ? ctrl.$viewValue : undefined;
               });

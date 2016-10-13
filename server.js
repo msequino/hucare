@@ -13,7 +13,7 @@ var express =	 	require('express')
 
 var app = express();
 
-app.use(favicon(__dirname + '/app/favicon.unipr.ico'));
+app.use(favicon(__dirname + '/app/favicon.ico'));
 app.use(logger('dev'));
 
 app.set('views', __dirname + '/server/views');

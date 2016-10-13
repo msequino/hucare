@@ -7,22 +7,19 @@
         <a class="mouse-over" ng-show="vm.user.GroupId == 2" ng-click="vm.changeView('components/home/homepage.html',3)"><span class="glyphicon glyphicon-home"/> Lista pazienti</a>
     </li>
     <li>
-        <a class="mouse-over" ng-show="vm.user.GroupId == 2" ng-click="vm.changeView('components/home/editPatient.html',4)"><span class="glyphicon glyphicon-bed"/> Nuovo paziente</a>
-    </li>
-    <li>
         <a class="mouse-over" ng-show="vm.user.GroupId == 1" ng-click="vm.changeView('components/home/editUsers.html',1)"><span class="glyphicon glyphicon-user"/> Lista utenti</a>
     </li>
     <li>
-        <a class="mouse-over" ng-show="vm.user.GroupId == 1" ng-click="vm.changeView('components/home/statsPatients.html',2)"><span class="glyphicon glyphicon-stats"/> Stat pazienti</a>
+        <a class="mouse-over" ng-show="vm.user.GroupId == 1" ng-click="vm.changeView('components/home/statsPatients.html',2)"><span class="glyphicon glyphicon-stats"/> Statistiche</a>
     </li>
     <li>
-        <a class="mouse-over" ng-show="vm.user.GroupId == 1" ng-click="vm.changeView('components/home/statsQuest.html',5)"><span class="glyphicon glyphicon-stats"/> Questionari</a>
+        <a class="mouse-over" ng-show="vm.user.GroupId == 1" ng-click="vm.changeView('components/home/statsQuest.html',5)"><span class="glyphicon glyphicon-th-list"/> Questionari</a>
     </li>
     <li>
-      <a href="http://example.com/files/myfile.pdf" class="mouse-over" href="http" target="_blank"><span class="glyphicon glyphicon-stats"/>Video</a>
+        <a class="mouse-over" ng-show="vm.user.GroupId == 1" ng-click="vm.changeView('components/home/upload.html',7)"><span class="glyphicon glyphicon-upload"/> Carica File</a>
     </li>
     <li>
-      <a href="http://example.com/files/myfile.pdf" class="mouse-over" href="http" target="_blank"><span class="glyphicon glyphicon-stats"/>Video</a>
+        <a class="mouse-over" ng-click="vm.changeView('components/home/documentation.html',6)"><span class="glyphicon glyphicon-book"/> Documentazione</a>
     </li>
 
   </ul>

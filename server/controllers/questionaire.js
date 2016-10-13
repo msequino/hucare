@@ -97,7 +97,8 @@ module.exports.insertAllRowT0 = function(req,res,next){
                 //res.json({code : 200 , message : "Informazioni salvate"});
                 if(error){
                   transporter.sendMail({from : "server@ao.pr.it",to:"mansequino@gmail.com", subject :"Execution error in HuCare", html:"E' successo qualcosa in hucare<br><br><b>" + error + "</b><br><br> dall'utente <b>"+JSON.stringify(req.user.username) + "</b>" },function(err,info){
-                    log.log('error',"USER " + req.user.id + " ERROR (cannot send email)");
+                    log.log('error',"USER " + req.user.id + " ERROR (cannot send email) " + error);
+
                     res.json({code : 400  ,message : "Mail non inviata"});
                   });
 

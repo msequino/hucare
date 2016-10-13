@@ -6,40 +6,20 @@
 
         <div class="slide-animate" ng-include="vm.patientPage"></div>
 
-<!--        <div class="row">
-          <div class="form-actions col-md-6">
-              <button type="submit" ng-disabled="vm.form.$invalid || vm.data == {}" class="btn btn-primary">{{vm.data.id ? "Aggiorna" : "Registra"}}</button>
-              <a ng-click="vm.cleanForm()" class="btn btn-link">Cancella</a>
-          </div>
-        </div>-->
-
         <br>
-        <div ng-show="(vm.isEligible(vm.data.Screening) && vm.countPatView > 0) && !vm.finalized" class="col col-md-10 col-md-offset-1 alert alert-danger" role="alert">
-          <input type="checkbox" ng-model="vm.data.Patient.finalized" id="finalized">
-          <strong>FINALIZZA</strong>
-          Attivando la casella la scheda verrà finalizzata
 
-        </div>
         <nav>
 
           <ul class="pager">
             <li class="previous mouse-over" ng-show="vm.countPatView > 0">
               <a ng-click="vm.change(-1);"><span aria-hidden="true">&larr;</span> Indietro</a>
             </li>
-            <li class="next mouse-over" ng-show="vm.countPatView < 2 && vm.isEligible(vm.data.Screening)">
+            <li class="next mouse-over" ng-show="vm.countPatView < 2">
               <a ng-click="vm.change(1);">Avanti <span aria-hidden="true">&rarr;</span></a>
-            </li>
-            <li class="next mouse-over" ng-show="(vm.countPatView == 2 || !vm.isEligible(vm.data.Screening)) && !vm.finalized">
-              <a ng-click="vm.submitPatient(vm.isEligible(vm.data.Screening))">Salva <span aria-hidden="true"></span></a>
             </li>
           </ul>
         </nav>
       </form>
-      <div class="footer" ng-hide="vm.qrcode == '' || vm.finalized != 1">
-        <a class="mouse-over" ng-click="vm.printDiv(vm.data)">Stampa pagina paziente</a>
-        oppure scannerizza il QrCode tramite l'app
-        <qr size="100" text="{{vm.qrcode}}"></qr>
-      </div>
 
   </div>
 </div>

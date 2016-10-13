@@ -1,7 +1,29 @@
 <div class="row">
+
+  <select class="form-control" ng-change="vm.changeView('components/home/statsPatients.html',2)" ng-model="vm.periodStat" ng-options="item.id as item.name for item in vm.timeInterval"/>
+  <br>
+  <br>
   <table class="table">
-    <thead><th>Ospedale</th><th>Pz arruolati</th><th>Pz con FU</th></thead>
-    <tbody ng-repeat="clinic in vm.clinicCounter"><td>{{clinic.Clinic.name}}</td><td>{{clinic.ClinicCount}}</td><td>{{clinic.Fu ? clinic.Fu : 0}}</td></tbody>
+    <thead>
+      <tr>
+        <th>Nome Utente</th>
+        <th>Ospedale</th>
+        <th>Pz arruolati</th>
+        <th>Pz non valido</th>
+        <th>Pz con basale</th>
+        <th>Pz con FU</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="clinic in vm.clinicCounter" ng-class="{red:(clinic.username.indexOf('TO') == 0 || clinic.username.indexOf('TG') == 0 || clinic.username.indexOf('MI') == 0 || clinic.username.indexOf('UD') == 0 || clinic.username.indexOf('VR') == 0), green:(clinic.username.indexOf('BR') == 0 || clinic.username.indexOf('CB') == 0 || clinic.username.indexOf('CS') == 0 || clinic.username.indexOf('FA') == 0 || clinic.username.indexOf('NA') == 0)}">
+        <td>{{clinic.username | uppercase}}</td>
+        <td>{{clinic.Clinic.name}}</td>
+        <td>{{clinic.ClinicCount}}</td>
+        <td>{{clinic.notValid}}</td>
+        <td>{{clinic.T0 ? clinic.T0 : 0}}</td>
+        <td>{{clinic.Fu ? clinic.Fu : 0}}</td>
+      </tr>
+    </tbody>
   </table>
-  
+
 </div>

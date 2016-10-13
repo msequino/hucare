@@ -1,4 +1,7 @@
 var passport =	require('passport');
+var multer  = require('multer');
+var fs  = require('fs');
+var path  = require('path');
 var User = require("../controllers/user"),
     Auth = require("../controllers/auth"),
     Clinic = require("../controllers/clinic"),
@@ -56,8 +59,9 @@ module.exports = function(app) {
   app.route("/patients").post(isAuthenticated,Patient.insertPatient);
   app.route("/patient/login").post(Patient.isValidPatient);
   app.route("/screening").post(isAuthenticated,Patient.insertNoEligiblePatients);
-  app.route("/stats").get(isAuthenticated,Patient.countRecluted);
-  app.route("/stats/quest/:clinic").get(isAuthenticated,Patient.countQuest);
+
+  app.route("/stats/:period").get(isAuthenticated,Patient.countRecluted);
+  app.route("/stats/quest/:clinic/:period").get(isAuthenticated,Patient.countQuest);
 
   app.route("/questionaires/bypatient/:id").get(isAuthenticated,Patient.getPatient);
   app.route("/questionaires").get(isAuthenticated,Patient.getPatients);
@@ -82,5 +86,35 @@ module.exports = function(app) {
 
   app.route("/clinics").get(isAuthenticated,Clinic.getClinics);
   app.route("/deployer").post(User.deploy);
+
+  var storage = multer.diskStorage({
+    destination: function(req,file,cb){
+      var path_resources = path.join(__dirname ,'..','..','app','resources',(req.query.type > 8) ? req.query.clinic : 'commons');
+      if (!fs.existsSync(path_resources)){
+          fs.mkdirSync(path_resources);
+      }
+      cb(null,path_resources);
+    },
+    filename: function (req, file, cb) {
+      var name = (req.query.type == 1 ? "utilizzo.mp4" :
+                  (req.query.type == 2 ? "esempio.mp4" :
+                  (req.query.type == 3 ? "faq.pdf" :
+                  (req.query.type == 4 ? "protocollo.pdf" :
+                  (req.query.type == 5 ? "sinossi.pdf" :
+                  (req.query.type == 6 ? "eortc.pdf" :
+                  (req.query.type == 7 ? "hads.pdf" :
+                  (req.query.type == 8 ? "neq.pdf" :
+                  (req.query.type == 9 ? "fogli_informativi.pdf" :
+                  (req.query.type == 10 ? "consenso_informato.pdf" : "altro.pdf"))))))))));
+
+      cb(null, name);
+    }
+  })
+
+  var upload = multer({ storage: storage })
+
+  app.post("/uploadFile",upload.single('file'),function(req,res){
+    res.json(200);
+  });
 
 }

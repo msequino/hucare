@@ -1,9 +1,14 @@
 <div class="form-group col-md-12">
+  <p><h2>Dati relativi a tutte le cliniche, seleziona una clinica dal box</h2></p>
   <label for="clinicId">Clinica</label>
   <select class="form-control" name="clinicId" ng-change="vm.changeView('components/home/statsQuest.html',5)" ng-model="vm.ChosenClinic" ng-options="item.id as item.name for item in vm.clinics"/>
+  <br>
+  <br>
+  <p><h2>Filtra per periodo</h2></p>
+  <select class="form-control" ng-change="vm.changeView('components/home/statsQuest.html',5)" ng-model="vm.periodQuest" ng-options="item.id as item.name for item in vm.timeInterval"/>
+
 </div>
 
-<p><h2>Dati relativi a tutte le cliniche, cambia la clinica sopra e vedrai i relativi valori</h2></p>
 <div class="row">
   <table class="table">
     <thead><th colspan="2">Eortc</th><th colspan="3">T0</th><th colspan="3">T1</th></thead>

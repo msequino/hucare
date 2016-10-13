@@ -30,22 +30,32 @@
               <span ng-show="vm.form.lastName.$dirty && vm.form.lastName.$error.required" class="help-block">Cognome richiesto</span>
           </div>
         </div>
+        <div class="form-group" ng-class="{ 'has-error': vm.form.mail.$dirty && vm.form.mail.$error.required }">
+            <label for="mail">Mail</label>
+            <input type="text" name="mail" class="form-control" ng-model="vm.data.mail" required />
+            <span ng-show="vm.form.mail.$dirty && vm.form.mail.$error.required" class="help-block">Mail richiesta</span>
+        </div>
         <div class="form-group" ng-class="{ 'has-error': vm.form.username.$dirty && vm.form.username.$error.required }">
             <label for="username">Username</label>
-            <input type="text" name="username" class="form-control" ng-model="vm.data.username" required />
+            <input disabled type="text" name="username" class="form-control" ng-model="vm.data.username" required />
             <span ng-show="vm.form.username.$dirty && vm.form.username.$error.required" class="help-block">Username richiesto</span>
         </div>
-        <div class="form-group">
+        <!--div class="form-group">
             <label for="password">Password</label>
             <input type="password" class="form-control" placeholder="Se vuoto, la password non sarà cambiata" ng-model="vm.data.password" />
-        </div>
+        </div-->
         <div class="row">
     	    <div class="form-group col-md-12" ng-class="{ 'has-error': vm.form.clinicId.$dirty && vm.form.clinicId.$error.required }">
     	      <label for="clinicId">Clinica</label>
     	      <select class="form-control" name="clinicId" ng-model="vm.data.ClinicId" ng-options="item.id as item.name for item in vm.clinics" required/>
-    	      <span ng-show="vm.form.clinicId.$dirty && vm.form.clinicId.$error.required" class="help-block">Clinica richiesto</span>
+    	      <span ng-show="vm.form.clinicId.$dirty && vm.form.clinicId.$error.required" class="help-block">Clinica richiesta</span>
     	    </div>
         </div>
+        <!--div class="form-group" ng-class="{ 'has-error': vm.form.test_date.$dirty && vm.form.test_date.$error.required }">
+            <label for="test_date">Data di fine test</label>
+            <input type="date" name="username" class="form-control" ng-model="vm.data.test_date" required />
+            <span ng-show="vm.form.test_date.$dirty && vm.form.test_date.$error.required" class="help-block">Data di fine test richiesto</span>
+        </div-->
         <div class="row">
           <div class="form-actions col-md-6">
               <button type="submit" ng-disabled="vm.form.$invalid || vm.data == {}" class="btn btn-primary">{{vm.data.id ? "Aggiorna" : "Registra"}}</button>

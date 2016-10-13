@@ -146,26 +146,93 @@ module.exports.insertNoEligiblePatients = function(req,res,next){
 }
 
 module.exports.countRecluted = function(req,res,next){
+
+  var timeLimit = {$gte : "2016-10-17 00:00:00", $lte : "2018-07-27 23:59:59"};
+
+  if(req.params.period == 1)
+    timeLimit = {$gte : "2016-10-17 00:00:00", $lte : "2017-01-27 23:59:59" };
+  else if(req.params.period == 2)
+    timeLimit = {$gte : "2017-02-06 00:00:00", $lte : "2017-05-19 23:59:59" };
+  else if(req.params.period == 3)
+    timeLimit = {$gte : "2017-06-12 00:00:00", $lte : "2017-09-22 23:59:59" };
+  else if(req.params.period == 4)
+    timeLimit = {$gte : "2017-12-04 00:00:00", $lte : "2018-03-16 23:59:59" };
+  else if(req.params.period == 5)
+    timeLimit = {$gte : "2018-04-16 00:00:00" , $lte : "2018-07-27 23:59:59"};
+
+//console.log(timeLimit);
+
   db.Screening.findAll({
     attributes : [[db.sequelize.fn('count',db.sequelize.col('ClinicId')), 'ClinicCount']],
     include : [{model : db.Clinic,attributes : ['id','name']}],
-    group : ['ClinicId']}).then(function(result){
-      var data = result;
+    where : {"createdAt": timeLimit},
+    group : ['ClinicId']}).then(function(screenedPatients){
+
       db.Patient.findAll({
         include : [
-          {model : db.Screening , attributes : ['ClinicId']}
+          {model : db.Screening , attributes : ['ClinicId'], where : {'createdAt' : timeLimit} }
         ],
         attributes : ['Screening.ClinicId',[db.sequelize.fn('count',db.sequelize.col('*')), 'ClinicCount']],
-        where : {'T1Date' : {$ne : null}},
+        where : {'T1Date' : {$ne : null} },
         group : ['Screening.ClinicId']
-      }).then(function(result){
-        var response = data;
-        for(var i =0;i<data.length;i++)
-          for(var j =0;j<result.length;j++)
-            if(result[j].Screening.ClinicId == data[i].Clinic.id)
-              response[i].dataValues.Fu = result[j].dataValues.ClinicCount;
+      }).then(function(enrolledPatientsT1){
 
-        res.json({code : 200 , data: response});
+        db.Patient.findAll({
+          include : [
+            {model : db.Screening , attributes : ['ClinicId'], where : {'createdAt' : timeLimit} }
+          ],
+          attributes : ['Screening.ClinicId',[db.sequelize.fn('count',db.sequelize.col('*')), 'ClinicCount']],
+          where : {'T0Date' : {$ne : null} },
+          group : ['Screening.ClinicId']
+        }).then(function(enrolledPatientsT0){
+
+          db.Screening.findAll({
+            attributes : [[db.sequelize.fn('count',db.sequelize.col('ClinicId')), 'ClinicCount']],
+            include : [{model : db.Clinic,attributes : ['id','name']}],
+            where: { 'createdAt' : timeLimit  , $or : [{'incl1' : { $ne : 1}},{'incl2' : { $ne : 1}},{'incl3' : { $ne : 1}},{'incl4' : { $ne : 1}},
+                            {'incl5' : { $ne : 1}},{'excl1' : { $ne : 2}},{'excl2' : { $ne : 2}},{'excl3' : { $ne : 2}},
+                            {'excl4' : { $ne : 2}},{'excl5' : { $ne : 2}},{'excl6' : { $ne : 2}},{'excl7' : { $ne : 2}},
+                            {'signed' : { $ne : 1}}]},
+            group : ['ClinicId']}).then(function(notScreenedPatients){
+
+              db.User.findAll().then(function(users){
+
+                for(var i =0;i<screenedPatients.length;i++){
+
+                  for(var j =0;j<users.length;j++)
+                    if(users[j].ClinicId == screenedPatients[i].Clinic.id)
+                      screenedPatients[i].dataValues.username = users[j].username;
+
+                  for(var j =0;j<enrolledPatientsT1.length;j++)
+                    if(enrolledPatientsT1[j].Screening.ClinicId == screenedPatients[i].Clinic.id)
+                      screenedPatients[i].dataValues.Fu = enrolledPatientsT1[j].dataValues.ClinicCount;
+
+                  for(var j =0;j<enrolledPatientsT0.length;j++)
+                    if(enrolledPatientsT0[j].Screening.ClinicId == screenedPatients[i].Clinic.id)
+                      screenedPatients[i].dataValues.T0 = enrolledPatientsT0[j].dataValues.ClinicCount;
+
+                  for(var j =0;j<notScreenedPatients.length;j++)
+                    if(notScreenedPatients[j].Clinic.id == screenedPatients[i].Clinic.id)
+                      screenedPatients[i].dataValues.notValid = notScreenedPatients[j].dataValues.ClinicCount;
+
+                }
+                res.json({code : 200 , data: screenedPatients});
+
+              }).catch(function(error){
+                log.log('error',error);
+                res.json({code :404});
+
+              });
+          }).catch(function(error){
+            log.log('error',error);
+            res.json({code :404});
+          });
+
+        }).catch(function(error){
+          log.log('error',error);
+          console.log(error);
+          res.json({code :404});
+        });
       }).catch(function(error){
         log.log('error',error);
         res.json({code :404});
@@ -173,13 +240,27 @@ module.exports.countRecluted = function(req,res,next){
 
   }).catch(function(error){
     log.log('error',error);
+    console.log(error);
     res.json({code :404});
   });
 }
 
 module.exports.countQuest = function(req,res,next){
 
-  var where = req.params.clinic.indexOf("0") == -1 ? "WHERE c.id = " + req.params.clinic : "";
+  var timeLimit = "s.createdAt >= '2016-10-17 00:00:00' AND s.createdAt <= '2018-07-27 23:59:59'";
+
+  if(req.params.period == 1)
+    timeLimit = "s.createdAt >= '2016-10-17 00:00:00' AND s.createdAt <= '2017-01-27 23:59:59'";
+  else if(req.params.period == 2)
+    timeLimit = "s.createdAt >= '2017-02-06 00:00:00' AND s.createdAt <= '2017-05-19 23:59:59'";
+  else if(req.params.period == 3)
+    timeLimit = "s.createdAt >= '2017-06-12 00:00:00' AND s.createdAt <= '2017-09-22 23:59:59'";
+  else if(req.params.period == 4)
+    timeLimit = "s.createdAt >= '2017-12-04 00:00:00' AND s.createdAt <= '2018-03-16 23:59:59'";
+  else if(req.params.period == 5)
+    timeLimit = "s.createdAt >= '2018-04-16 00:00:00' AND s.createdAt <= '2018-07-27 23:59:59'";
+
+  var where = (req.params.clinic.indexOf("0") == -1 ? "WHERE c.id = " + req.params.clinic  : "") + " AND " + timeLimit;
   db.sequelize.query("SELECT c.name,"+
   //eortc t0
   "count(e0.dom1) TOTE0DOM1, sum(if(e0.dom1 = 0,1,0)) MISSE0DOM1, sum(if(e0.dom1 is null,1,0)) NULLE0DOM1, "+
@@ -327,10 +408,11 @@ module.exports.countQuest = function(req,res,next){
   "count(n1.dom22) TOTN1DOM22, sum(if(n1.dom22 = 0,1,0)) MISSN1DOM22, sum(if(n1.dom22 is null,1,0)) NULLN1DOM22, "+
   "count(n1.dom23) TOTN1DOM23, sum(if(n1.dom23 = 0,1,0)) MISSN1DOM23, sum(if(n1.dom23 is null,1,0)) NULLN1DOM23 "+
 
-  "FROM patients p LEFT JOIN t0eortcs e0 ON p.t0eortcid=e0.id LEFT JOIN t1eortcs e1 ON p.t1eortcid=e1.id " +
-  "LEFT JOIN t0hads h0 ON p.t0hadid=h0.id LEFT JOIN t1hads h1 ON p.t1hadid=h1.id " +
-  "LEFT JOIN t0neqs n0 ON p.t0neqid=n0.id LEFT JOIN t1neqs n1 ON p.t1neqid=n1.id " +
-  "LEFT JOIN screenings s ON p.screeningid=s.id INNER JOIN clinics c ON c.id=s.ClinicId " + where ,{type : db.sequelize.QueryTypes.SELECT}).then(function(result){
+//TODO questa parte non deve essere committata
+  "FROM Patients p LEFT JOIN T0Eortcs e0 ON p.t0eortcid=e0.id LEFT JOIN T1Eortcs e1 ON p.t1eortcid=e1.id " +
+  "LEFT JOIN T0Hads h0 ON p.t0hadid=h0.id LEFT JOIN T1Hads h1 ON p.t1hadid=h1.id " +
+  "LEFT JOIN T0Neqs n0 ON p.t0neqid=n0.id LEFT JOIN T1Neqs n1 ON p.t1neqid=n1.id " +
+  "LEFT JOIN Screenings s ON p.screeningid=s.id INNER JOIN Clinics c ON c.id=s.ClinicId " + where ,{type : db.sequelize.QueryTypes.SELECT}).then(function(result){
     res.json({code : 200 , data: result});
   }).catch(function(error){
     console.log(error);
@@ -454,7 +536,7 @@ module.exports.createEortc = function(name, eortc, time){
     "<p>Versione elettronica delle domande inserite dal paziente</p>"+
     "<br/>"+
     "<h2>In generale</h2>"+
-    "<table style='border-spacing:8px;border-collapse:separate;font-size:12' border='2'>"+
+    "<table style='border-spacing:8px;border-collapse:separate;font-size:12;page-break-after: always;' border='2'>"+
       "<thead>"+
         "<tr><th></th><th>Domanda</th><th>Risposta</th></tr>"+
       "</thead>"+
@@ -468,7 +550,7 @@ module.exports.createEortc = function(name, eortc, time){
       "</table>"+
       "<br>"+
       "<h2>Durante gli ultimi sette giorni</h2>"+
-      "<table style='border-spacing:8px;border-collapse:separate;font-size:12' border='2'>"+
+      "<table style='border-spacing:8px;border-collapse:separate;font-size:12;margin-top:40px;page-break-after: always;' border='2'>"+
         "<thead>"+
           "<tr><th></th><th>Domanda</th><th>Risposta</th></tr>"+
         "</thead>"+
@@ -486,23 +568,20 @@ module.exports.createEortc = function(name, eortc, time){
         "<tr><td>16</td><td>Ha avuto problemi di stitichezza?</td><td align='center'>" + getRealValue(eortc.dom16) + "</td></tr>"+
         "<tr><td>17</td><td>Ha avuto problemi di diarrea?</td><td align='center'>" + getRealValue(eortc.dom17) + "</td></tr>"+
         "<tr><td>18</td><td>Ha sentito stanchezza?</td><td align='center'>" + getRealValue(eortc.dom18) + "</td></tr>"+
-        "</tbody>"+
-        "</table>"+
-        "<br><br>"+
-        "<br><br>"+
-        "<br><br>"+
-        "<table style='border-spacing:8px;border-collapse:separate;font-size:12' border='2'>"+
-          "<thead>"+
-            "<tr><th></th><th>Domanda</th><th>Risposta ( 1 = Pessimo; 7 = Ottimo )</th></tr>"+
-          "</thead>"+
-          "<tbody>"+
-          "<tr><td>19</td><td>Il dolore ha interferito con le Sue attività quotidiane?</td><td align='center'>" + getRealValue(eortc.dom19) + "</td></tr>"+
+        "<tr><td>19</td><td>Il dolore ha interferito con le Sue attività quotidiane?</td><td align='center'>" + getRealValue(eortc.dom19) + "</td></tr>"+
         "<tr><td>20</td><td>Ha avuto difficoltà a concentrarsi su cose come leggere un giornale o guardare la televisione?</td><td align='center'>" + getRealValue(eortc.dom20) + "</td></tr>"+
         "<tr><td>21</td><td>Si è sentito/a teso/a?</td><td align='center'>" + getRealValue(eortc.dom21) + "</td></tr>"+
         "<tr><td>22</td><td>Ha avuto preoccupazioni?</td><td align='center'>" + getRealValue(eortc.dom22) + "</td></tr>"+
         "<tr><td>23</td><td>Ha avuto manifestazioni di irritabilità?</td><td align='center'>" + getRealValue(eortc.dom23)+ "</td></tr>"+
         "<tr><td>24</td><td>Ha avvertito uno stato di depressione?</td><td align='center'>" + getRealValue(eortc.dom24) + "</td></tr>"+
         "<tr><td>25</td><td>Ha avuto difficoltà a ricordare le cose?</td><td align='center'>" + getRealValue(eortc.dom25) + "</td></tr>"+
+        "</tbody>"+
+        "</table>"+
+        "<table style='border-spacing:8px;border-collapse:separate;font-size:12;margin-top:40px' border='2'>"+
+          "<thead>"+
+            "<tr><th></th><th>Domanda</th><th>Risposta ( 1 = Pessimo; 7 = Ottimo )</th></tr>"+
+          "</thead>"+
+          "<tbody>"+
         "<tr><td>26</td><td>Le Sue condizioni fisiche o il Suo trattamento medico hanno interferito con le Sua vita familiare?</td><td align='center'>" + getRealValue(eortc.dom26) + "</td></tr>"+
         "<tr><td>27</td><td>Le Sue condizioni fisiche o il Suo trattamento medico hanno interferito con le Sue attività sociali?</td><td align='center'>" + getRealValue(eortc.dom27) + "</td></tr>"+
         "<tr><td>28</td><td>Le Sue condizioni fisiche o il Suo trattamento medico Le hanno causato difficoltà finanziarie?</td><td align='center'>" + getRealValue(eortc.dom28) + "</td></tr>"+
@@ -533,7 +612,7 @@ module.exports.createNeq = function(name, neq, time){
     "</header>"+
     "<center><h2>Questionario per la Valutazione dei Bisogni del Paziente</h2></center>"+
     "<p>Versione elettronica delle domande inserite dal paziente</p>"+
-    "<table style='font-size:12;border-spacing:8px;border-collapse:separate' border='2'>"+
+    "<table style='font-size:12;border-spacing:8px;border-collapse:separate;page-break-after: always;' border='2'>"+
       "<thead>"+
         "<tr><th></th><th>Domanda</th><th>SI</th><th>NO</th></tr>"+
       "</thead>"+
@@ -550,7 +629,14 @@ module.exports.createNeq = function(name, neq, time){
         "<tr><td>L</td><td>Ho bisogno di maggiore aiuto per mangiare, vestirmi ed andare in bagno</td><td>" + (neq.dom10 == 1 ? "X" : "")+ "</td><td>" + (neq.dom10 == 2 ? "X" : "") + "</td></tr>"+
         "<tr><td>M</td><td>Ho bisogno di maggiore rispetto della mia intimità</td><td>" + (neq.dom11 == 1 ? "X" : "")+ "</td><td>" + (neq.dom11 == 2 ? "X" : "") + "</td></tr>"+
         "<tr><td>N</td><td>Ho bisogno di maggiore attenzione da parte del personale infermieristico</td><td>" + (neq.dom12 == 1 ? "X" : "")+ "</td><td>" + (neq.dom12 == 2 ? "X" : "") + "</td></tr>"+
-        "<tr><td>O</td><td>Ho bisogno di essere più rassicurato dai medici</td><td>" + (neq.dom13 == 1 ? "X" : "")+ "</td><td>" + (neq.dom13 == 2 ? "X" : "") + "</td></tr>"+
+        "</tbody>"+
+        "</table>"+
+        "<table style='font-size:12;border-spacing:8px;border-collapse:separate;margin-top:40px;' border='2'>"+
+          "<thead>"+
+            "<tr><th></th><th>Domanda</th><th>SI</th><th>NO</th></tr>"+
+          "</thead>"+
+          "<tbody>"+
+            "<tr><td>O</td><td>Ho bisogno di essere più rassicurato dai medici</td><td>" + (neq.dom13 == 1 ? "X" : "")+ "</td><td>" + (neq.dom13 == 2 ? "X" : "") + "</td></tr>"+
         "<tr><td>P</td><td>Ho bisogno che i servizi offerti dall'ospedale (bagni, pasti, pulizia) siano migliori</td><td>" + (neq.dom14 == 1 ? "X" : "")+ "</td><td>" + (neq.dom14 == 2 ? "X" : "") + "</td></tr>"+
         "<tr><td>Q</td><td>Ho bisogno di avere maggiori informazioni economico-assicurative legate alla mia malattia (ticket, invalidità, ecc.)</td><td>" + (neq.dom15 == 1 ? "X" : "")+ "</td><td>" + (neq.dom15 == 2 ? "X" : "") + "</td></tr>"+
         "<tr><td>R</td><td>Ho bisogno di un aiuto economico</td><td>" + (neq.dom16 == 1 ? "X" : "")+ "</td><td>" + (neq.dom16 == 2 ? "X" : "") + "</td></tr>"+

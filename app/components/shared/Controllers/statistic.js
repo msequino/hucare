@@ -14,8 +14,8 @@
 
         return service;
 
-        function GetAll() {
-            return $http.get('/hucare/stats').then(handleSuccess, handleError('Error getting all doctors'));
+        function GetAll(period) {
+            return $http.get('/hucare/stats' + period).then(handleSuccess, handleError('Error getting all doctors'));
         }
 
         function GetQuestionaire(id) {

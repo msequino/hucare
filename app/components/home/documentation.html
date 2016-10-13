@@ -1,0 +1,80 @@
+
+<div class="row">
+
+  <div class="col-md-offset-2 col-md-10"><h3>Documentazione <small>Clicca su un bottone per visualizzare una risorsa</small></h3></div>
+  <div class="col-md-offset-2 col-md-10"><h5>Attenzione <small>il caricamento potrebbe richiedere qualche secondo</small></h3></div>
+  <div class="col-md-2">
+    <div class="btn-group-vertical" role="group" aria-label="">
+      <b>Video</b>
+      <button type="button" class="btn btn-default" ng-class="{active: vm.isActive == 1}" ng-click="vm.isActive = 1;">Utilizzo app</button>
+      <button type="button" class="btn btn-default" ng-class="{active: vm.isActive == 2}" ng-click="vm.isActive = 2;">Esempio clinico</button>
+      <br/>
+      <b>Documenti cartacei</b>
+      <button type="button" class="btn btn-default" ng-class="{active: vm.isActive == 3}" ng-click="vm.isActive = 3;">FAQ</button>
+      <button type="button" class="btn btn-default" ng-class="{active: vm.isActive == 4}" ng-click="vm.isActive = 4;">Protocollo</button>
+      <button type="button" class="btn btn-default" ng-class="{active: vm.isActive == 5}" ng-click="vm.isActive = 5;">Sinossi</button>
+      <button type="button" class="btn btn-default" ng-class="{active: vm.isActive == 6}" ng-click="vm.isActive = 6;">Eortc</button>
+      <button type="button" class="btn btn-default" ng-class="{active: vm.isActive == 7}" ng-click="vm.isActive = 7;">Hads</button>
+      <button type="button" class="btn btn-default" ng-class="{active: vm.isActive == 8}" ng-click="vm.isActive = 8;">Neq</button>
+      <button type="button" class="btn btn-default" ng-class="{active: vm.isActive == 9}" ng-click="vm.isActive = 9;">Foglio informativi</button>
+      <button type="button" class="btn btn-default" ng-class="{active: vm.isActive == 10}" ng-click="vm.isActive = 10;">Consenso</button>
+    </div>
+  </div>
+  <div class="col-md-10">
+
+    <video ng-if="vm.isActive == 1" width="100%" height="500" controls>
+      <source src='./resources/commons/utilizzo.mp4' type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+
+    <video ng-if="vm.isActive == 2" width="100%" height="500" controls>
+      <source src='./resources/commons/esempio.mp4' type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+
+    <embed ng-if="vm.isActive == 3" src="./resources/commons/faq.pdf" width="100%" height="500" alt="pdf">
+
+    <embed ng-if="vm.isActive == 4" src="./resources/commons/protocollo.pdf" width="100%" height="500" alt="pdf">
+
+    <embed ng-if="vm.isActive == 5" src="./resources/commons/sinossi.pdf" width="100%" height="500" alt="pdf">
+
+    <embed ng-if="vm.isActive == 6" src="./resources/commons/eortc.pdf" width="100%" height="500" alt="pdf">
+
+    <embed ng-if="vm.isActive == 7" src="./resources/commons/hads.pdf" width="100%" height="500" alt="pdf">
+
+    <embed ng-if="vm.isActive == 8" src="./resources/commons/neq.pdf" width="100%" height="500" alt="pdf">
+
+    <embed ng-if="vm.isActive == 9 && vm.user.ClinicId == 3" src="./resources/3/fogli_informativi.pdf" width="100%" height="500" alt="pdf">
+    <embed ng-if="vm.isActive == 9 && vm.user.ClinicId == 4" src="./resources/4/fogli_informativi.pdf" width="100%" height="500" alt="pdf">
+    <embed ng-if="vm.isActive == 9 && vm.user.ClinicId == 5" src="./resources/5/fogli_informativi.pdf" width="100%" height="500" alt="pdf">
+    <embed ng-if="vm.isActive == 9 && vm.user.ClinicId == 6" src="./resources/6/fogli_informativi.pdf" width="100%" height="500" alt="pdf">
+    <embed ng-if="vm.isActive == 9 && vm.user.ClinicId == 7" src="./resources/7/fogli_informativi.pdf" width="100%" height="500" alt="pdf">
+    <embed ng-if="vm.isActive == 9 && vm.user.ClinicId == 8" src="./resources/8/fogli_informativi.pdf" width="100%" height="500" alt="pdf">
+    <embed ng-if="vm.isActive == 9 && vm.user.ClinicId == 9" src="./resources/9/fogli_informativi.pdf" width="100%" height="500" alt="pdf">
+    <embed ng-if="vm.isActive == 9 && vm.user.ClinicId == 10" src="./resources/10/fogli_informativi.pdf" width="100%" height="500" alt="pdf">
+    <embed ng-if="vm.isActive == 9 && vm.user.ClinicId == 11" src="./resources/11/fogli_informativi.pdf" width="100%" height="500" alt="pdf">
+    <embed ng-if="vm.isActive == 9 && vm.user.ClinicId == 12" src="./resources/12/fogli_informativi.pdf" width="100%" height="500" alt="pdf">
+    <embed ng-if="vm.isActive == 9 && vm.user.ClinicId == 13" src="./resources/13/fogli_informativi.pdf" width="100%" height="500" alt="pdf">
+    <embed ng-if="vm.isActive == 9 && vm.user.ClinicId == 14" src="./resources/14/fogli_informativi.pdf" width="100%" height="500" alt="pdf">
+    <embed ng-if="vm.isActive == 9 && vm.user.ClinicId == 15" src="./resources/15/fogli_informativi.pdf" width="100%" height="500" alt="pdf">
+    <embed ng-if="vm.isActive == 9 && vm.user.ClinicId == 16" src="./resources/16/fogli_informativi.pdf" width="100%" height="500" alt="pdf">
+    <embed ng-if="vm.isActive == 9 && vm.user.ClinicId == 17" src="./resources/17/fogli_informativi.pdf" width="100%" height="500" alt="pdf">
+
+    <embed ng-if="vm.isActive == 10 && vm.user.ClinicId == 3" src="./resources/3/consenso_informato.pdf" width="100%" height="500" alt="pdf">
+    <embed ng-if="vm.isActive == 10 && vm.user.ClinicId == 4" src="./resources/4/consenso_informato.pdf" width="100%" height="500" alt="pdf">
+    <embed ng-if="vm.isActive == 10 && vm.user.ClinicId == 5" src="./resources/5/consenso_informato.pdf" width="100%" height="500" alt="pdf">
+    <embed ng-if="vm.isActive == 10 && vm.user.ClinicId == 6" src="./resources/6/consenso_informato.pdf" width="100%" height="500" alt="pdf">
+    <embed ng-if="vm.isActive == 10 && vm.user.ClinicId == 7" src="./resources/7/consenso_informato.pdf" width="100%" height="500" alt="pdf">
+    <embed ng-if="vm.isActive == 10 && vm.user.ClinicId == 8" src="./resources/8/consenso_informato.pdf" width="100%" height="500" alt="pdf">
+    <embed ng-if="vm.isActive == 10 && vm.user.ClinicId == 9" src="./resources/9/consenso_informato.pdf" width="100%" height="500" alt="pdf">
+    <embed ng-if="vm.isActive == 10 && vm.user.ClinicId == 10" src="./resources/10/consenso_informato.pdf" width="100%" height="500" alt="pdf">
+    <embed ng-if="vm.isActive == 10 && vm.user.ClinicId == 11" src="./resources/11/consenso_informato.pdf" width="100%" height="500" alt="pdf">
+    <embed ng-if="vm.isActive == 10 && vm.user.ClinicId == 12" src="./resources/12/consenso_informato.pdf" width="100%" height="500" alt="pdf">
+    <embed ng-if="vm.isActive == 10 && vm.user.ClinicId == 13" src="./resources/13/consenso_informato.pdf" width="100%" height="500" alt="pdf">
+    <embed ng-if="vm.isActive == 10 && vm.user.ClinicId == 14" src="./resources/14/consenso_informato.pdf" width="100%" height="500" alt="pdf">
+    <embed ng-if="vm.isActive == 10 && vm.user.ClinicId == 15" src="./resources/15/consenso_informato.pdf" width="100%" height="500" alt="pdf">
+    <embed ng-if="vm.isActive == 10 && vm.user.ClinicId == 16" src="./resources/16/consenso_informato.pdf" width="100%" height="500" alt="pdf">
+    <embed ng-if="vm.isActive == 10 && vm.user.ClinicId == 17" src="./resources/17/consenso_informato.pdf" width="100%" height="500" alt="pdf">
+
+  </div>
+</div>

@@ -23,16 +23,16 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="mouse-over" ng-class="{success : patient.finalized , danger : !patient.finalized}" ng-repeat="patient in vm.patients | customLimitTo:vm.itemsPerPage:(vm.pagination-1)*vm.itemsPerPage" ng-dblclick="vm.changeView('components/home/editPatient.html',4,patient.id)">
+        <tr class="mouse-over" ng-repeat="patient in vm.patients | customLimitTo:vm.itemsPerPage:(vm.pagination-1)*vm.itemsPerPage" ng-dblclick="vm.changeView('components/home/editPatient.html',4,patient.id)">
           <td><center>{{patient.name}}</center></td>
           <td>{{patient.sex == '1' ? "Uomo" : (patient.sex == '2' ? "Donna" : "")}}</td>
           <td>{{patient.birth | date : 'yyyy-MM-dd'}}</td>
           <td><span class="glyphicon" ng-class="{'glyphicon-ok': patient.T0EortcId,'glyphicon-remove': !patient.T0EortcId}" aria-hidden="true"></span></td>
-          <td><span class="glyphicon" ng-class="{'glyphicon-ok': patient.T0HadsId,'glyphicon-remove': !patient.T0HadsId}" aria-hidden="true"></span></td>
+          <td><span class="glyphicon" ng-class="{'glyphicon-ok': patient.T0HadId,'glyphicon-remove': !patient.T0HadId}" aria-hidden="true"></span></td>
           <td><span class="glyphicon" ng-class="{'glyphicon-ok': patient.T0NeqId,'glyphicon-remove': !patient.T0NeqId}" aria-hidden="true"></span></td>
           <td><span class="glyphicon" ng-class="{'glyphicon-ok': patient.T0ReportingId,'glyphicon-remove': !patient.T0ReportingId}" aria-hidden="true"></span></td>
           <td><span class="glyphicon" ng-class="{'glyphicon-ok': patient.T1EortcId,'glyphicon-remove': !patient.T1EortcId}" aria-hidden="true"></span></td>
-          <td><span class="glyphicon" ng-class="{'glyphicon-ok': patient.T1HadsId,'glyphicon-remove': !patient.T1HadsId}" aria-hidden="true"></span></td>
+          <td><span class="glyphicon" ng-class="{'glyphicon-ok': patient.T1HadId,'glyphicon-remove': !patient.T1HadId}" aria-hidden="true"></span></td>
           <td><span class="glyphicon" ng-class="{'glyphicon-ok': patient.T1NeqId,'glyphicon-remove': !patient.T1NeqId}" aria-hidden="true"></span></td>
           <td><span class="glyphicon" ng-class="{'glyphicon-ok': patient.T1ReportingId,'glyphicon-remove': !patient.T1ReportingId}" aria-hidden="true"></span></td>
         </tr>

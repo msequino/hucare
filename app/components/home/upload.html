@@ -1,0 +1,30 @@
+
+<div class="row">
+
+  <div class="col-md-offset-2 col-md-10"><h3>Documentazione <small>Clicca su un bottone per visualizzare una risorsa</small></h3></div>
+  <div class="col-md-2">
+  </div>
+  <div class="col-md-10">
+    <div class="row">
+      <div class="form-group col-md-12" ng-class="{ 'has-error': vm.form.clinicId.$dirty && vm.form.clinicId.$error.required }">
+        <label for="clinicId">Scegli la clinica a cui interessa il documento</label>
+        <select class="form-control" name="clinicId" ng-model="vm.data.ClinicId" ng-options="item.id as item.name for item in vm.clinics"/>
+        <span ng-show="vm.form.clinicId.$dirty && vm.form.clinicId.$error.required" class="help-block">Clinica richiesta</span>
+      </div>
+      <div class="form-group col-md-12" ng-class="{ 'has-error': vm.form.documentName.$dirty && vm.form.documentName.$error.required }">
+        <label for="documentName">Quale documento stai caricando?</label>
+        <select class="form-control" name="documentName" ng-model="vm.data.documentName" ng-options="item.id as item.name for item in vm.documents"/>
+        <span ng-show="vm.form.documentName.$dirty && vm.form.documentName.$error.required" class="help-block">Tipo documento richiesto</span>
+      </div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-10">
+           <input type = "file" file-model= "vm.data.myFile"/><br>
+           <button type="button" ng-disabled="!vm.data.ClinicId && (vm.data.documentName == 3 || vm.data.documentName == 7)" class="btn btn-primarty btn-lg" ng-click = "vm.uploadFile()">
+             <span class="glyphicon glyphicon-upload" aria-hidden="true"></span> Upload
+           </button>
+        </div>
+    </div>
+  </div>
+</div>
