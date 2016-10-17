@@ -443,7 +443,7 @@ module.exports.printPatient = function(req,res,next){
     return res.json({code : 400  ,message : "Attenzione: il centro non è stato ancora randomizzato, queste informazioni saranno visibili solo ad inizio sperimentazione"})*/
   db.Patient.findOne( { where : {name:req.params.id} ,
     include:
-    [{model: db.T0Eortc},{model: db.T1Eortc},{model: db.T0Neq},{model: db.T1Neq},{model: db.Screening}],
+    [{model: db.T0Eortc},{model: db.T1Eortc},{model: db.T0Neq},{model: db.T1Neq},{model: db.T0Hads},{model: db.T1Hads},{model: db.Screening}],
   }).then(function(patient){
 
     if(!patient) return res.json({code : 400  ,message : "Il paziente non è stato ancora inserito nel database centrale. Si prega di inserirlo tramite il relativo reporting form"});
@@ -463,47 +463,66 @@ module.exports.printPatient = function(req,res,next){
           var html = module.exports.createEortc(patient.name,patient.T1Eortc,1);
           pdf.create(html, options).toFile(path.join(__dirname, '..','tmp',req.params.id+'Eortc1.pdf'), function(err, result) {
             if(result) attachments.push({filename: req.params.id+'EortcT1.pdf', path : path.join(__dirname,'..','tmp',req.params.id+'Eortc1.pdf')});
+            var html = module.exports.createHads(patient.name,patient.T0Had,0);
+            pdf.create(html, options).toFile(path.join(__dirname, '..','tmp',req.params.id+'Hads0.pdf'), function(err, result) {
+              if(result) attachments.push({filename: req.params.id+'HadsT0.pdf', path : path.join(__dirname,'..','tmp',req.params.id+'Hads0.pdf')});
+              var html = module.exports.createHads(patient.name,patient.T1Had,1);
+              pdf.create(html, options).toFile(path.join(__dirname, '..','tmp',req.params.id+'Hads1.pdf'), function(err, result) {
+                if(result) attachments.push({filename: req.params.id+'HadsT1.pdf', path : path.join(__dirname,'..','tmp',req.params.id+'Hads1.pdf')});
 
-            // create reusable transporter object using the default SMTP transport
-            //var transporter = nm.createTransport("SMTP", require('../config/aruba_config.json'));
-            var transporter = nm.createTransport(smtpTransport(require('../config/aruba_config.json')));
-            // setup e-mail data with unicode symbols
+                // create reusable transporter object using the default SMTP transport
+                //var transporter = nm.createTransport("SMTP", require('../config/aruba_config.json'));
+                var transporter = nm.createTransport(smtpTransport(require('../config/aruba_config.json')));
+                // setup e-mail data with unicode symbols
 
-            db.User.findOne({where : {ClinicId:patient.Screening.ClinicId}, attributes:['mail']}).then(function(user){
+                db.User.findOne({where : {ClinicId:patient.Screening.ClinicId}, attributes:['mail']}).then(function(user){
 
-              var mailOptions = {
-                  from: '"Progetto Hucare" <progetto.hucare@gmail.com>', // sender address
-                  //to: req.query.email, // list of receivers
-                  to: user.mail, // list of receivers
-                  //to: 'mansequino@gmail.com', // list of receivers
-                  subject: 'HuCare: Questionari paziente ' + req.params.id, // Subject line
-                  html: 'Gentile partecipante allo Studio HuCARE,<br> in allegato trova tutti i questionari compilati dal paziente ' + req.params.id +'<br><br><b>NB</b>: se la mail non presenta allegati, vuol dire che il paziente non ha compilato né i questionari Eortc né quelli Neq', // html body
-                  attachments : attachments
-                  };
-                  //console.log(attachments);
-              // send mail with defined transport object
-              transporter.sendMail(mailOptions, function(error, info){
+                  var mailOptions = {
+                      from: '"Progetto Hucare" <progetto.hucare@gmail.com>', // sender address
+                      //to: req.query.email, // list of receivers
+                      to: user.mail, // list of receivers
+                      //to: 'mansequino@gmail.com', // list of receivers
+                      subject: 'HuCare: Questionari paziente ' + req.params.id, // Subject line
+                      html: 'Gentile partecipante allo Studio HuCARE,<br> in allegato trova tutti i questionari compilati dal paziente ' + req.params.id +'<br><br><b>NB</b>: se la mail non presenta allegati, vuol dire che il paziente non ha compilato né i questionari Eortc né quelli Neq', // html body
+                      attachments : attachments
+                      };
+                      //console.log(attachments);
+                  // send mail with defined transport object
+                  transporter.sendMail(mailOptions, function(error, info){
 
-                try{
-                  if(fs.statSync(path.join(__dirname ,'..','tmp',req.params.id+'Neq0.pdf')).isFile())
-                    fs.unlink(path.join(__dirname ,'..','tmp',req.params.id+'Neq0.pdf'));
-                }catch(err){}
-                try{
-                  if(fs.statSync(path.join(__dirname ,'..','tmp',req.params.id+'Neq1.pdf')).isFile())
-                    fs.unlink(path.join(__dirname ,'..','tmp',req.params.id+'Neq1.pdf'));
-                }catch(err){}
-                try{
-                  if(fs.statSync(path.join(__dirname ,'..','tmp',req.params.id+'Eortc0.pdf')).isFile())
-                    fs.unlink(path.join(__dirname ,'..','tmp',req.params.id+'Eortc0.pdf'));
-                }catch(err){}
-                try{
-                  if(fs.statSync(path.join(__dirname ,'..','tmp',req.params.id+'Eortc1.pdf')).isFile())
-                    fs.unlink(path.join(__dirname ,'..','tmp',req.params.id+'Eortc1.pdf'));
-                }catch(err){}
+                    try{
+                      if(fs.statSync(path.join(__dirname ,'..','tmp',req.params.id+'Neq0.pdf')).isFile())
+                        fs.unlink(path.join(__dirname ,'..','tmp',req.params.id+'Neq0.pdf'));
+                    }catch(err){}
+                    try{
+                      if(fs.statSync(path.join(__dirname ,'..','tmp',req.params.id+'Neq1.pdf')).isFile())
+                        fs.unlink(path.join(__dirname ,'..','tmp',req.params.id+'Neq1.pdf'));
+                    }catch(err){}
+                    try{
+                      if(fs.statSync(path.join(__dirname ,'..','tmp',req.params.id+'Eortc0.pdf')).isFile())
+                        fs.unlink(path.join(__dirname ,'..','tmp',req.params.id+'Eortc0.pdf'));
+                    }catch(err){}
+                    try{
+                      if(fs.statSync(path.join(__dirname ,'..','tmp',req.params.id+'Eortc1.pdf')).isFile())
+                        fs.unlink(path.join(__dirname ,'..','tmp',req.params.id+'Eortc1.pdf'));
+                    }catch(err){}
 
-                if(error)  res.json({code : 400  ,message : "Mail non inviata"});
-                else
-                  res.json({code : 200  ,message : "Informazioni salvate"});
+                    try{
+                      if(fs.statSync(path.join(__dirname ,'..','tmp',req.params.id+'Hads1.pdf')).isFile())
+                        fs.unlink(path.join(__dirname ,'..','tmp',req.params.id+'Hads1.pdf'));
+                    }catch(err){}
+
+                    try{
+                      if(fs.statSync(path.join(__dirname ,'..','tmp',req.params.id+'Hads0.pdf')).isFile())
+                        fs.unlink(path.join(__dirname ,'..','tmp',req.params.id+'Hads0.pdf'));
+                    }catch(err){}
+
+                    if(error)  res.json({code : 400  ,message : "Mail non inviata"});
+                    else
+                      res.json({code : 200  ,message : "Informazioni salvate"});
+                  });
+                });
+
               });
             });
 
@@ -595,6 +614,49 @@ module.exports.createEortc = function(name, eortc, time){
           "<tbody>"+
         "<tr><td>29</td><td>Come valuterebbe in generale la Sua salute durante gli ultimi sette giorni?</td><td align='center'>" + (eortc.dom29 == 0? "NA" : eortc.dom29) + "</td></tr>"+
         "<tr><td>30</td><td>Come valuterebbe in generale la Sua qualità di vita durante gli ultimi sette giorni?</td><td align='center'>" + (eortc.dom30 == 0 ? "NA" : eortc.dom30) + "</td></tr>"+
+      "</tbody>"+
+    "</table>"+
+    "</body>"+
+    "</html>";
+//  else
+    return " ";
+}
+
+module.exports.createHads = function(name, hads, time){
+  if(hads)
+    if(hads.date)
+    return "<html>"+
+    "<body style='width:90%;margin-left:40px;margin-top:50px;margin-right:50px;font-size:15'><header style='border-style:solid;'><h1><center>VALUTAZIONE " + (time == 0 ? "BASALE" : "FOLLOW-UP")+ " paziente " + name +"</center></h1>"+
+    "</header>"+
+    "<center><h2>Questionario per la Valutazione della Depressione ed Ansia</h2></center>"+
+    "<p>Versione elettronica delle domande inserite dal paziente</p>"+
+    "<br/>"+
+    "<table style='border-spacing:8px;border-collapse:separate;font-size:12;page-break-after: always;' border='2'>"+
+      "<thead>"+
+        "<tr><th></th><th>Domanda</th><th>Risposta</th></tr>"+
+      "</thead>"+
+      "<tbody>"+
+        "<tr><td>1</td><td>Mi sono sentito/a teso/a o molto nervoso/a</td>                                          <td align='center'>" + (hads.dom1 == 0 ? "Quasi sempre" : (hads.dom1 == 1 ? "Spesso" : (hads.dom1 == 2 ? "A volte" : (hads.dom1 == 3 ? "Mai" : "NA")))) + "</td></tr>"+
+        "<tr><td>2</td><td>Ho continuato a provare piacere per le stesse cose che mi piacevano prima</td>           <td align='center'>" + (hads.dom2 == 0 ? "Proprio come prima" : (hads.dom2 == 1 ? "Non proprio come prima" : (hads.dom2 == 2 ? "Solo in parte" : (hads.dom2 == 3 ? "Quasi per niente" : "NA")))) + "</td></tr>"+
+        "<tr><td>3</td><td>Mi sono sentito/a come rallentato/a</td>                                                 <td align='center'>" + (hads.dom3 == 0 ? "Quasi sempre" : (hads.dom3 == 1 ? "Molto spesso" : (hads.dom3 == 2 ? "A volte" : (hads.dom3 == 3 ? "Mai" : "NA")))) + "</td></tr>"+
+        "<tr><td>4</td><td>Ho provato una sensazione di paura, come un senso di tensione allo stomaco</td>          <td align='center'>" + (hads.dom4 == 0 ? "Mai" : (hads.dom4 == 1 ? "A volte" : (hads.dom4 == 2 ? "Spesso" : (hads.dom4 == 3 ? "Molto spesso" : "NA")))) + "</td></tr>"+
+        "<tr><td>5</td><td>Ho provato una sensazione di paura come se stesse per accadere qualcosa di terribile</td><td align='center'>" + (hads.dom5 == 0 ? "Sicuramente e tanto" : (hads.dom5 == 1 ? "Si, ma non tanto" : (hads.dom5 == 2 ? "Un pò, ma non da preoccuparmene" : (hads.dom5 == 3 ? "Mai" : "NA")))) + "</td></tr>"+
+        "<tr><td>6</td><td>Sono riuscito/a a ridere e a vedere il lato divertente delle cose</td>                   <td align='center'>" + (hads.dom6 == 0 ? "Proprio come ho sempre fatto" : (hads.dom6 == 1 ? "Non proprio come prima" : (hads.dom6 == 2 ? "Sicuramente non come prima" : (hads.dom6 == 3 ? "Per niente" : "NA")))) + "</td></tr>"+
+        "<tr><td>7</td><td>Ho perso interesse per il mio aspetto fisico</td>                                        <td align='center'>" + (hads.dom7 == 0 ? "Completamente" : (hads.dom7 == 1 ? "Spesso non me ne prendo cura quanto dovrei" : (hads.dom7 == 2 ? "A volte non me ne prendo cura abbastanza" : (hads.dom7 == 3 ? "Me ne prendo cura come al solito" : "NA")))) + "</td></tr>"+
+        "<tr><td>8</td><td>Mi sono sentito/a irrequieto/a e incapace di stare fermo</td>                            <td align='center'>" + (hads.dom8 == 0 ? "Moltissimo" : (hads.dom8 == 1 ? "Molto" : (hads.dom8 == 2 ? "Non molto" : (hads.dom8 == 3 ? "Mai" : "NA")))) + "</td></tr>"+
+        "<tr><td>9</td><td>Mi sono venuti in mente pensieri preoccupanti</td>                                       <td align='center'>" + (hads.dom9 == 0 ? "Quasi sempre" : (hads.dom9 == 1 ? "Spesso" : (hads.dom9 == 2 ? "A volte" : (hads.dom9 == 3 ? "Quasi mai" : "NA")))) + "</td></tr>"+
+        "<tr><td>10</td><td>Mi sono sentito/a di buon umore</td>                                                    <td align='center'>" + (hads.dom10 == 0 ? "Mai" : (hads.dom10 == 1 ? "Raramente" : (hads.dom10 == 2 ? "A volte" : (hads.dom10 == 3 ? "Quasi sempre" : "NA")))) + "</td></tr>"+
+        "</tbody>"+
+      "</table>"+
+          "<table style='border-spacing:8px;border-collapse:separate;font-size:12;margin-top:50px;' border='2'>"+
+          "<thead>"+
+            "<tr><th></th><th>Domanda</th><th>Risposta</th></tr>"+
+          "</thead>"+
+          "<tbody>"+
+        "<tr><td>11</td><td>Ho pensato al futuro con ottimismo</td>                                                 <td align='center'>" + (hads.dom11 == 0 ? "Come sempre" : (hads.dom11 == 1 ? "Un pò meno di prima" : (hads.dom11 == 2 ? "Molto meno di prima" : (hads.dom11 == 3 ? "Quasi per niente" : "NA")))) + "</td></tr>"+
+        "<tr><td>12</td><td>Ho avuto improvvise sensazioni di panico</td>                                           <td align='center'>" + (hads.dom12 == 0 ? "Molto spesso" : (hads.dom12 == 1 ? "Spesso" : (hads.dom12 == 2 ? "Raramente" : (hads.dom12 == 3 ? "Mai" : "NA")))) + "</td></tr>"+
+        "<tr><td>13</td><td>Sono riuscito/a stare seduto fermo/a e a sentirmi rilassato/a</td>                      <td align='center'>" + (hads.dom13 == 0 ? "Sempre" : (hads.dom13 == 1 ? "Spesso" : (hads.dom13 == 2 ? "Raramente" : (hads.dom13 == 3 ? "Mai" : "NA")))) + "</td></tr>"+
+        "<tr><td>14</td><td>Sono riuscito/a godermi un buon libro o un buon programma alla radio o alla televisione</td><td align='center'>" + (hads.dom14 == 0 ? "Spesso" : (hads.dom14 == 1 ? "A volte" : (hads.dom14 == 2 ? "Raramente" : (hads.dom14 == 3 ? "Molto raramente" : "NA")))) + "</td></tr>"+
       "</tbody>"+
     "</table>"+
     "</body>"+

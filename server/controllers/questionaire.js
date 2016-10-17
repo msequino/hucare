@@ -51,7 +51,7 @@ module.exports.insertAllRowT0 = function(req,res,next){
 
     db.Patient.findOne( { where : {name: patientName} ,
       include:
-      [{model: db.T0Eortc},{model: db.T0Neq},{model: db.Screening}],
+      [{model: db.T0Eortc},{model: db.T0Neq},{model: db.T0Hads},{model: db.Screening}],
     }).then(function(patient){
 
       if(!patient) return res.json({code : 400  ,message : "Il paziente non è stato ancora inserito nel database centrale. Si prega di inserirlo tramite il relativo reporting form"});
@@ -65,6 +65,9 @@ module.exports.insertAllRowT0 = function(req,res,next){
         var html = Patient.createEortc(patient.name,patient.T0Eortc,0);
         pdf.create(html, options).toFile(path.join(__dirname, '..','tmp',patient.name+'Eortc0.pdf'), function(err, result) {
           if(result) attachments.push({filename: patient.name+'EortcT0.pdf', path :path.join( __dirname,'..','tmp',patient.name+'Eortc0.pdf')});
+          var html = Patient.createHads(patient.name,patient.T0Had,0);
+          pdf.create(html, options).toFile(path.join(__dirname , '..' , 'tmp', patient.name+'Hads0.pdf'), function(err, result) {
+            if(result) attachments.push({filename: patient.name+'HadsT0.pdf', path : path.join(__dirname,'..','tmp',patient.name+'Hads0.pdf')});
 
             // create reusable transporter object using the default SMTP transport
             //var transporter = nm.createTransport("SMTP", require('../config/aruba_config.json'));
@@ -93,6 +96,10 @@ module.exports.insertAllRowT0 = function(req,res,next){
                   if(fs.statSync(path.join(__dirname ,'..','tmp',patient.name+'Eortc0.pdf')).isFile())
                     fs.unlink(path.join(__dirname ,'..','tmp',patient.name+'Eortc0.pdf'));
                 }catch(err){}
+                try{
+                  if(fs.statSync(path.join(__dirname ,'..','tmp',patient.name+'Hads0.pdf')).isFile())
+                    fs.unlink(path.join(__dirname ,'..','tmp',patient.name+'Hads0.pdf'));
+                }catch(err){}
 
                 //res.json({code : 200 , message : "Informazioni salvate"});
                 if(error){
@@ -107,6 +114,7 @@ module.exports.insertAllRowT0 = function(req,res,next){
                   res.json({code : 200  ,message : "Informazioni salvate"});
               });
             });
+          });
         });
       });
     });
@@ -143,7 +151,7 @@ module.exports.insertAllRowT1 = function(req,res,next){
   }).then(function(result){
     db.Patient.findOne( { where : {name:req.params.patientName} ,
       include:
-      [{model: db.T1Eortc},{model: db.T1Neq},{model: db.Screening}],
+      [{model: db.T1Eortc},{model: db.T1Neq},{model: db.T1Hads},{model: db.Screening}],
     }).then(function(patient){
 
       if(!patient) return res.json({code : 400  ,message : "Il paziente non è stato ancora inserito nel database centrale. Si prega di inserirlo tramite il relativo reporting form"});
@@ -157,6 +165,9 @@ module.exports.insertAllRowT1 = function(req,res,next){
           var html = Patient.createEortc(patient.name,patient.T1Eortc,1);
           pdf.create(html, options).toFile(path.join(__dirname, '..' ,'tmp',patient.name+'Eortc1.pdf'), function(err, result) {
             if(result) attachments.push({filename: patient.name+'EortcT1.pdf', path : path.join(__dirname,'..','tmp',patient.name+'Eortc1.pdf')});
+            var html = Patient.createHads(patient.name,patient.T1Had,1);
+            pdf.create(html, options).toFile(path.join(__dirname, '..' ,'tmp',patient.name+'Hads1.pdf'), function(err, result) {
+              if(result) attachments.push({filename: patient.name+'Hads1.pdf', path : path.join(__dirname,'..','tmp',patient.name+'Hads1.pdf')});
 
               // create reusable transporter object using the default SMTP transport
               //var transporter = nm.createTransport("SMTP", require('../config/aruba_config.json'));
@@ -185,6 +196,10 @@ module.exports.insertAllRowT1 = function(req,res,next){
                     if(fs.statSync(path.join(__dirname ,'..','tmp',patient.name+'Eortc1.pdf')).isFile())
                       fs.unlink(path.join(__dirname ,'..','tmp',patient.name+'Eortc1.pdf'));
                   }catch(err){}
+                  try{
+                    if(fs.statSync(path.join(__dirname ,'..','tmp',patient.name+'Hads1.pdf')).isFile())
+                      fs.unlink(path.join(__dirname ,'..','tmp',patient.name+'Hads1.pdf'));
+                  }catch(err){}
 
                   //res.json({code : 200 , message : "Informazioni salvate"});
                   if(error)  {
@@ -197,6 +212,7 @@ module.exports.insertAllRowT1 = function(req,res,next){
                     res.json({code : 200  ,message : "Informazioni salvate"});
                 });
               });
+            });
 
         });
       });
