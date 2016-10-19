@@ -41,13 +41,19 @@
 </div>
 
 <nav class="nav-footer">
-  <ul class="pagination" ng-repeat="n in [] | range:vm.Math.ceil(vm.patients.length / vm.itemsPerPage)">
-    <li ng-if="n==0" ng-hide="vm.pagination-1==0">
+  <ul class="pagination" ng-repeat="n in [] | range:vm.Math.ceil(vm.patients.length / vm.itemsPerPage) > 10+vm.pagination ? 10+vm.pagination : vm.Math.ceil(vm.patients.length / vm.itemsPerPage):vm.pagination">
+    <li ng-if="n==vm.pagination-1" ng-hide="vm.pagination-1==0">
+      <a href="" aria-label="Primo" ng-click="vm.pagination = 1"><span aria-hidden="true">&laquo;&laquo;</span></a>
       <a href="" aria-label="Precedente" ng-click="vm.pagination = vm.pagination-1"><span aria-hidden="true">&laquo;</span></a>
     </li>
+
     <li ng-class="{active:vm.pagination == (n+1)}"><a href="" ng-click="vm.pagination = (n+1)">{{n+1}}</a></li>
-    <li ng-if="n==vm.Math.ceil(vm.patients.length / vm.itemsPerPage)-1" ng-hide="vm.pagination==vm.Math.ceil(vm.patients.length / vm.itemsPerPage)">
+
+    <li ng-if="n==(vm.Math.ceil(vm.patients.length / vm.itemsPerPage) > 10 ? 10 : vm.Math.ceil(vm.patients.length / vm.itemsPerPage)) + vm.pagination -1 "
+      ng-hide="vm.pagination==vm.Math.ceil(vm.patients.length / vm.itemsPerPage)">
       <a href="" aria-label="Successivo" ng-click="vm.pagination = vm.pagination+1"><span aria-hidden="true">&raquo;</span></a>
+      <a href="" aria-label="Ultimo" ng-click="vm.pagination = vm.Math.ceil(vm.patients.length / vm.itemsPerPage)"><span aria-hidden="true">&raquo;&raquo;</span></a>
     </li>
+
   </ul>
 </nav>

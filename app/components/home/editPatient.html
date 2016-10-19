@@ -8,12 +8,24 @@
 
         <br>
 
+        <div ng-show="vm.user.GroupId == 1" class="col-md-10 col-md-offset-1">
+          E' un paziente di test?
+          <input type="radio" name="PatientTest" ng-model="vm.data.Patient.test" value="1"> Si
+          <input type="radio" name="PatientTest" ng-model="vm.data.Patient.test" value="0"> No
+        </div>
+        <br>
+        <div ng-show="vm.user.GroupId == 1" class="col-md-10 col-md-offset-1" style="margin-bottom:20px;margin-top:10px">
+          Note
+          <textarea class="form-control" name="PatientNote" ng-model="vm.data.Patient.note" rows="3"></textarea>
+        </div>
+
         <nav>
 
           <ul class="pager">
             <li class="previous mouse-over" ng-show="vm.countPatView > 0">
               <a ng-click="vm.change(-1);"><span aria-hidden="true">&larr;</span> Indietro</a>
             </li>
+            <li ng-show="vm.user.GroupId == 1"><a ng-click="vm.savePatient()">Salva info</a></li>
             <li class="next mouse-over" ng-show="vm.countPatView < 2">
               <a ng-click="vm.change(1);">Avanti <span aria-hidden="true">&rarr;</span></a>
             </li>

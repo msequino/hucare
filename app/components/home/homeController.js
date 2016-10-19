@@ -45,6 +45,7 @@
         vm.changeResource = changeResource;
         //Submits
         vm.submitUser = submitUser;
+        vm.savePatient = savePatient;
 
         vm.uploadFile = uploadFile;
 
@@ -228,6 +229,21 @@
               vm.message = error.message;
             });
           }
+        }
+
+        function savePatient(){
+          PatientService.Update(vm.data.Patient).then(function(response){
+            if(("success" in response)){
+              vm.error = !response.success;
+              vm.message = response.message.data;
+              return;
+            }
+
+            vm.success = true;
+          },function(error){
+            vm.error = error.success;
+            vm.message = error.message;
+          });
         }
 
         function backToHomepage(){

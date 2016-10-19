@@ -108,6 +108,12 @@ module.exports = function(sequelize, DataTypes) {
     },
     finalized: {
       type : DataTypes.BOOLEAN,
+    },
+    test: {
+      type : DataTypes.INTEGER(1),
+    },
+    note: {
+      type : DataTypes.STRING,
     }
 
   }, {

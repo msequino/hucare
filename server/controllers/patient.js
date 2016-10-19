@@ -162,18 +162,22 @@ module.exports.countRecluted = function(req,res,next){
 
 //console.log(timeLimit);
 
-  db.Screening.findAll({
-    attributes : [[db.sequelize.fn('count',db.sequelize.col('ClinicId')), 'ClinicCount']],
-    include : [{model : db.Clinic,attributes : ['id','name']}],
-    where : {"createdAt": timeLimit},
-    group : ['ClinicId']}).then(function(screenedPatients){
+    db.Patient.findAll({
+      include : [
+        {model : db.Screening , attributes : ['ClinicId'], include : [{model : db.Clinic,attributes : ['id','name']}] }
+      ],
+      attributes : ['Screening.Clinic.name','Screening.ClinicId',[db.sequelize.fn('count',db.sequelize.col('*')), 'ClinicCount']],
+      where : {'test' : 0, 'createdAt' : timeLimit},
+      group : ['Screening.ClinicId']
+    }).then(function(screenedPatients){
+
 
       db.Patient.findAll({
         include : [
-          {model : db.Screening , attributes : ['ClinicId'], where : {'createdAt' : timeLimit} }
+          {model : db.Screening , attributes : ['ClinicId']}
         ],
         attributes : ['Screening.ClinicId',[db.sequelize.fn('count',db.sequelize.col('*')), 'ClinicCount']],
-        where : {'T1Date' : {$ne : null} },
+        where : {'T1Date' : {$ne : null} , 'test' : 0, 'createdAt' : timeLimit},
         group : ['Screening.ClinicId']
       }).then(function(enrolledPatientsT1){
 
@@ -182,14 +186,13 @@ module.exports.countRecluted = function(req,res,next){
             {model : db.Screening , attributes : ['ClinicId'], where : {'createdAt' : timeLimit} }
           ],
           attributes : ['Screening.ClinicId',[db.sequelize.fn('count',db.sequelize.col('*')), 'ClinicCount']],
-          where : {'T0Date' : {$ne : null} },
+          where : {'T0Date' : {$ne : null}, 'test' : 0},
           group : ['Screening.ClinicId']
         }).then(function(enrolledPatientsT0){
 
           db.Screening.findAll({
-            attributes : [[db.sequelize.fn('count',db.sequelize.col('ClinicId')), 'ClinicCount']],
-            include : [{model : db.Clinic,attributes : ['id','name']}],
-            where: { 'createdAt' : timeLimit  , $or : [{'incl1' : { $ne : 1}},{'incl2' : { $ne : 1}},{'incl3' : { $ne : 1}},{'incl4' : { $ne : 1}},
+            attributes : ['ClinicId',[db.sequelize.fn('count', db.sequelize.col('ClinicId')), 'ClinicCount']],
+            where: { $or : [{'incl1' : { $ne : 1}},{'incl2' : { $ne : 1}},{'incl3' : { $ne : 1}},{'incl4' : { $ne : 1}},
                             {'incl5' : { $ne : 1}},{'excl1' : { $ne : 2}},{'excl2' : { $ne : 2}},{'excl3' : { $ne : 2}},
                             {'excl4' : { $ne : 2}},{'excl5' : { $ne : 2}},{'excl6' : { $ne : 2}},{'excl7' : { $ne : 2}},
                             {'signed' : { $ne : 1}}]},
@@ -200,20 +203,20 @@ module.exports.countRecluted = function(req,res,next){
                 for(var i =0;i<screenedPatients.length;i++){
 
                   for(var j =0;j<users.length;j++)
-                    if(users[j].ClinicId == screenedPatients[i].Clinic.id)
+                    if(users[j].ClinicId == screenedPatients[i].dataValues.Screening.dataValues.ClinicId)
                       screenedPatients[i].dataValues.username = users[j].username;
 
                   for(var j =0;j<enrolledPatientsT1.length;j++)
-                    if(enrolledPatientsT1[j].Screening.ClinicId == screenedPatients[i].Clinic.id)
+                    if(enrolledPatientsT1[j].dataValues.Screening.ClinicId == screenedPatients[i].dataValues.Screening.dataValues.ClinicId)
                       screenedPatients[i].dataValues.Fu = enrolledPatientsT1[j].dataValues.ClinicCount;
 
                   for(var j =0;j<enrolledPatientsT0.length;j++)
-                    if(enrolledPatientsT0[j].Screening.ClinicId == screenedPatients[i].Clinic.id)
+                    if(enrolledPatientsT0[j].dataValues.Screening.ClinicId == screenedPatients[i].dataValues.Screening.dataValues.ClinicId)
                       screenedPatients[i].dataValues.T0 = enrolledPatientsT0[j].dataValues.ClinicCount;
 
                   for(var j =0;j<notScreenedPatients.length;j++)
-                    if(notScreenedPatients[j].Clinic.id == screenedPatients[i].Clinic.id)
-                      screenedPatients[i].dataValues.notValid = notScreenedPatients[j].dataValues.ClinicCount;
+                    if(notScreenedPatients[j].dataValues.ClinicId == screenedPatients[i].dataValues.Screening.dataValues.ClinicId)
+                      screenedPatients[i].dataValues.notValid = notScreenedPatients[j].dataValues.ClinicId;
 
                 }
                 res.json({code : 200 , data: screenedPatients});
@@ -230,7 +233,6 @@ module.exports.countRecluted = function(req,res,next){
 
         }).catch(function(error){
           log.log('error',error);
-          console.log(error);
           res.json({code :404});
         });
       }).catch(function(error){
@@ -240,27 +242,26 @@ module.exports.countRecluted = function(req,res,next){
 
   }).catch(function(error){
     log.log('error',error);
-    console.log(error);
     res.json({code :404});
   });
 }
 
 module.exports.countQuest = function(req,res,next){
 
-  var timeLimit = "s.createdAt >= '2016-10-17 00:00:00' AND s.createdAt <= '2018-07-27 23:59:59'";
+  var timeLimit = "p.createdAt >= '2016-10-17 00:00:00' AND p.createdAt <= '2018-07-27 23:59:59'";
 
   if(req.params.period == 1)
-    timeLimit = "s.createdAt >= '2016-10-17 00:00:00' AND s.createdAt <= '2017-01-27 23:59:59'";
+    timeLimit = "p.createdAt >= '2016-10-17 00:00:00' AND p.createdAt <= '2017-01-27 23:59:59'";
   else if(req.params.period == 2)
-    timeLimit = "s.createdAt >= '2017-02-06 00:00:00' AND s.createdAt <= '2017-05-19 23:59:59'";
+    timeLimit = "p.createdAt >= '2017-02-06 00:00:00' AND p.createdAt <= '2017-05-19 23:59:59'";
   else if(req.params.period == 3)
-    timeLimit = "s.createdAt >= '2017-06-12 00:00:00' AND s.createdAt <= '2017-09-22 23:59:59'";
+    timeLimit = "p.createdAt >= '2017-06-12 00:00:00' AND p.createdAt <= '2017-09-22 23:59:59'";
   else if(req.params.period == 4)
-    timeLimit = "s.createdAt >= '2017-12-04 00:00:00' AND s.createdAt <= '2018-03-16 23:59:59'";
+    timeLimit = "p.createdAt >= '2017-12-04 00:00:00' AND p.createdAt <= '2018-03-16 23:59:59'";
   else if(req.params.period == 5)
-    timeLimit = "s.createdAt >= '2018-04-16 00:00:00' AND s.createdAt <= '2018-07-27 23:59:59'";
+    timeLimit = "p.createdAt >= '2018-04-16 00:00:00' AND p.createdAt <= '2018-07-27 23:59:59'";
 
-  var where = (req.params.clinic.indexOf("0") == -1 ? "WHERE c.id = " + req.params.clinic  : "") + " AND " + timeLimit;
+  var where = (req.params.clinic.indexOf("0") == -1 ? "WHERE c.id = " + req.params.clinic  : "") + " AND " + timeLimit + " AND p.test=0";
   db.sequelize.query("SELECT c.name,"+
   //eortc t0
   "count(e0.dom1) TOTE0DOM1, sum(if(e0.dom1 = 0,1,0)) MISSE0DOM1, sum(if(e0.dom1 is null,1,0)) NULLE0DOM1, "+
@@ -408,13 +409,13 @@ module.exports.countQuest = function(req,res,next){
   "count(n1.dom22) TOTN1DOM22, sum(if(n1.dom22 = 0,1,0)) MISSN1DOM22, sum(if(n1.dom22 is null,1,0)) NULLN1DOM22, "+
   "count(n1.dom23) TOTN1DOM23, sum(if(n1.dom23 = 0,1,0)) MISSN1DOM23, sum(if(n1.dom23 is null,1,0)) NULLN1DOM23 "+
 
-  "FROM patients p LEFT JOIN t0eortcs e0 ON p.T0eortcId=e0.id LEFT JOIN t1eortcs e1 ON p.T1EortcId=e1.id " +
-  "LEFT JOIN t0hads h0 ON p.T0hadId=h0.id LEFT JOIN t1hads h1 ON p.T1HadId=h1.id " +
-  "LEFT JOIN t0neqs n0 ON p.T0neqId=n0.id LEFT JOIN t1neqs n1 ON p.T1NeqId=n1.id " +
+  "FROM patients p " +
+  "LEFT JOIN t0eortcs e0 ON p.T0eortcId=e0.id LEFT JOIN T1eortcs e1 ON p.T1EortcId=e1.id " +
+  "LEFT JOIN t0hads h0 ON p.T0hadId=h0.id LEFT JOIN T1hads h1 ON p.T1HadId=h1.id " +
+  "LEFT JOIN t0neqs n0 ON p.T0neqId=n0.id LEFT JOIN T1neqs n1 ON p.T1NeqId=n1.id " +
   "LEFT JOIN screenings s ON p.ScreeningId=s.id INNER JOIN clinics c ON c.id=s.ClinicId " + where ,{type : db.sequelize.QueryTypes.SELECT}).then(function(result){
     res.json({code : 200 , data: result});
   }).catch(function(error){
-    console.log(error);
     log.log('error',error);
     res.status(404).send({message : "No Screening inserted"});
   });
