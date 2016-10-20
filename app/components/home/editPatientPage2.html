@@ -7,9 +7,9 @@
     <table class="table">
       <tbody>
         <tr ng-class="{'danger': vm.data.Patient.finalized && vm.form.PatientDate.$error.required}">
-          <td><label>1. Data rilevazione</label></td>
+          <td><label>1. Data rilevazione (aaaa-mm-dd)</label></td>
           <td>
-            <p class="showInline"><input style="width:98px;" type="text" name="PatientDate" disabled finalized="vm.finalized" class="form-control small" max-date="vm.today" ng-model="vm.data.Patient.date" required/></p>
+            <p class="showInline"><input style="width:98px;" type="text" name="PatientDate" ng-disabled="vm.user.GroupId != 1" finalized="vm.finalized" class="form-control small" max-date="vm.today" ng-model="vm.data.Patient.date" required/></p>
           </td>
         </tr>
         <tr ng-class="{'danger': vm.data.Patient.finalized && (vm.form.PatientMetastaticfirstdatemonth.$error.required || vm.form.PatientMetastaticfirstdateyear.$error.required)}">
@@ -18,11 +18,11 @@
             <div class="form-inline">
               <div class="form-group">
                 <label for="month">Mese</label>
-                <input type="number" name="PatientMetastaticfirstdatemonth" disabled class="form-control" ng-model="vm.data.Patient.firstdatemonth" min="1" max="12" required>
+                <input type="number" name="PatientMetastaticfirstdatemonth" ng-disabled="vm.user.GroupId != 1" class="form-control" ng-model="vm.data.Patient.firstdatemonth" min="1" max="12" required>
               </div>
               <div class="form-group">
                 <label for="year">Anno</label>
-                <input type="number" name="PatientMetastaticfirstdateyear" disabled class="form-control" ng-model="vm.data.Patient.firstdateyear" min="1990" max="2018" required>
+                <input type="number" name="PatientMetastaticfirstdateyear" ng-disabled="vm.user.GroupId != 1" class="form-control" ng-model="vm.data.Patient.firstdateyear" min="1990" max="2018" required>
               </div>
             </div>
           </td>
@@ -31,14 +31,14 @@
           <td><label>3. Tumore metastatico</label></td>
           <td>
             <label for="PatientMetastatic{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Si',2: 'No'}">
-              <input type="radio" name="PatientMetastatic" disabled ng-model="vm.data.Patient.metastatic" value="{{key}}" required> {{item}}
+              <input type="radio" name="PatientMetastatic" ng-change="vm.cleanMetastics()" ng-disabled="vm.user.GroupId != 1" ng-model="vm.data.Patient.metastatic" value="{{key}}" required> {{item}}
             </label>
           </td>
         </tr>
         <tr ng-class="{'danger': vm.data.Patient.finalized && vm.form.PatientPlace.$error.required}">
           <td><label>4. Sede del tumore primitivo</label></td>
           <td>
-            <select class="form-control" name="PatientPlace" ng-model="vm.data.Patient.place" disabled>
+            <select class="form-control" name="PatientPlace" ng-model="vm.data.Patient.place" ng-disabled="vm.user.GroupId != 1">
               <option value="{{key}}" ng-selected="{{key == vm.data.Patient.place}}" ng-repeat="(key,value) in {1:'Apparato Urinario',2:'Capo e collo',3:'Colon e retto',3:'Fegato e vie biliari',4:'Ginecologici',5:'Mammella',6:'Pancreas',7:'Polmone',8:'Prostata',9:'Sangue',10:'Stomaco ed esofago',11:'Altra sede / Sede non nota'}">
                  {{value}}
               </option>
@@ -52,7 +52,7 @@
           <td class="no-border"> Epatica</td>
           <td class="no-border">
             <label for="PatientMetastatic1{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Si',2: 'No'}">
-              <input type="radio" name="PatientMetastatic1" disabled ng-model="vm.data.Patient.metastatic1" value="{{key}}" metastatic > {{item}}
+              <input type="radio" name="PatientMetastatic1" ng-disabled="vm.user.GroupId != 1" ng-model="vm.data.Patient.metastatic1" value="{{key}}"  > {{item}}
             </label>
           </td>
         </tr>
@@ -60,7 +60,7 @@
           <td class="no-border"> Polmonare</td>
           <td class="no-border">
             <label for="PatientMetastatic2{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Si',2: 'No'}">
-              <input type="radio" name="PatientMetastatic2" disabled ng-model="vm.data.Patient.metastatic2" value="{{key}}" metastatic> {{item}}
+              <input type="radio" name="PatientMetastatic2" ng-disabled="vm.user.GroupId != 1" ng-model="vm.data.Patient.metastatic2" value="{{key}}" > {{item}}
             </label>
           </td>
         </tr>
@@ -68,7 +68,7 @@
           <td class="no-border"> Ossea</td>
           <td class="no-border">
             <label for="PatientMetastatic3{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Si',2: 'No'}">
-              <input type="radio" name="PatientMetastatic3" disabled ng-model="vm.data.Patient.metastatic3" value="{{key}}" metastatic > {{item}}
+              <input type="radio" name="PatientMetastatic3" ng-disabled="vm.user.GroupId != 1" ng-model="vm.data.Patient.metastatic3" value="{{key}}"  > {{item}}
             </label>
           </td>
         </tr>
@@ -76,7 +76,7 @@
           <td class="no-border"> Cerebrale</td>
           <td class="no-border">
             <label for="PatientMetastatic4{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Si',2: 'No'}">
-              <input type="radio" name="PatientMetastatic4" disabled ng-model="vm.data.Patient.metastatic4" value="{{key}}" metastatic > {{item}}
+              <input type="radio" name="PatientMetastatic4" ng-disabled="vm.user.GroupId != 1" ng-model="vm.data.Patient.metastatic4" value="{{key}}"  > {{item}}
             </label>
           </td>
         </tr>
@@ -84,7 +84,7 @@
           <td class="no-border"> Addominale</td>
           <td class="no-border">
             <label for="PatientMetastatic5{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Si',2: 'No'}">
-              <input type="radio" name="PatientMetastatic5" disabled ng-model="vm.data.Patient.metastatic5" value="{{key}}" metastatic > {{item}}
+              <input type="radio" name="PatientMetastatic5" ng-disabled="vm.user.GroupId != 1" ng-model="vm.data.Patient.metastatic5" value="{{key}}"  > {{item}}
             </label>
           </td>
         </tr>
@@ -92,7 +92,7 @@
           <td class="no-border"> Linfonodale</td>
           <td class="no-border">
             <label for="PatientMetastatic6{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Si',2: 'No'}">
-              <input type="radio" name="PatientMetastatic6" disabled ng-model="vm.data.Patient.metastatic6" value="{{key}}" metastatic > {{item}}
+              <input type="radio" name="PatientMetastatic6" ng-disabled="vm.user.GroupId != 1" ng-model="vm.data.Patient.metastatic6" value="{{key}}"  > {{item}}
             </label>
           </td>
         </tr>
@@ -100,14 +100,14 @@
           <td class="no-border"> Altra sede (specificare)</td>
           <td class="no-border">
             <label for="PatientMetastatic7{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Si',2: 'No'}">
-              <input type="radio" name="PatientMetastatic7" ng-change="vm.data.Patient.metastaticother = null" disabled ng-model="vm.data.Patient.metastatic7" value="{{key}}" metastatic > {{item}}
+              <input type="radio" name="PatientMetastatic7" ng-change="vm.data.Patient.metastaticother = null" ng-disabled="vm.user.GroupId != 1" ng-model="vm.data.Patient.metastatic7" value="{{key}}"  > {{item}}
             </label>
           </td>
         </tr>
         <tr class="no-border" ng-class="{'danger': vm.data.Patient.finalized && vm.form.PatientMetastaticOther.$error.metastatic}" ng-show="vm.data.Patient.metastatic == 1 && vm.data.Patient.metastatic7 == 1">
           <td class="no-border"> Specificare</td>
           <td class="no-border">
-            <input type="text" name="PatientMetastaticOther" class="form-control" disabled ng-model="vm.data.Patient.metastaticother" >
+            <input type="text" name="PatientMetastaticOther" class="form-control" ng-disabled="vm.user.GroupId != 1" ng-model="vm.data.Patient.metastaticother" >
           </td>
         </tr>
 
@@ -115,38 +115,58 @@
           <td><label>5. Performance Status di ECOG</label></td>
           <td>
             <label for="PatientEcog{{item}}" class="radio-inline" ng-repeat="value in [0, 1,2, 3,4,5]">
-              <input type="radio" name="PatientEcog" disabled ng-model="vm.data.Patient.ecog" value="{{value}}" required> {{value}}
+              <input type="radio" name="PatientEcog" ng-disabled="vm.user.GroupId != 1" ng-model="vm.data.Patient.ecog" value="{{value}}" required> {{value}}
             </label>
           </td>
         </tr>
         <tr ng-class="{'danger': vm.data.Patient.finalized && vm.form.PatientTypetreatment.$error.required}">
           <td><label>6. Tipo di trattamento</label></td>
           <td>
-            <div class="radio">
-              <label for="PatientTypetreatment1" class="" >
-                <input type="checkbox" name="PatientTypetreatment1" disabled ng-model="vm.data.Patient.typetreatment1" ng-checked="vm.data.Patient.typetreatment1 == 1" > Chemioterapia EV
+            <div class="col col-md-7">
+              Chemioterapia EV
+              </div>
+              <div class="col col-md-5">
+              <label for="PatientTypetreatment1{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Si', 2 : 'No'}">
+                <input type="radio" name="PatientTypetreatment1" ng-disabled="vm.user.GroupId != 1" ng-model="vm.data.Patient.typetreatment1" value="{{key}}" required> {{item}}
               </label>
             </div>
-            <div class="radio">
-              <label for="PatientTypetreatment2" class="" >
-                <input type="checkbox" name="PatientTypetreatment2" disabled ng-model="vm.data.Patient.typetreatment2" ng-checked="vm.data.Patient.typetreatment2 == 1" > Farmaci orali
-              </label>
-            </div>
-            <div class="radio">
-              <label for="PatientTypetreatment3" class="" >
-                <input type="checkbox" name="PatientTypetreatment3" disabled ng-model="vm.data.Patient.typetreatment3" ng-checked="vm.data.Patient.typetreatment3 == 1" > Farmaci a target molecolari
-              </label>
-            </div>
-            <div class="radio">
-              <label for="PatientTypetreatment4" class="" >
-                <input type="checkbox" name="PatientTypetreatment4" disabled ng-model="vm.data.Patient.typetreatment4" ng-checked="vm.data.Patient.typetreatment4 == 1" > Terapia ormonale
-              </label>
-            </div>
-            <div class="radio">
-              <label for="PatientTypetreatment5" class="" >
-                <input type="checkbox" name="PatientTypetreatment5" disabled ng-model="vm.data.Patient.typetreatment5" ng-checked="vm.data.Patient.typetreatment5 == 1" > Immunoterapia
-              </label>
-            </div>
+            <br/>
+            <div class="col col-md-7">
+            Farmaci orali
+          </div>
+          <div class="col col-md-5">
+            <label for="PatientTypetreatment2{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Si', 2 : 'No'}">
+              <input type="radio" name="PatientTypetreatment2" ng-disabled="vm.user.GroupId != 1" ng-model="vm.data.Patient.typetreatment2" value="{{key}}" required> {{item}}
+            </label>
+          </div>
+            <br/>
+            <div class="col col-md-7">
+            Farmaci a target molecolari
+          </div>
+          <div class="col col-md-5">
+            <label for="PatientTypetreatment3{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Si', 2 : 'No'}">
+              <input type="radio" name="PatientTypetreatment3" ng-disabled="vm.user.GroupId != 1" ng-model="vm.data.Patient.typetreatment3" value="{{key}}" required>{{item}}
+            </label>
+          </div>
+            <br/>
+            <div class="col col-md-7">
+            Terapia ormonale
+          </div>
+          <div class="col col-md-5">
+            <label for="PatientTypetreatment4{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Si', 2 : 'No'}">
+              <input type="radio" name="PatientTypetreatment4" ng-disabled="vm.user.GroupId != 1" ng-model="vm.data.Patient.typetreatment4" value="{{key}}" required>{{item}}
+              <br>
+            </label>
+          </div>
+            <br/>
+            <div class="col col-md-7">
+            Immunoterapia
+          </div>
+          <div class="col col-md-5">
+            <label for="PatientTypetreatment5{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Si', 2 : 'No'}">
+              <input type="radio" name="PatientTypetreatment5" ng-disabled="vm.user.GroupId != 1" ng-model="vm.data.Patient.typetreatment5" value="{{key}}" required>{{item}}
+            </label>
+          </div>
           </td>
         </tr>
       </tbody>

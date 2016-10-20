@@ -13,21 +13,25 @@ var db = require("../models"),
 module.exports.getPatients = function(req,res,next){
   var clinic = !req.user.getDataValue('ClinicId') ? {} : {ClinicId : req.user.getDataValue('ClinicId') };
   db.Patient.findAll(
-    { include:
+    {
+      include:
       [{
         model: db.Screening,
         where : clinic,
         include : [{
           model:db.Clinic,
+          order : [ ['id', 'ASC']],
         }]
-      }]
+      }],
+      order: [
+        [ db.Screening, 'ClinicId', 'ASC' ]
+      ]
     }
   ).then(function(patients){
     res.json({code : 200, data : patients});
 
   }).catch(function(error){
     log.log('error',error);
-    console.log(error);
     res.status(404).send({message : error});
   });
 }

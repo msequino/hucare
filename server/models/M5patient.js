@@ -6,7 +6,7 @@ module.exports = function(sequelize, DataTypes) {
       type : DataTypes.STRING(6),
     },
     birth: {
-      type : DataTypes.DATEONLY,
+      type : DataTypes.DATEONLY
     },
     sex: {
       type : DataTypes.INTEGER(1),

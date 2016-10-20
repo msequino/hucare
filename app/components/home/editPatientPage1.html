@@ -7,16 +7,16 @@
     <table class="table">
       <tbody>
         <tr ng-class="{'danger': vm.data.Patient.finalized && vm.form.PatientBirth.$error.required}">
-          <td><label>1. Data di nascita</label></td>
+          <td><label>1. Data di nascita (aaaa-mm-dd)</label></td>
           <td>
-            <p class="showInline"><input style="width:98px;" type="text" name="PatientBirth" disabled class="form-control small"  ng-model="vm.data.Patient.birth"  /></p>
+            <p class="showInline"><input style="width:98px;" type="text" name="PatientBirth" ng-disabled="vm.user.GroupId != 1" class="form-control small"  ng-model="vm.data.Patient.birth"  /></p>
           </td>
         </tr>
         <tr ng-class="{'danger': vm.data.Patient.finalized && vm.form.PatientSex.$error.required}">
           <td><label>2. Sesso</label></td>
           <td>
             <label for="PatientSex{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Uomo',2: 'Donna'}">
-              <input type="radio" name="PatientSex" disabled ng-model="vm.data.Patient.sex" value="{{key}}" required> {{item}}
+              <input type="radio" name="PatientSex" ng-disabled="vm.user.GroupId != 1" ng-model="vm.data.Patient.sex" value="{{key}}" required> {{item}}
             </label>
           </td>
         </tr>
@@ -24,7 +24,7 @@
           <td><label>3. Stato civile</label></td>
           <td>
             <label for="PatientMarital{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Coniugato/a o convive stabilmente',2: 'Altro'}">
-              <input type="radio" name="PatientMarital" disabled ng-model="vm.data.Patient.marital" value="{{key}}" required> {{item}}
+              <input type="radio" name="PatientMarital" ng-disabled="vm.user.GroupId != 1" ng-model="vm.data.Patient.marital" value="{{key}}" required> {{item}}
             </label>
           </td>
         </tr>
@@ -33,7 +33,7 @@
           <td>
             <div class="radio">
               <label for="PatientScholar{{item}}" class="" ng-repeat="(key,item) in {1 : 'Primario (nessuno / elementare / scuola media)',2: 'Secondario (diploma scuola media superiore)',3:'Universitario (laurea / post-laurea)'}">
-                <input type="radio" name="PatientScholar" disabled ng-model="vm.data.Patient.scholar" value="{{key}}" required> {{item}}
+                <input type="radio" name="PatientScholar" ng-disabled="vm.user.GroupId != 1" ng-model="vm.data.Patient.scholar" value="{{key}}" required> {{item}}
 
               </label>
             </div>

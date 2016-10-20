@@ -46,7 +46,7 @@
         //Submits
         vm.submitUser = submitUser;
         vm.savePatient = savePatient;
-
+        vm.cleanMetastics = cleanMetastics;
         vm.uploadFile = uploadFile;
 
         vm.backToHomepage = backToHomepage;
@@ -100,6 +100,18 @@
 
         }
 
+        //Clean metastatics
+        function cleanMetastics() {
+          vm.data.Patient.metastatic1 = null;
+          vm.data.Patient.metastatic2 = null;
+          vm.data.Patient.metastatic3 = null;
+          vm.data.Patient.metastatic4 = null;
+          vm.data.Patient.metastatic5 = null;
+          vm.data.Patient.metastatic6 = null;
+          vm.data.Patient.metastatic7 = null;
+          vm.data.Patient.metastaticother = null;
+        }
+
         //USER functionality
 
         // TEMPLATE
@@ -137,7 +149,10 @@
 
                             var pdd = vm.data.Patient.birth.substr(0,10).split("-");
 
-                            vm.qrcode = vm.data.Screening.Clinic.abbr + vm.data.Patient.name + ';' + pdd[2] + "" + pdd[1];
+                            vm.data.Patient.birth = vm.data.Patient.birth.substring(0,vm.data.Patient.birth.indexOf("T"));
+                            vm.data.Patient.date = vm.data.Patient.date.substring(0,vm.data.Patient.date.indexOf("T"));
+
+                            //vm.qrcode = vm.data.Screening.Clinic.abbr + vm.data.Patient.name + ';' + pdd[2] + "" + pdd[1];
 
                             vm.finalized = vm.data.Patient.finalized;
                             vm.countPatView = 1;
@@ -232,6 +247,10 @@
         }
 
         function savePatient(){
+          var oldBirth = vm.data.Patient.birth;
+          var oldDate = vm.data.Patient.date;
+          vm.data.Patient.birth = new Date(vm.data.Patient.birth);
+          vm.data.Patient.date = new Date(vm.data.Patient.date);
           PatientService.Update(vm.data.Patient).then(function(response){
             if(("success" in response)){
               vm.error = !response.success;
@@ -239,6 +258,8 @@
               return;
             }
 
+            vm.data.Patient.birth = oldBirth;
+            vm.data.Patient.date = oldDate;
             vm.success = true;
           },function(error){
             vm.error = error.success;

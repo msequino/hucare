@@ -1,3 +1,8 @@
+<div class="col col-md-4 col-md-offset-4" style="margin-bottom:40px">
+  <h4>Cerca un paziente</h4>
+  <input class="col-md-2 form-control" ng-model="vm.searchedPatient">
+</div>
+
 <div class="row">
     <table class="table table-hover">
       <thead>
@@ -23,7 +28,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="mouse-over" ng-repeat="patient in vm.patients | customLimitTo:vm.itemsPerPage:(vm.pagination-1)*vm.itemsPerPage" ng-dblclick="vm.changeView('components/home/editPatient.html',4,patient.id)">
+        <tr class="mouse-over" ng-repeat="patient in vm.patients | customLimitTo:vm.itemsPerPage:(vm.pagination-1)*vm.itemsPerPage:vm.searchedPatient" ng-dblclick="vm.changeView('components/home/editPatient.html',4,patient.id)">
           <td><center>{{patient.name}}</center></td>
           <td>{{patient.sex == '1' ? "Uomo" : (patient.sex == '2' ? "Donna" : "")}}</td>
           <td>{{patient.birth | date : 'yyyy-MM-dd'}}</td>
