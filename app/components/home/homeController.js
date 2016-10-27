@@ -185,6 +185,10 @@
         function cleanForm(){
           vm.data = {};
           vm.qrcode = '';
+
+          vm.error = false;
+          vm.success = false;
+          vm.message = "";
           if(vm.form)
             vm.form.$setPristine();
         }

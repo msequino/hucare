@@ -427,6 +427,8 @@ module.exports.countQuest = function(req,res,next){
 
 module.exports.updatePatient = function(req,res,next){
   db.Patient.findOne({where : {id : req.params.id}}).then(function(patient){
+    req.body.birth = new Date(req.body.birth);
+    req.body.date = new Date(req.body.date);
 
     if(patient)
       patient.updateAttributes(req.body).then(function(p){
