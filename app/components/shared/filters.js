@@ -57,15 +57,22 @@
           return function(input, limit, begin, filter) {
             limit = parseInt(limit);
             begin = parseInt(begin);
-            if(filter)
-              filter = filter.toUpperCase();
+
             var out = [];
-            if(input)
-              for(var i=0 ; i<limit;i++)
-              {
-                if(input.length > i+begin && (!filter || input[i+begin].name.indexOf(filter) == 0) )
-                  out.push(input[i+begin]);
+            if(input) {
+              if(filter) {
+                filter = filter.toUpperCase();
+                for(var i=0 ; i < input.length;i++) {
+                  if(input[i].name.indexOf(filter) == 0) {
+                    out.push(input[i]);
+                  }
+                }
+              } else {
+                for(var i=begin; i < begin + limit;i++)
+                  out.push(input[i]);
               }
+            }
+
             return out;
           }
         })

@@ -1,7 +1,7 @@
 <div class="form-group col-md-12">
   <p><h2>Dati relativi a tutte le cliniche, seleziona una clinica dal box</h2></p>
   <label for="clinicId">Clinica</label>
-  <select class="form-control" name="clinicId" ng-change="vm.changeView('components/home/statsQuest.html',5)" ng-model="vm.ChosenClinic" ng-options="item.id as item.name for item in vm.clinics"/>
+  <select class="form-control" name="clinicId" ng-change="vm.changeView('components/home/statsQuest.html',5)" ng-model="vm.ChosenClinic" ng-options="item.id as item.name + ' (' + item.city + ')' for item in vm.clinics"/>
   <br>
   <br>
   <p><h2>Filtra per periodo</h2></p>

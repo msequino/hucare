@@ -11,6 +11,8 @@
 
         service.GetAll = GetAll;
         service.GetQuestionaire = GetQuestionaire;
+        service.GetDataset = GetDataset;
+        service.GetDatasetUrl = GetDatasetUrl;
 
         return service;
 
@@ -22,9 +24,19 @@
             return $http.get('/hucare/stats/quest' + id).then(handleSuccess, handleError('Error getting doctor by id'));
         }
 
+        function GetDataset() {
+            return $http.post('/hucare/stats/dataset')
+                        .then(handleSuccess, handleError('Error getting doctor by id'));
+        }
+
+        function GetDatasetUrl() {
+            return '/hucare/stats/dataset';
+        }
+
 
         // private functions
         function handleSuccess(res) {
+          console.log(res.data);
             return res.data;
         }
 

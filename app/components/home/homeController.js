@@ -49,6 +49,7 @@
         vm.cleanMetastics = cleanMetastics;
         vm.uploadFile = uploadFile;
 
+        vm.downloadDataset = downloadDataset;
         vm.backToHomepage = backToHomepage;
         vm.change = change;
 
@@ -81,6 +82,10 @@
             AuthenticationService.ClearCredentials();
             $location.path('/login');
           });
+        }
+
+        function downloadDataset() {
+          window.open(StatisticService.GetDatasetUrl(), '_blank');
         }
 
         //Profile functionalities

@@ -18,14 +18,6 @@ module.exports = function(app) {
     next();
   };
 
-  /*var isAdmin = function(req, res, next){
-    if (!req.isAuthenticated())
-      return res.sendStatus(401);
-    if (!req.user.isAdmin())
-      return res.sendStatus(401);
-    next();
-  };*/
-
   // Deny only USER
   var isAdmin = function(req, res, next){
     if (!req.isAuthenticated())
@@ -60,13 +52,14 @@ module.exports = function(app) {
   app.route("/patient/login").post(Patient.isValidPatient);
   app.route("/screening").post(isAuthenticated,Patient.insertNoEligiblePatients);
 
-  app.route("/stats/:period").get(isAuthenticated,Patient.countRecluted);
+  app.route("/stats/dataset").get(              isAdmin,Patient.getDataset);
   app.route("/stats/quest/:clinic/:period").get(isAuthenticated,Patient.countQuest);
+  app.route("/stats/:period").get(              isAuthenticated,Patient.countRecluted);
 
   app.route("/questionaires/bypatient/:id").get(isAuthenticated,Patient.getPatient);
-  app.route("/questionaires").get(isAuthenticated,Patient.getPatients);
-  app.route("/questionaires/:id").put(isAuthenticated,Patient.updatePatient);
-  app.route("/questionaires").post(isAuthenticated,Patient.insertPatient);
+  app.route("/questionaires").get(              isAuthenticated,Patient.getPatients);
+  app.route("/questionaires/:id").put(          isAuthenticated,Patient.updatePatient);
+  app.route("/questionaires").post(             isAuthenticated,Patient.insertPatient);
 
   //app.route("/questionaires/t0/:patientId").post(isAuthenticated,Questionaire.insertAllT0);
   //app.route("/questionaires/t1/:patientId").post(isAuthenticated,Questionaire.insertAllT1);

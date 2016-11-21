@@ -15,7 +15,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="clinic in vm.clinicCounter" ng-class="{red:(clinic.username.indexOf('TO') == 0 || clinic.username.indexOf('TG') == 0 || clinic.username.indexOf('MI') == 0 || clinic.username.indexOf('UD') == 0 || clinic.username.indexOf('VR') == 0), green:(clinic.username.indexOf('BR') == 0 || clinic.username.indexOf('CB') == 0 || clinic.username.indexOf('CS') == 0 || clinic.username.indexOf('FA') == 0 || clinic.username.indexOf('NA') == 0)}">
+      <tr ng-repeat="clinic in vm.clinicCounter" ng-class="{red:(clinic.username.indexOf('TORINO') == 0 || clinic.username.indexOf('TORINO2') == 0 || clinic.username.indexOf('MILANO') == 0 || clinic.username.indexOf('UDINE') == 0 || clinic.username.indexOf('VERONA') == 0), green:(clinic.username.indexOf('BRINDISI') == 0 || clinic.username.indexOf('CAMPOBASSO') == 0 || clinic.username.indexOf('COSENZA') == 0 || clinic.username.indexOf('FANO') == 0 || clinic.username.indexOf('NAPOLI') == 0)}">
         <td>{{clinic.username | uppercase}}</td>
         <td>{{clinic.Screening.Clinic.name}}</td>
         <td>{{clinic.ClinicCount}}</td>

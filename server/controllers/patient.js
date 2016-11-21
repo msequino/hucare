@@ -265,7 +265,7 @@ module.exports.countQuest = function(req,res,next){
   else if(req.params.period == 5)
     timeLimit = "p.createdAt >= '2018-04-16 00:00:00' AND p.createdAt <= '2018-07-27 23:59:59'";
 
-  var where = (req.params.clinic.indexOf("0") == -1 ? "WHERE c.id = " + req.params.clinic  : "") + " AND " + timeLimit + " AND p.test=0";
+  var where = (req.params.clinic.indexOf("0") == -1 ? "WHERE c.id = " + req.params.clinic  : "") + " AND " + timeLimit + " AND p.test=0 ";
   db.sequelize.query("SELECT c.name,"+
   //eortc t0
   "count(e0.dom1) TOTE0DOM1, sum(if(e0.dom1 = 0,1,0)) MISSE0DOM1, sum(if(e0.dom1 is null,1,0)) NULLE0DOM1, "+
@@ -414,14 +414,100 @@ module.exports.countQuest = function(req,res,next){
   "count(n1.dom23) TOTN1DOM23, sum(if(n1.dom23 = 0,1,0)) MISSN1DOM23, sum(if(n1.dom23 is null,1,0)) NULLN1DOM23 "+
 
   "FROM patients p " +
-  "LEFT JOIN t0eortcs e0 ON p.T0eortcId=e0.id LEFT JOIN T1eortcs e1 ON p.T1EortcId=e1.id " +
-  "LEFT JOIN t0hads h0 ON p.T0hadId=h0.id LEFT JOIN T1hads h1 ON p.T1HadId=h1.id " +
-  "LEFT JOIN t0neqs n0 ON p.T0neqId=n0.id LEFT JOIN T1neqs n1 ON p.T1NeqId=n1.id " +
-  "LEFT JOIN screenings s ON p.ScreeningId=s.id INNER JOIN clinics c ON c.id=s.ClinicId " + where ,{type : db.sequelize.QueryTypes.SELECT}).then(function(result){
+  "LEFT JOIN t0eortcs e0 ON p.T0eortcId=e0.id LEFT JOIN t1eortcs e1 ON p.T1EortcId=e1.id " +
+  "LEFT JOIN t0hads h0 ON p.T0hadId=h0.id LEFT JOIN t1hads h1 ON p.T1HadId=h1.id " +
+  "LEFT JOIN t0neqs n0 ON p.T0neqId=n0.id LEFT JOIN t1neqs n1 ON p.T1NeqId=n1.id " +
+  "LEFT JOIN screenings s ON p.ScreeningId=s.id INNER JOIN clinics c ON c.id=s.ClinicId " + where + " GROUP BY c.id",{type : db.sequelize.QueryTypes.SELECT}).then(function(result){
+
+  //"FROM Patients p " +
+  //"LEFT JOIN T0Eortcs e0 ON p.T0EortcId=e0.id LEFT JOIN T1Eortcs e1 ON p.T1EortcId=e1.id " +
+  //"LEFT JOIN T0Hads h0 ON p.T0HadId=h0.id LEFT JOIN T1Hads h1 ON p.T1HadId=h1.id " +
+  //"LEFT JOIN T0Neqs n0 ON p.T0NeqId=n0.id LEFT JOIN T1Neqs n1 ON p.T1NeqId=n1.id " +
+  //"LEFT JOIN Screenings s ON p.ScreeningId=s.id INNER JOIN Clinics c ON c.id=s.ClinicId " + where + " GROUP BY c.id",{type : db.sequelize.QueryTypes.SELECT}).then(function(result){
     res.json({code : 200 , data: result});
-  }).catch(function(error){
+  }).catch(function(error) {
     log.log('error',error);
-    res.status(404).send({message : "No Screening inserted"});
+    res.status(404)
+        .send({message : "No Screening inserted"});
+  });
+}
+
+module.exports.getDataset = function(req,res,next) {
+
+  db.sequelize.query("SELECT "+
+      " p.name,	p.birth, p.sex,	p.marital,	p.scholar,	p.date,	p.firstdatemonth,	p.firstdateyear,	p.metastatic,	p.place,	p.metastatic1,	p.metastatic2,	p.metastatic3,	p.metastatic4,	p.metastatic5,	p.metastatic6,	p.metastatic7,	p.metastaticother,	p.ecog,	p.typetreatment1,	p.typetreatment2,	p.typetreatment3,	p.typetreatment4,	p.typetreatment5,	p.T0Date,	p.T1Date, "+
+      " e0.date e0date, e0.compiletime e0compiletime, e0.dom1 e0dom1, e0.dom2 e0dom2, e0.dom3 e0dom3, e0.dom4 e0dom4, e0.dom5 e0dom5, e0.dom6 e0dom6, e0.dom7 e0dom7, e0.dom8 e0dom8, e0.dom9 e0dom9, e0.dom10 e0dom10, e0.dom11 e0dom11, e0.dom12 e0dom12, e0.dom13 e0dom13, e0.dom14 e0dom14, e0.dom15 e0dom15, e0.dom16 e0dom16, e0.dom17 e0dom17, e0.dom18 e0dom18, e0.dom19 e0dom19, e0.dom20 e0dom20, e0.dom21 e0dom21, e0.dom22 e0dom22, e0.dom23 e0dom23, e0.dom24 e0dom24, e0.dom25 e0dom25, e0.dom26 e0dom26, e0.dom27 e0dom27, e0.dom28 e0dom28, e0.dom29 e0dom29, e0.dom30 e0dom30, "+
+      " e1.date e1date, e1.compiletime e1compiletime, e1.dom1 e1dom1, e1.dom2 e1dom2, e1.dom3 e1dom3, e1.dom4 e1dom4, e1.dom5 e1dom5, e1.dom6 e1dom6, e1.dom7 e1dom7, e1.dom8 e1dom8, e1.dom9 e1dom9, e1.dom10 e1dom10, e1.dom11 e1dom11, e1.dom12 e1dom12, e1.dom13 e1dom13, e1.dom14 e1dom14, e1.dom15 e1dom15, e1.dom16 e1dom16, e1.dom17 e1dom17, e1.dom18 e1dom18, e1.dom19 e1dom19, e1.dom20 e1dom20, e1.dom21 e1dom21, e1.dom22 e1dom22, e1.dom23 e1dom23, e1.dom24 e1dom24, e1.dom25 e1dom25, e1.dom26 e1dom26, e1.dom27 e1dom27, e1.dom28 e1dom28, e1.dom29 e1dom29, e1.dom30 e1dom30, "+
+      " h0.date h0date, h0.compiletime h0compiletime, h0.dom1 h0dom1, h0.dom2 h0dom2, h0.dom3 h0dom3, h0.dom4 h0dom4, h0.dom5 h0dom5, h0.dom6 h0dom6, h0.dom7 h0dom7, h0.dom8 h0dom8, h0.dom9 h0dom9, h0.dom10 h0dom10, h0.dom11 h0dom11, h0.dom12 h0dom12, h0.dom13 h0dom13, h0.dom14 h0dom14, "+
+      " h1.date h1date, h1.compiletime h1compiletime, h1.dom1 h1dom1, h1.dom2 h1dom2, h1.dom3 h1dom3, h1.dom4 h1dom4, h1.dom5 h1dom5, h1.dom6 h1dom6, h1.dom7 h1dom7, h1.dom8 h1dom8, h1.dom9 h1dom9, h1.dom10 h1dom10, h1.dom11 h1dom11, h1.dom12 h1dom12, h1.dom13 h1dom13, h1.dom14 h1dom14, "+
+      " n0.date n0date, n0.compiletime n0compiletime, n0.dom1 n0dom1, n0.dom2 n0dom2, n0.dom3 n0dom3, n0.dom4 n0dom4, n0.dom5 n0dom5, n0.dom6 n0dom6, n0.dom7 n0dom7, n0.dom8 n0dom8, n0.dom9 n0dom9, n0.dom10 n0dom10, n0.dom11 n0dom11, n0.dom12 n0dom12, n0.dom13 n0dom13, n0.dom14 n0dom14, n0.dom15 n0dom15, n0.dom16 n0dom16, n0.dom17 n0dom17, n0.dom18 n0dom18, n0.dom19 n0dom19, n0.dom20 n0dom20, n0.dom21 n0dom21, n0.dom22 n0dom22, n0.dom23 n0dom23, "+
+      " n1.date n1date, n1.compiletime n1compiletime, n1.dom1 n1dom1, n1.dom2 n1dom2, n1.dom3 n1dom3, n1.dom4 n1dom4, n1.dom5 n1dom5, n1.dom6 n1dom6, n1.dom7 n1dom7, n1.dom8 n1dom8, n1.dom9 n1dom9, n1.dom10 n1dom10, n1.dom11 n1dom11, n1.dom12 n1dom12, n1.dom13 n1dom13, n1.dom14 n1dom14, n1.dom15 n1dom15, n1.dom16 n1dom16, n1.dom17 n1dom17, n1.dom18 n1dom18, n1.dom19 n1dom19, n1.dom20 n1dom20, n1.dom21 n1dom21, n1.dom22 n1dom22, n1.dom23 n1dom23, "+
+      " r0.date r0date, r0.dom4 r0dom4, r0.dom4t r0dom4t, r0.dom5 r0dom5, r0.dom6 r0dom6, r0.dom6t r0dom6t, "+
+      " r1.date r1date, r1.dom1 r1dom1, r1.dom2 r1dom2, r1.dom3 r1dom3, r1.dom4 r1dom4, r1.dom4t r1dom4t, r1.dom5 r1dom5, r1.dom6 r1dom6, r1.dom6t r1dom6t "+
+
+
+      //"FROM Patients p LEFT JOIN Screenings s ON p.ScreeningId=s.id "+
+			//"LEFT JOIN T0Eortcs e0 ON p.T0EortcId= e0.id "+
+			//"LEFT JOIN T1Eortcs e1 ON p.T1EortcId= e1.id "+
+			//"LEFT JOIN T0Hads h0 ON p.T0HadId= h0.id "+
+			//"LEFT JOIN T1Hads h1 ON p.T1HadId= h1.id "+
+			//"LEFT JOIN T0Neqs n0 ON p.T0NeqId= n0.id "+
+			//"LEFT JOIN T1Neqs n1 ON p.T1NeqId= n1.id "+
+			//"LEFT JOIN T0Reportings r0 ON p.T0ReportingId= r0.id "+
+			//"LEFT JOIN T1Reportings r1 ON p.T1ReportingId= r1.id WHERE p.test=0" ,{type : db.sequelize.QueryTypes.SELECT}).then(function(result){
+
+      "FROM patients p LEFT JOIN screenings s ON p.ScreeningId=s.id "+
+      "LEFT JOIN t0eortcs e0 ON p.T0EortcId= e0.id "+
+      "LEFT JOIN t1eortcs e1 ON p.T1EortcId= e1.id "+
+      "LEFT JOIN t0hads h0 ON p.T0HadId= h0.id "+
+      "LEFT JOIN t1hads h1 ON p.T1HadId= h1.id "+
+      "LEFT JOIN t0neqs n0 ON p.T0NeqId= n0.id "+
+      "LEFT JOIN t1neqs n1 ON p.T1NeqId= n1.id "+
+      "LEFT JOIN t0reportings r0 ON p.T0ReportingId= r0.id "+
+      "LEFT JOIN t1reportings r1 ON p.T1ReportingId= r1.id WHERE p.test=0" ,{type : db.sequelize.QueryTypes.SELECT}).then(function(result){
+
+    //res.json({code : 200 , data: result});
+    var today = new Date();
+    var file_date = today.getFullYear() +"" + today.getMonth()+""+today.getDate();
+    var file_path = path.join(__dirname, '..','tmp','dataset' + file_date + '.csv');
+    var head = "";
+    for(var key in result[0]) head+=[key]+";";
+    head = head.substring(0,head.length-1);
+
+    fs.appendFileSync(file_path, head + "\n");
+
+
+    for(var i=0; i< result.length;i++) {
+      var line = "";
+      var element = result[i];
+
+      for(var key in result[i]) {
+        if(element[key] instanceof Date)
+          line+="\""+new Date(element[key]).getDate()+"-"+(new Date(element[key]).getMonth()+1)+"-"+new Date(element[key]).getFullYear()+"\";";
+        else
+          line+="\""+(element[key] == null ? "" : element[key])+"\";";
+
+      }
+      //line = line.replace("/\r?\n|\r/g","");
+      //line += line + "\n";
+      console.log(i + ") " + line);
+      line = line.substring(0,line.length-1);
+      fs.appendFileSync(file_path, line + "\n");
+    }
+
+    res.download(file_path,'dataset' + file_date + '.csv', function(err){
+      if(!err)
+        fs.unlink(file_path);
+      else {
+        console.log(err);
+      }
+    });
+
+  }).catch(function(error) {
+    log.log('error',error);
+    console.log(error);
+    res.status(404)
+        .send({message : "No Screening inserted"});
   });
 }
 
