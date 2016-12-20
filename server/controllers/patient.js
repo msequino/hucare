@@ -151,10 +151,10 @@ module.exports.insertNoEligiblePatients = function(req,res,next){
 
 module.exports.countRecluted = function(req,res,next){
 
-  var timeLimit = {$gte : "2016-10-17 00:00:00", $lte : "2018-07-27 23:59:59"};
+  var timeLimit = {$gte : "2016-08-25 00:00:00", $lte : "2018-07-27 23:59:59"};
 
   if(req.params.period == 1)
-    timeLimit = {$gte : "2016-10-17 00:00:00", $lte : "2017-01-27 23:59:59" };
+    timeLimit = {$gte : "2016-08-25 00:00:00", $lte : "2017-01-27 23:59:59" };
   else if(req.params.period == 2)
     timeLimit = {$gte : "2017-02-06 00:00:00", $lte : "2017-05-19 23:59:59" };
   else if(req.params.period == 3)
@@ -252,10 +252,10 @@ module.exports.countRecluted = function(req,res,next){
 
 module.exports.countQuest = function(req,res,next){
 
-  var timeLimit = "p.createdAt >= '2016-10-17 00:00:00' AND p.createdAt <= '2018-07-27 23:59:59'";
+  var timeLimit = "p.createdAt >= '2016-08-25 00:00:00' AND p.createdAt <= '2018-07-27 23:59:59'";
 
   if(req.params.period == 1)
-    timeLimit = "p.createdAt >= '2016-10-17 00:00:00' AND p.createdAt <= '2017-01-27 23:59:59'";
+    timeLimit = "p.createdAt >= '2016-08-25 00:00:00' AND p.createdAt <= '2017-01-27 23:59:59'";
   else if(req.params.period == 2)
     timeLimit = "p.createdAt >= '2017-02-06 00:00:00' AND p.createdAt <= '2017-05-19 23:59:59'";
   else if(req.params.period == 3)
