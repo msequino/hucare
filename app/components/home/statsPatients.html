@@ -8,7 +8,7 @@
       <tr>
         <th>Nome Utente</th>
         <th>Ospedale</th>
-        <th>Pz arruolati</th>
+        <th>Pz arruolati (di cui test)</th>
         <th>Pz non valido</th>
         <th>Pz con basale</th>
         <th>Pz con FU</th>
@@ -18,7 +18,7 @@
       <tr ng-repeat="clinic in vm.clinicCounter" ng-class="{red:(clinic.username.indexOf('TORINO') == 0 || clinic.username.indexOf('TORINO2') == 0 || clinic.username.indexOf('MILANO') == 0 || clinic.username.indexOf('UDINE') == 0 || clinic.username.indexOf('VERONA') == 0), green:(clinic.username.indexOf('BRINDISI') == 0 || clinic.username.indexOf('CAMPOBASSO') == 0 || clinic.username.indexOf('COSENZA') == 0 || clinic.username.indexOf('FANO') == 0 || clinic.username.indexOf('NAPOLI') == 0)}">
         <td>{{clinic.username | uppercase}}</td>
         <td>{{clinic.Screening.Clinic.name}}</td>
-        <td>{{clinic.ClinicCount}}</td>
+        <td>{{clinic.ClinicCount}} ({{clinic.Test ? clinic.Test : 0}})</td>
         <td>{{clinic.notValid}}</td>
         <td>{{clinic.T0 ? clinic.T0 : 0}}</td>
         <td>{{clinic.Fu ? clinic.Fu : 0}}</td>

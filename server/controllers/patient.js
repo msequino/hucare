@@ -168,77 +168,94 @@ module.exports.countRecluted = function(req,res,next){
 
     db.Patient.findAll({
       include : [
-        {model : db.Screening , attributes : ['ClinicId'], include : [{model : db.Clinic,attributes : ['id','name']}] }
+        {model : db.Screening , attributes : ['ClinicId'], include : [{model : db.Clinic,attributes : ['name']}] }
       ],
       attributes : ['Screening.Clinic.name','Screening.ClinicId',[db.sequelize.fn('count',db.sequelize.col('*')), 'ClinicCount']],
-      where : {'test' : 0, 'createdAt' : timeLimit},
+      where : {'createdAt' : timeLimit},
       group : ['Screening.ClinicId']
     }).then(function(screenedPatients){
 
-
       db.Patient.findAll({
         include : [
-          {model : db.Screening , attributes : ['ClinicId']}
+          {model : db.Screening , attributes : ['ClinicId'], include : [{model : db.Clinic,attributes : ['name']}] }
         ],
-        attributes : ['Screening.ClinicId',[db.sequelize.fn('count',db.sequelize.col('*')), 'ClinicCount']],
-        where : {'T1Date' : {$ne : null} , 'test' : 0, 'createdAt' : timeLimit},
+        attributes : ['Screening.Clinic.name','Screening.ClinicId',[db.sequelize.fn('count',db.sequelize.col('*')), 'ClinicCount']],
+        where : {'test':1, 'createdAt' : timeLimit},
         group : ['Screening.ClinicId']
-      }).then(function(enrolledPatientsT1){
+      }).then(function(screenedPatientsTest){
 
         db.Patient.findAll({
           include : [
-            {model : db.Screening , attributes : ['ClinicId'], where : {'createdAt' : timeLimit} }
+            {model : db.Screening , attributes : ['ClinicId']}
           ],
           attributes : ['Screening.ClinicId',[db.sequelize.fn('count',db.sequelize.col('*')), 'ClinicCount']],
-          where : {'T0Date' : {$ne : null}, 'test' : 0},
+          where : {'T1Date' : {$ne : null} , 'test' : 0, 'createdAt' : timeLimit},
           group : ['Screening.ClinicId']
-        }).then(function(enrolledPatientsT0){
+        }).then(function(enrolledPatientsT1){
 
-          db.Screening.findAll({
-            attributes : ['ClinicId',[db.sequelize.fn('count', db.sequelize.col('ClinicId')), 'ClinicCount']],
-            where: { $or : [{'incl1' : { $ne : 1}},{'incl2' : { $ne : 1}},{'incl3' : { $ne : 1}},{'incl4' : { $ne : 1}},
-                            {'incl5' : { $ne : 1}},{'excl1' : { $ne : 2}},{'excl2' : { $ne : 2}},{'excl3' : { $ne : 2}},
-                            {'excl4' : { $ne : 2}},{'excl5' : { $ne : 2}},{'excl6' : { $ne : 2}},{'excl7' : { $ne : 2}},
-                            {'signed' : { $ne : 1}}]},
-            group : ['ClinicId']}).then(function(notScreenedPatients){
+          db.Patient.findAll({
+            include : [
+              {model : db.Screening , attributes : ['ClinicId'], where : {'createdAt' : timeLimit} }
+            ],
+            attributes : ['Screening.ClinicId',[db.sequelize.fn('count',db.sequelize.col('*')), 'ClinicCount']],
+            where : {'T0Date' : {$ne : null}, 'test' : 0},
+            group : ['Screening.ClinicId']
+          }).then(function(enrolledPatientsT0){
 
-              db.User.findAll().then(function(users){
+            db.Screening.findAll({
+              attributes : ['ClinicId',[db.sequelize.fn('count', db.sequelize.col('ClinicId')), 'ClinicCount']],
+              where: { $or : [{'incl1' : { $ne : 1}},{'incl2' : { $ne : 1}},{'incl3' : { $ne : 1}},{'incl4' : { $ne : 1}},
+                              {'incl5' : { $ne : 1}},{'excl1' : { $ne : 2}},{'excl2' : { $ne : 2}},{'excl3' : { $ne : 2}},
+                              {'excl4' : { $ne : 2}},{'excl5' : { $ne : 2}},{'excl6' : { $ne : 2}},{'excl7' : { $ne : 2}},
+                              {'signed' : { $ne : 1}}]},
+              group : ['ClinicId']}).then(function(notScreenedPatients){
 
-                for(var i =0;i<screenedPatients.length;i++){
+                db.User.findAll().then(function(users){
 
-                  for(var j =0;j<users.length;j++)
-                    if(users[j].ClinicId == screenedPatients[i].dataValues.Screening.dataValues.ClinicId)
-                      screenedPatients[i].dataValues.username = users[j].username;
+                  for(var i =0;i<screenedPatients.length;i++){
 
-                  for(var j =0;j<enrolledPatientsT1.length;j++)
-                    if(enrolledPatientsT1[j].dataValues.Screening.ClinicId == screenedPatients[i].dataValues.Screening.dataValues.ClinicId)
-                      screenedPatients[i].dataValues.Fu = enrolledPatientsT1[j].dataValues.ClinicCount;
+                    for(var j =0;j<users.length;j++)
+                      if(users[j].ClinicId == screenedPatients[i].dataValues.Screening.dataValues.ClinicId)
+                        screenedPatients[i].dataValues.username = users[j].username;
 
-                  for(var j =0;j<enrolledPatientsT0.length;j++)
-                    if(enrolledPatientsT0[j].dataValues.Screening.ClinicId == screenedPatients[i].dataValues.Screening.dataValues.ClinicId)
-                      screenedPatients[i].dataValues.T0 = enrolledPatientsT0[j].dataValues.ClinicCount;
+                    for(var j =0;j<enrolledPatientsT1.length;j++)
+                      if(enrolledPatientsT1[j].dataValues.Screening.ClinicId == screenedPatients[i].dataValues.Screening.dataValues.ClinicId)
+                        screenedPatients[i].dataValues.Fu = enrolledPatientsT1[j].dataValues.ClinicCount;
 
-                  for(var j =0;j<notScreenedPatients.length;j++)
-                    if(notScreenedPatients[j].dataValues.ClinicId == screenedPatients[i].dataValues.Screening.dataValues.ClinicId)
-                      screenedPatients[i].dataValues.notValid = notScreenedPatients[j].dataValues.ClinicId;
+                    for(var j =0;j<enrolledPatientsT0.length;j++)
+                      if(enrolledPatientsT0[j].dataValues.Screening.ClinicId == screenedPatients[i].dataValues.Screening.dataValues.ClinicId)
+                        screenedPatients[i].dataValues.T0 = enrolledPatientsT0[j].dataValues.ClinicCount;
 
-                }
-                res.json({code : 200 , data: screenedPatients});
+                    for(var j =0;j<screenedPatientsTest.length;j++)
+                      if(screenedPatientsTest[j].dataValues.Screening.ClinicId == screenedPatients[i].dataValues.Screening.dataValues.ClinicId)
+                        screenedPatients[i].dataValues.Test = screenedPatientsTest[j].dataValues.ClinicCount;
 
-              }).catch(function(error){
-                log.log('error',error);
-                res.json({code :404});
+                    for(var j =0;j<notScreenedPatients.length;j++)
+                      if(notScreenedPatients[j].dataValues.ClinicId == screenedPatients[i].dataValues.Screening.dataValues.ClinicId)
+                        screenedPatients[i].dataValues.notValid = notScreenedPatients[j].dataValues.ClinicCount;
 
-              });
+                  }
+                  res.json({code : 200 , data: screenedPatients});
+
+                }).catch(function(error){
+                  log.log('error',error);
+                  res.json({code :404});
+
+                });
+            }).catch(function(error){
+              log.log('error',error);
+              res.json({code :404});
+            });
+
           }).catch(function(error){
             log.log('error',error);
             res.json({code :404});
           });
-
         }).catch(function(error){
           log.log('error',error);
           res.json({code :404});
         });
+
       }).catch(function(error){
         log.log('error',error);
         res.json({code :404});
@@ -446,16 +463,16 @@ module.exports.getDataset = function(req,res,next) {
       " r1.date r1date, r1.dom1 r1dom1, r1.dom2 r1dom2, r1.dom3 r1dom3, r1.dom4 r1dom4, r1.dom4t r1dom4t, r1.dom5 r1dom5, r1.dom6 r1dom6, r1.dom6t r1dom6t "+
 
 
-      //"FROM Patients p LEFT JOIN Screenings s ON p.ScreeningId=s.id "+
-			//"LEFT JOIN T0Eortcs e0 ON p.T0EortcId= e0.id "+
-			//"LEFT JOIN T1Eortcs e1 ON p.T1EortcId= e1.id "+
-			//"LEFT JOIN T0Hads h0 ON p.T0HadId= h0.id "+
-			//"LEFT JOIN T1Hads h1 ON p.T1HadId= h1.id "+
-			//"LEFT JOIN T0Neqs n0 ON p.T0NeqId= n0.id "+
-			//"LEFT JOIN T1Neqs n1 ON p.T1NeqId= n1.id "+
-			//"LEFT JOIN T0Reportings r0 ON p.T0ReportingId= r0.id "+
-			//"LEFT JOIN T1Reportings r1 ON p.T1ReportingId= r1.id WHERE p.test=0" ,{type : db.sequelize.QueryTypes.SELECT}).then(function(result){
-
+      /*"FROM Patients p LEFT JOIN Screenings s ON p.ScreeningId=s.id "+
+			"LEFT JOIN T0Eortcs e0 ON p.T0EortcId= e0.id "+
+			"LEFT JOIN T1Eortcs e1 ON p.T1EortcId= e1.id "+
+			"LEFT JOIN T0Hads h0 ON p.T0HadId= h0.id "+
+			"LEFT JOIN T1Hads h1 ON p.T1HadId= h1.id "+
+			"LEFT JOIN T0Neqs n0 ON p.T0NeqId= n0.id "+
+			"LEFT JOIN T1Neqs n1 ON p.T1NeqId= n1.id "+
+			"LEFT JOIN T0Reportings r0 ON p.T0ReportingId= r0.id "+
+			"LEFT JOIN T1Reportings r1 ON p.T1ReportingId= r1.id WHERE p.test=0" ,{type : db.sequelize.QueryTypes.SELECT}).then(function(result){
+*/
       "FROM patients p LEFT JOIN screenings s ON p.ScreeningId=s.id "+
       "LEFT JOIN t0eortcs e0 ON p.T0EortcId= e0.id "+
       "LEFT JOIN t1eortcs e1 ON p.T1EortcId= e1.id "+

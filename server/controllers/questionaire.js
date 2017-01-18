@@ -137,7 +137,7 @@ module.exports.insertAllRowT1 = function(req,res,next){
           log.log('info',"USER " + req.user.id + " CREATED T1Neq " + n.id + ' ('+ JSON.stringify(n) + ')');
           return db.T1Reporting.create(req.body.Reporting, {transaction : t}).then(function(r){
             log.log('info',"USER " + req.user.id + " CREATED T1Reporting " + r.id + ' ('+ JSON.stringify(r) + ')');
-            return db.Patient.find({where : {name : req.params.patientName}}, {transaction : t}).then(function(patient){
+            return db.Patient.find({where : {name : req.params.patientName, test: 0}}, {transaction : t}).then(function(patient){
               log.log('info',"USER " + req.user.id + " UPDATED patient " + patient.id + ' ('+ JSON.stringify(patient) + ')');
               if (patient) { // if the record exists in the db
                 patient.updateAttributes({T1EortcId: e.id,T1HadId: h.id,T1NeqId: n.id,
