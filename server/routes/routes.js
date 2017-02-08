@@ -37,8 +37,8 @@ module.exports = function(app) {
 
   app.route("/user/:username").get(isAuthenticated,User.getUserByUsername);
   app.route("/users/upgrade").get(isAuthenticated,User.sendApk);
-  app.route("/users/clinic/:clinic").get(User.getUsersByClinicId);
-  app.route("/users/changepassword/:id").post(User.updateUser);
+  app.route("/users/clinic/:clinic").get(isAdmin, User.getUsersByClinicId);
+  app.route("/users/changepassword/:id").post(isAdmin, User.updateUser);
   app.route("/users").get(isAdmin,User.getUsers);
   app.route("/users/:id").get(isAdmin,User.getUser);
   app.route("/users/:id").put(isAdmin,User.updateUser);
@@ -53,8 +53,8 @@ module.exports = function(app) {
   app.route("/screening").post(isAuthenticated,Patient.insertNoEligiblePatients);
 
   app.route("/stats/dataset").get(              isAdmin,Patient.getDataset);
-  app.route("/stats/quest/:clinic/:period").get(isAuthenticated,Patient.countQuest);
-  app.route("/stats/:period").get(              isAuthenticated,Patient.countRecluted);
+  app.route("/stats/quest/:clinic/:period").get(isAdmin,Patient.countQuest);
+  app.route("/stats/:period").get(              isAdmin,Patient.countRecluted);
 
   app.route("/questionaires/bypatient/:id").get(isAuthenticated,Patient.getPatient);
   app.route("/questionaires").get(              isAuthenticated,Patient.getPatients);
@@ -64,10 +64,10 @@ module.exports = function(app) {
   //app.route("/questionaires/t0/:patientId").post(isAuthenticated,Questionaire.insertAllT0);
   //app.route("/questionaires/t1/:patientId").post(isAuthenticated,Questionaire.insertAllT1);
 
-  app.route("/questionaires/insertall/t0/").post(isAuthenticated,Questionaire.insertAllRowT0);
+  app.route("/questionaires/insertall/t0/").post(            isAuthenticated,Questionaire.insertAllRowT0);
   app.route("/questionaires/insertall/t1/:patientName").post(isAuthenticated,Questionaire.insertAllRowT1);
 
-  app.route("/questionaires/eortcs/t0").post(isAuthenticated,Questionaire.insertT0Eortc);
+  /*app.route("/questionaires/eortcs/t0").post(isAuthenticated,Questionaire.insertT0Eortc);
   app.route("/questionaires/eortcs/t1").post(isAuthenticated,Questionaire.insertT1Eortc);
   app.route("/questionaires/hads/t0").post(isAuthenticated,Questionaire.insertT0Hads);
   app.route("/questionaires/hads/t1").post(isAuthenticated,Questionaire.insertT1Hads);
@@ -75,10 +75,10 @@ module.exports = function(app) {
   app.route("/questionaires/neqs/t1").post(isAuthenticated,Questionaire.insertT1Neq);
   app.route("/questionaires/reportings/t0").post(isAuthenticated,Questionaire.insertT0Reporting);
   app.route("/questionaires/reportings/t1").post(isAuthenticated,Questionaire.insertT1Reporting);
-  app.route("/questionaires/evaluations").post(isAuthenticated,Questionaire.insertEvaluation);
+  app.route("/questionaires/evaluations").post(isAuthenticated,Questionaire.insertEvaluation);*/
 
   app.route("/clinics").get(isAuthenticated,Clinic.getClinics);
-  app.route("/deployer").post(User.deploy);
+  //app.route("/deployer").post(User.deploy);
 
   var storage = multer.diskStorage({
     destination: function(req,file,cb){
@@ -106,7 +106,7 @@ module.exports = function(app) {
 
   var upload = multer({ storage: storage })
 
-  app.post("/uploadFile",upload.single('file'),function(req,res){
+  app.post("/uploadFile",isAdmin, upload.single('file'),function(req,res){
     res.json(200);
   });
 

@@ -15,7 +15,7 @@ var transporter = nm.createTransport("SMTP", require('../config/aruba_config.jso
 
 module.exports.insertAllRowT0 = function(req,res,next){
 
-  var patientName = req.body.Patient.name;
+  //var patientName = req.body.Patient.name;
   db.sequelize.transaction(function(t){
     return db.T0Eortc.create(req.body.Eortc, {transaction : t}).then(function(e){
       log.log('info',"USER " + req.user.id + " CREATED T0Eortc " + e.id + ' ('+ JSON.stringify(e) + ')');
@@ -103,7 +103,7 @@ module.exports.insertAllRowT0 = function(req,res,next){
 
                 //res.json({code : 200 , message : "Informazioni salvate"});
                 if(error){
-                  transporter.sendMail({from : "server@ao.pr.it",to:"mansequino@gmail.com", subject :"Execution error in HuCare", html:"E' successo qualcosa in hucare<br><br><b>" + error + "</b><br><br> dall'utente <b>"+JSON.stringify(req.user.username) + "</b>" },function(err,info){
+                  transporter.sendMail({from : "server@ao.pr.it",to:"mansequino@gmail.com", subject :"Execution error in HuCare", html:"Impossibile inviare la mail per errore:<br><br><b>" + error + "</b><br><br> dall'utente <b>"+JSON.stringify(req.user.username) + "</b>" },function(err,info){
                     log.log('error',"USER " + req.user.id + " ERROR (cannot send email) " + error);
 
                     res.json({code : 400  ,message : "Mail non inviata"});
@@ -119,8 +119,8 @@ module.exports.insertAllRowT0 = function(req,res,next){
       });
     });
   }).catch(function(error){
-    transporter.sendMail({from : "server@ao.pr.it",to:"mansequino@gmail.com", subject :"Execution error in HuCare", html:"E' successo qualcosa in hucare<br><br><b>" + error + "</b><br><br> dall'utente <b>"+JSON.stringify(req.user.username) + "</b>" },function(err,info){
-      log.log('error',"USER " + req.user.id + " ERROR ("+ JSON.stringify(error) +")");
+    transporter.sendMail({from : "server@ao.pr.it",to:"mansequino@gmail.com", subject :"Execution error in HuCare", html:"Impossibile inserire le info al T0<br><br><b>" + error + "</b><br><br> dall'utente <b>"+JSON.stringify(req.user.username) + "</b><br><br><br>" + JSON.stringify(req.body) },function(err,info){
+      log.log('error',"USER " + req.user.id + " pz " + req.body + " ERROR ("+ JSON.stringify(error) +")");
       res.json({code: 400, message : "Error in inserting"});
     });
   });
@@ -218,8 +218,8 @@ module.exports.insertAllRowT1 = function(req,res,next){
       });
     });
   }).catch(function(error){
-    transporter.sendMail({from : "server@ao.pr.it",to:"mansequino@gmail.com", subject :"Execution error in HuCare", html:"E' successo qualcosa in hucare<br><br><b>" + error + "</b><br><br> dall'utente <b>"+JSON.stringify(req.user.username) + "</b>" },function(err,info){
-      log.log('error',"USER " + req.user.id + " ERROR ("+ JSON.stringify(error) +")");
+    transporter.sendMail({from : "server@ao.pr.it",to:"mansequino@gmail.com", subject :"Execution error in HuCare", html:"Impossibile inserire le info al T1<br><br><b>" + error + "</b><br><br> dall'utente <b>"+JSON.stringify(req.user.username) + "</b><br><br><br>" + JSON.stringify(req.body) },function(err,info){
+      log.log('error',"USER " + req.user.id + " pz " + JSON.stringify(req.body) + " ERROR ("+ JSON.stringify(error) +")");
       res.json({code: 400, message : "Error in inserting"});
     });
   });
@@ -265,7 +265,6 @@ module.exports.insertAllT0 = function(req,res,next){
 }
 
 module.exports.insertAllT1 = function(req,res,next){
-  console.log(req.body);
 
   db.sequelize.transaction(function(t){
     return db.T1Eortc.create(req.body.Eortc, {transaction : t}).then(function(e){
