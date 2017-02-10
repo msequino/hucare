@@ -15,7 +15,7 @@ var transporter = nm.createTransport("SMTP", require('../config/aruba_config.jso
 
 module.exports.insertAllRowT0 = function(req,res,next){
 
-  //var patientName = req.body.Patient.name;
+  var patientName = req.body.Patient.name;
   db.sequelize.transaction(function(t){
     return db.T0Eortc.create(req.body.Eortc, {transaction : t}).then(function(e){
       log.log('info',"USER " + req.user.id + " CREATED T0Eortc " + e.id + ' ('+ JSON.stringify(e) + ')');
