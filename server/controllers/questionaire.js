@@ -120,7 +120,7 @@ module.exports.insertAllRowT0 = function(req,res,next){
     });
   }).catch(function(error){
     transporter.sendMail({from : "server@ao.pr.it",to:"mansequino@gmail.com", subject :"Execution error in HuCare", html:"Impossibile inserire le info al T0<br><br><b>" + error + "</b><br><br> dall'utente <b>"+JSON.stringify(req.user.username) + "</b><br><br><br>" + JSON.stringify(req.body) },function(err,info){
-      log.log('error',"USER " + req.user.id + " pz " + req.body + " ERROR ("+ JSON.stringify(error) +")");
+      log.log('error',"T0 USER " + req.user.id + " pz " + JSON.stringify(req.body) + " ERROR ("+ JSON.stringify(error) +")");
       res.json({code: 400, message : "Error in inserting"});
     });
   });
@@ -219,7 +219,7 @@ module.exports.insertAllRowT1 = function(req,res,next){
     });
   }).catch(function(error){
     transporter.sendMail({from : "server@ao.pr.it",to:"mansequino@gmail.com", subject :"Execution error in HuCare", html:"Impossibile inserire le info al T1<br><br><b>" + error + "</b><br><br> dall'utente <b>"+JSON.stringify(req.user.username) + "</b><br><br><br>" + JSON.stringify(req.body) },function(err,info){
-      log.log('error',"USER " + req.user.id + " pz " + JSON.stringify(req.body) + " ERROR ("+ JSON.stringify(error) +")");
+      log.log('error',"T1 USER " + req.user.id + " pz " + JSON.stringify(req.body) + " ERROR ("+ JSON.stringify(error) +")");
       res.json({code: 400, message : "Error in inserting"});
     });
   });
