@@ -49,7 +49,7 @@ module.exports.insertAllRowT0 = function(req,res,next){
     })
   }).then(function(){
 
-    db.Patient.findOne( { where : {name: patientName} ,
+    db.Patient.findOne( { where : {name: patientName, test: 0} ,
       include:
       [{model: db.T0Eortc},{model: db.T0Neq},{model: db.T0Hads},{model: db.Screening}],
     }).then(function(patient){
@@ -103,12 +103,8 @@ module.exports.insertAllRowT0 = function(req,res,next){
 
                 //res.json({code : 200 , message : "Informazioni salvate"});
                 if(error){
-                  transporter.sendMail({from : "server@ao.pr.it",to:"mansequino@gmail.com", subject :"Execution error in HuCare", html:"Impossibile inviare la mail per errore:<br><br><b>" + error + "</b><br><br> dall'utente <b>"+JSON.stringify(req.user.username) + "</b>" },function(err,info){
-                    log.log('error',"USER " + req.user.id + " ERROR (cannot send email) " + error);
-
-                    res.json({code : 400  ,message : "Mail non inviata"});
-                  });
-
+                  log.log('error',"T0 USER " + req.user.id + " requested mail for " + patient.name +  " ERROR (cannot send email) ");
+                  res.json({code : 400  ,message : "Mail non inviata"});
                 }
                 else
                   res.json({code : 200  ,message : "Informazioni salvate"});
@@ -149,7 +145,7 @@ module.exports.insertAllRowT1 = function(req,res,next){
       });
     })
   }).then(function(result){
-    db.Patient.findOne( { where : {name:req.params.patientName} ,
+    db.Patient.findOne( { where : {name:req.params.patientName, test: 0} ,
       include:
       [{model: db.T1Eortc},{model: db.T1Neq},{model: db.T1Hads},{model: db.Screening}],
     }).then(function(patient){
@@ -174,6 +170,7 @@ module.exports.insertAllRowT1 = function(req,res,next){
               var transporter = nm.createTransport(smtpTransport(require('../config/aruba_config.json')));
               // setup e-mail data with unicode symbols
 
+
               db.User.findOne({where : {ClinicId:patient.Screening.ClinicId}, attributes:['mail']}).then(function(user){
 
                 var mailOptions = {
@@ -187,6 +184,8 @@ module.exports.insertAllRowT1 = function(req,res,next){
 
                 // send mail with defined transport object
                 transporter.sendMail(mailOptions, function(error, info){
+
+                  console.log(error);
 
                   try{
                     if(fs.statSync(path.join(__dirname ,'..','tmp',patient.name+'Neq1.pdf')).isFile())
@@ -203,10 +202,8 @@ module.exports.insertAllRowT1 = function(req,res,next){
 
                   //res.json({code : 200 , message : "Informazioni salvate"});
                   if(error)  {
-                    transporter.sendMail({from : "server@ao.pr.it",to:"mansequino@gmail.com", subject :"Execution error in HuCare", html:"E' successo qualcosa in hucare<br><br><b>" + error + "</b><br><br> dall'utente <b>"+JSON.stringify(req.user.username) + "</b>" },function(err,info){
-                      log.log('error',"USER " + req.user.id + " ERROR to send email");
-                      res.json({code : 400  ,message : "Mail non inviata"});
-                    });
+                    log.log('error',"T1 USER " + req.user.id + " requested mail for " + patient.name +  " ERROR (cannot send email) ");
+                    res.json({code : 400  ,message : "Mail non inviata"});
                   }
                   else
                     res.json({code : 200  ,message : "Informazioni salvate"});
@@ -218,6 +215,8 @@ module.exports.insertAllRowT1 = function(req,res,next){
       });
     });
   }).catch(function(error){
+    console.log(error);
+
     transporter.sendMail({from : "server@ao.pr.it",to:"mansequino@gmail.com", subject :"Execution error in HuCare", html:"Impossibile inserire le info al T1<br><br><b>" + error + "</b><br><br> dall'utente <b>"+JSON.stringify(req.user.username) + "</b><br><br><br>" + JSON.stringify(req.body) },function(err,info){
       log.log('error',"T1 USER " + req.user.id + " pz " + JSON.stringify(req.body) + " ERROR ("+ JSON.stringify(error) +")");
       res.json({code: 400, message : "Error in inserting"});

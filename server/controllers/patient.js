@@ -164,7 +164,7 @@ module.exports.countRecluted = function(req,res,next){
   else if(req.params.period == 5)
     timeLimit = {$gte : "2018-04-16 00:00:00" , $lte : "2018-07-27 23:59:59"};
 
-//console.log(timeLimit);
+    //console.log(timeLimit);
 
     db.Patient.findAll({
       include : [
@@ -472,7 +472,7 @@ module.exports.getDataset = function(req,res,next) {
 			"LEFT JOIN T1Neqs n1 ON p.T1NeqId= n1.id "+
 			"LEFT JOIN T0Reportings r0 ON p.T0ReportingId= r0.id "+
 			"LEFT JOIN T1Reportings r1 ON p.T1ReportingId= r1.id WHERE p.test=0" ,{type : db.sequelize.QueryTypes.SELECT}).then(function(result){
-*/
+      */
       "FROM patients p LEFT JOIN screenings s ON p.ScreeningId=s.id "+
       "LEFT JOIN t0eortcs e0 ON p.T0EortcId= e0.id "+
       "LEFT JOIN t1eortcs e1 ON p.T1EortcId= e1.id "+
@@ -551,7 +551,7 @@ module.exports.printPatient = function(req,res,next){
 
   /*  if(req.user.rand_date < new Date())
     return res.json({code : 400  ,message : "Attenzione: il centro non è stato ancora randomizzato, queste informazioni saranno visibili solo ad inizio sperimentazione"})*/
-  db.Patient.findOne( { where : {name:req.params.id} ,
+  db.Patient.findOne( { where : {name:req.params.id, testo : 0} ,
     include:
     [{model: db.T0Eortc},{model: db.T1Eortc},{model: db.T0Neq},{model: db.T1Neq},{model: db.T0Hads},{model: db.T1Hads},{model: db.Screening}],
   }).then(function(patient){

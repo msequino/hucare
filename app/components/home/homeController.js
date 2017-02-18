@@ -206,7 +206,7 @@
         }
 
         function change(id){
-          vm.countPatView = (id+vm.countPatView)%3;
+          vm.countPatView = (id+vm.countPatView)%5;
           vm.patientPage = "components/home/editPatientPage"+ vm.countPatView + ".html";
         }
 

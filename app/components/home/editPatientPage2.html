@@ -39,7 +39,7 @@
           <td><label>4. Sede del tumore primitivo</label></td>
           <td>
             <select class="form-control" name="PatientPlace" ng-model="vm.data.Patient.place" ng-disabled="vm.user.GroupId != 1">
-              <option value="{{key}}" ng-selected="{{key == vm.data.Patient.place}}" ng-repeat="(key,value) in {1:'Apparato Urinario',2:'Capo e collo',3:'Colon e retto',3:'Fegato e vie biliari',4:'Ginecologici',5:'Mammella',6:'Pancreas',7:'Polmone',8:'Prostata',9:'Sangue',10:'Stomaco ed esofago',11:'Altra sede / Sede non nota'}">
+              <option value="{{key}}" ng-selected="{{key == vm.data.Patient.place}}" ng-repeat="(key,value) in {1:'Apparato Urinario',2:'Capo e collo',3:'Colon e retto',4:'Fegato e vie biliari',5:'Ginecologici',6:'Mammella',7:'Pancreas',8:'Polmone',9:'Prostata',10:'Sangue',11:'Stomaco ed esofago',12:'Altra sede / Sede non nota'}">
                  {{value}}
               </option>
             </select>

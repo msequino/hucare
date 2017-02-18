@@ -5,7 +5,11 @@ var path      = require("path");
 var Sequelize = require("sequelize");
 var env       = process.env.NODE_ENV || "development";
 var db        = require("../config/db.json");
-var sequelize = new Sequelize(db.name, db.user, db.pass, {logging : false});
+var sequelize = new Sequelize(db.name, db.user, db.pass, {
+                                                          host: db.hasOwnProperty('host') ? db.host : "localhost",
+                                                          port : 3306,
+                                                          logging : false,
+                                                          freezeTableName : false});
 var db        = {};
 
 fs

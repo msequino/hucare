@@ -33,6 +33,7 @@
     "promise": "^7.1.1",
     "sequelize": "latest",
     "serve-favicon": "^2.3.0",
-    "winston": "^2.2.0"
+    "winston": "^2.2.0",
+    "winston-graylog2": "^0.6.0"
   }
 }
