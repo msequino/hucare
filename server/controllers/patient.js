@@ -51,7 +51,7 @@ module.exports.getPatient = function(req,res,next){
     //res.sendFile(__dirname + "/../qrcodes/"+patient.name+".png");
     //var data = {};
     //data['patient'] = patient;
-//    data['img'] =
+    //    data['img'] =
     res.json({code : 200, data : patient});
 
   }).catch(function(error){
@@ -538,26 +538,34 @@ module.exports.updatePatient = function(req,res,next){
     req.body.T1Reporting.date = new Date(req.body.T1Reporting.date);
 
     if(patient)
-      patient.updateAttributes(req.body.Patient).then(function(p){
-        db.T0Reporting.findOne({where : {id : req.body.T0Reporting.id}}).then(function(t0reporting){
+    db.sequelize.transaction(function(t){
+      return patient.updateAttributes(req.body.Patient, {transaction : t}).then(function(p){
+        return db.T0Reporting.findOne({where : {id : req.body.T0Reporting.id}, transaction : t}).then(function(t0reporting){
           if(t0reporting)
-            t0reporting.updateAttributes(req.body.T0Reporting).then(function(t0){
-              db.T1Reporting.findOne({where : {id : req.body.T1Reporting.id}}).then(function(t1reporting){
+            return t0reporting.updateAttributes(req.body.T0Reporting, {transaction : t}).then(function(t0){
+              return db.T1Reporting.findOne({where : {id : req.body.T1Reporting.id}, transaction : t}).then(function(t1reporting){
                 if(t1reporting)
-                  t1reporting.updateAttributes(req.body.T1Reporting).then(function(t1){
+                  return t1reporting.updateAttributes(req.body.T1Reporting, {transaction : t}).then(function(t1){
                     log.log('info', req.user.id + ' UPDATE patient '+ JSON.stringify(req.body));
-                    res.json(p);
                   });
               });
             });
         });
-      }).catch(function(error){
-        log.log('error',error);
-        res.status(404).send(error);
-      });
+      })
+
+    })
+    .then(function(error){
+      log.log('info', "Paziente aggiornato");
+      return res.json({code: 200, message: "Paziente aggiornato"});
+    })
+    .catch(function(error){
+      log.log('error',error);
+      return res.status(404).send(error);
+    });
+
   }).catch(function(error){
     log.log('error',error);
-    res.status(404).send(error);
+    return res.status(404).send(error);
   });
 }
 

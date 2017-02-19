@@ -285,7 +285,7 @@ module.exports.makeACopy = function(req, res, next) {
         log.log("error", "Paziente duplicato, impossibile inviare la mail a hucare");
       else
         log.log("info", "Inviata mail a hucare");
-        
+
       return res.json({code: 200, message : "Il paziente è stato clonato"});
     });
 
