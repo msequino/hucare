@@ -30,8 +30,8 @@
             return $http.post(application + (isEligible ? '/patients' : '/screening'), patient).then(handleSuccess, handleError);
         }
 
-        function Update(patient) {
-            return $http.put(application + '/patients/' + patient.id, patient).then(handleSuccess, handleError);
+        function Update(data) {
+            return $http.put(application + '/patients/' + data.Patient.id, data).then(handleSuccess, handleError);
         }
 
         function Delete(id) {

@@ -148,8 +148,12 @@
 
                             vm.data.Patient = {};
                             vm.data.Screening = {};
+                            vm.data.T0Reporting = {};
+                            vm.data.T1Reporting = {};
                             angular.copy(response.data,vm.data.Patient);
                             angular.copy(response.data.Screening,vm.data.Screening);
+                            angular.copy(response.data.T0Reporting,vm.data.T0Reporting);
+                            angular.copy(response.data.T1Reporting,vm.data.T1Reporting);
                             delete vm.data.Patient.Screening;
 
                             var pdd = vm.data.Patient.birth.substr(0,10).split("-");
@@ -260,7 +264,8 @@
           var oldDate = vm.data.Patient.date;
           vm.data.Patient.birth = new Date(vm.data.Patient.birth);
           vm.data.Patient.date = new Date(vm.data.Patient.date);
-          PatientService.Update(vm.data.Patient).then(function(response){
+          delete vm.data.Screening;
+          PatientService.Update(vm.data).then(function(response){
             if(("success" in response)){
               vm.error = !response.success;
               vm.message = response.message.data;

@@ -44,7 +44,7 @@ module.exports.getPatient = function(req,res,next){
       include : [{
         model:db.Clinic,
       }]
-    }],
+    }, {model: db.T0Reporting}, {model: db.T1Reporting}],
     where : {id:req.params.id}
   }).then(function(patient){
 
@@ -530,13 +530,27 @@ module.exports.getDataset = function(req,res,next) {
 
 module.exports.updatePatient = function(req,res,next){
   db.Patient.findOne({where : {id : req.params.id}}).then(function(patient){
-    req.body.birth = new Date(req.body.birth);
-    req.body.date = new Date(req.body.date);
+
+    req.body.Patient.birth = new Date(req.body.Patient.birth);
+    req.body.Patient.date = new Date(req.body.Patient.date);
+
+    req.body.T0Reporting.date = new Date(req.body.T0Reporting.date);
+    req.body.T1Reporting.date = new Date(req.body.T1Reporting.date);
 
     if(patient)
-      patient.updateAttributes(req.body).then(function(p){
-        log.log('info',req.user.id + ' UPDATE patient '+ JSON.stringify(p));
-        res.json(p);
+      patient.updateAttributes(req.body.Patient).then(function(p){
+        db.T0Reporting.findOne({where : {id : req.body.T0Reporting.id}}).then(function(t0reporting){
+          if(t0reporting)
+            t0reporting.updateAttributes(req.body.T0Reporting).then(function(t0){
+              db.T1Reporting.findOne({where : {id : req.body.T1Reporting.id}}).then(function(t1reporting){
+                if(t1reporting)
+                  t1reporting.updateAttributes(req.body.T1Reporting).then(function(t1){
+                    log.log('info', req.user.id + ' UPDATE patient '+ JSON.stringify(req.body));
+                    res.json(p);
+                  });
+              });
+            });
+        });
       }).catch(function(error){
         log.log('error',error);
         res.status(404).send(error);

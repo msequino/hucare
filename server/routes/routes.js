@@ -66,6 +66,7 @@ module.exports = function(app) {
 
   app.route("/questionaires/insertall/t0/").post(            isAuthenticated,Questionaire.insertAllRowT0);
   app.route("/questionaires/insertall/t1/:patientName").post(isAuthenticated,Questionaire.insertAllRowT1);
+  app.route("/questionaires/clone/:patientName").post(       isAuthenticated,Questionaire.makeACopy);
 
   /*app.route("/questionaires/eortcs/t0").post(isAuthenticated,Questionaire.insertT0Eortc);
   app.route("/questionaires/eortcs/t1").post(isAuthenticated,Questionaire.insertT1Eortc);
