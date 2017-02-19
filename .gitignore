@@ -7,3 +7,5 @@ server/config/aruba_config.json
 server/config/db.json
 server/qrcodes/
 node_modules/*
+
+server/apk
