@@ -13,10 +13,44 @@ var db = require("../models"),
 
 var transporter = nm.createTransport("SMTP", require('../config/aruba_config.json'));
 
+module.exports.insertPatient = function(req,res,next){
+
+  db.sequelize.transaction(function(t){
+
+    return db.Screening.create(req.body.Screening, {transaction : t}).then(function(sc){
+      log.log('info',"USER " + req.user.id + " CREATED Screening " + sc.id + ' ('+ JSON.stringify(sc) + ')');
+
+      req.body.Patient.ScreeningId = sc.id;
+      return db.Patient.find({where : {name : req.body.Patient.name, test: 0}}, {transaction : t}).then(function(exist){
+        if(!exist) {
+          return db.Patient.create(req.body.Patient, {transaction : t}).then(function(patient){
+            log.log('info',"USER " + req.user.id + " CREATED patient " + patient.id + ' ('+ JSON.stringify(patient) + ')');
+          })
+        } else {
+          throw new Error("Paziente gia esistente");
+        }
+      });
+
+    });
+
+  }).then(function() {
+
+    log.log('info',"USER " + req.user.id + " inserted pz " + JSON.stringify(req.body) );
+    return res.json({code: 200, message : "Paziente creato"});
+
+  }).catch(function(error) {
+    log.log('error',"PATIENT USER " + req.user.id + " pz " + JSON.stringify(req.body) + " ERROR ("+ error.message +")");
+    return res.json({code: 400, message : "Error in inserting new patient"});
+
+  });
+
+}
+
 module.exports.insertAllRowT0 = function(req,res,next){
 
-  var patientName = req.body.Patient.name;
+  var patientName = req.params.patientName;
   db.sequelize.transaction(function(t){
+    //console.log(req.body);
     return db.T0Eortc.create(req.body.Eortc, {transaction : t}).then(function(e){
       log.log('info',"USER " + req.user.id + " CREATED T0Eortc " + e.id + ' ('+ JSON.stringify(e) + ')');
       return db.T0Hads.create(req.body.Had, {transaction : t}).then(function(h){
@@ -25,28 +59,42 @@ module.exports.insertAllRowT0 = function(req,res,next){
           log.log('info',"USER " + req.user.id + " CREATED T0Neq " + n.id + ' ('+ JSON.stringify(n) + ')');
           return db.T0Reporting.create(req.body.Reporting, {transaction : t}).then(function(r){
             log.log('info',"USER " + req.user.id + " CREATED T0Reporting " + r.id + ' ('+ JSON.stringify(r) + ')');
-            /*TODO Nello studio normale, devi togliere le valutazioni */
-            //return db.Evaluation.create(req.body.Evaluation, {transaction : t}).then(function(ev){
-            //  log.log('info',"USER " + req.user.id + " CREATED Evaluation " + ev.id + ' ('+ JSON.stringify(ev) + ')');
-              return db.Screening.create(req.body.Screening, {transaction : t}).then(function(sc){
-                log.log('info',"USER " + req.user.id + " CREATED Screening " + sc.id + ' ('+ JSON.stringify(sc) + ')');
-                req.body.Patient.T0EortcId = e.id;
-                req.body.Patient.T0HadId = h.id;
-                req.body.Patient.T0NeqId = n.id;
-                req.body.Patient.T0ReportingId = r.id;
-                req.body.Patient.T0Date = new Date();
-                //req.body.Patient.EvaluationId = ev.id;
-                req.body.Patient.ScreeningId = sc.id;
+            //console.log(patientName);
 
-                return db.Patient.create(req.body.Patient, {transaction : t}).then(function(patient){
-                  log.log('info',"USER " + req.user.id + " CREATED patient " + patient.id + ' ('+ JSON.stringify(patient) + ')');
+                return db.Patient.find({where : {name : patientName, test: 0}}, {transaction : t}).then(function(patient){
+
+
+                  if (!patient) { // if the record do not exist in the db
+
+                    return db.Screening.create(req.body.Screening, {transaction : t}).then(function(sc){
+                      log.log('info',"USER " + req.user.id + " CREATED Screening " + sc.id + ' ('+ JSON.stringify(sc) + ')');
+
+                      req.body.Patient.T0EortcId = e.id;
+                      req.body.Patient.T0HadId = h.id;
+                      req.body.Patient.T0NeqId = n.id;
+                      req.body.Patient.T0ReportingId = r.id;
+                      req.body.Patient.T0Date = new Date();
+                      req.body.Patient.ScreeningId = sc.id;
+
+                      return db.Patient.create(req.body.Patient, {transaction : t}).then(function(patient){
+                        log.log('info',"USER " + req.user.id + " CREATED patient " + patient.id + ' ('+ JSON.stringify(patient) + ')');
+                      })
+                    });
+                  } else {
+
+                    log.log('info',"USER " + req.user.id + " UPDATED patient " + patient.id + ' ('+ JSON.stringify(patient) + ')');
+                    patient.updateAttributes({T0EortcId: e.id,T0HadId: h.id,T0NeqId: n.id,
+                                              T0ReportingId: r.id,T0Date : new Date()});
+
+                  }
+                }).catch(function(error) {
+                  console.log(error);
                 });
+
               });
-            //});
           });
         });
       });
-    })
   }).then(function(){
 
     db.Patient.findOne( { where : {name: patientName, test: 0} ,
@@ -118,7 +166,7 @@ module.exports.insertAllRowT0 = function(req,res,next){
     });
   }).catch(function(error){
     transporter.sendMail({from : "server@ao.pr.it",to:"mansequino@gmail.com", subject :"Execution error in HuCare", html:"Impossibile inserire le info al T0<br><br><b>" + error + "</b><br><br> dall'utente <b>"+JSON.stringify(req.user.username) + "</b><br><br><br>" + JSON.stringify(req.body) },function(err,info){
-      log.log('error',"T0 USER " + req.user.id + " pz " + JSON.stringify(req.body) + " ERROR ("+ JSON.stringify(error) +")");
+      log.log('error',"T0 USER " + req.user.id + " pz " + JSON.stringify(req.body) + " ERROR ("+ error.message +")");
       return res.json({code: 400, message : "Error in inserting"});
     });
   });
@@ -220,7 +268,7 @@ module.exports.insertAllRowT1 = function(req,res,next){
   }).catch(function(error){
 
     transporter.sendMail({from : "server@ao.pr.it",to:"mansequino@gmail.com", subject :"Execution error in HuCare", html:"Impossibile inserire le info al T1<br><br><b>" + error + "</b><br><br> dall'utente <b>"+JSON.stringify(req.user.username) + "</b><br><br><br>" + JSON.stringify(req.body) },function(err,info){
-      log.log('error',"T1 USER " + req.user.id + " pz " + JSON.stringify(req.body) + " ERROR ("+ JSON.stringify(error) +")");
+      log.log('error',"T1 USER " + req.user.id + " pz " + JSON.stringify(req.body) + " ERROR ("+ error +")");
       return res.json({code: 400, message : "Error in inserting"});
     });
   });
@@ -239,7 +287,6 @@ module.exports.makeACopy = function(req, res, next) {
       else { // if the record exists in the db
 
         return old_patient.updateAttributes({
-          T1Date : new Date(),
           test : 1,
           note : "Sottomissione nuovo reporting Form"
         }, {transaction : t}).then(function(patient){
@@ -253,11 +300,20 @@ module.exports.makeACopy = function(req, res, next) {
           delete new_patient.id;
           new_patient.test = 0;
           new_patient.note = null;
-          new_patient.T1EortcId = null;
-          new_patient.T1HadId = null;
-          new_patient.T1NeqId = null;
-          new_patient.T1ReportingId = null;
-          new_patient.T1Date = null;
+
+          if(new_patient.T1Date != null) {
+            new_patient.T1EortcId = null;
+            new_patient.T1HadId = null;
+            new_patient.T1NeqId = null;
+            new_patient.T1ReportingId = null;
+            new_patient.T1Date = null;
+          } else {
+            new_patient.T0EortcId = null;
+            new_patient.T0HadId = null;
+            new_patient.T0NeqId = null;
+            new_patient.T0ReportingId = null;
+            new_patient.T0Date = null;
+          }
 
           return db.Patient.create(new_patient, {transaction : t}).then(function(result){
             log.log('info',"USER " + req.user.id + " CREATED new patient " + result.id + ' ('+ JSON.stringify(result) + ')');
@@ -269,25 +325,8 @@ module.exports.makeACopy = function(req, res, next) {
 
   }).then(function() {
 
-    var mailOptions = {
-        from: '"Progetto Hucare" <progetto.hucare@gmail.com>', // sender address
-        to: "hucare@ao.pr.it", // list of receivers
-        subject: 'HuCare: Duplicazione paziente ' + req.params.patientName + ' per inserimento nuovo follow-up', // Subject line
-        html: 'Gentile responsabile,<br> '+
-              'il presente reminder serve a comunicare che il centro <b>' + req.user.getUsername() +
-              'ha richiesto di inserire nuovamente i questionari al tempo T1 per il paziente ' + req.params.patientName + '.'+
-              '<br>'+
-              'Il centro provvederà ad inserire il questionario nei prossimi giorni.<br><br>'
-        };
-
-    transporter.sendMail(mailOptions, function(error, info){
-      if(error)
-        log.log("error", "Paziente duplicato, impossibile inviare la mail a hucare");
-      else
-        log.log("info", "Inviata mail a hucare");
-
-      return res.json({code: 200, message : "Il paziente è stato clonato"});
-    });
+    log.log("info", "Paziente " + req.params.patientName + " clonato");
+    return res.json({code: 200, message : "Paziente clonato correttamente"});
 
   }).catch(function(error) {
     log.log("error", "Impossibile duplicare paziente " + JSON.stringify(error));
@@ -295,6 +334,122 @@ module.exports.makeACopy = function(req, res, next) {
   });
 
 }
+
+module.exports.saveFieldEortc = function(req,res,next){
+
+  db.sequelize.transaction(function(t){
+    return db.Patient.find({where : {name : req.params.patientName, test: 0, finalized : 0}}, {transaction : t}).then(function(patient){
+
+      if(!patient)
+        throw new TypeError();
+        //res.json({code: 101, message : "Paziente non inserito in DB"});
+      else {
+        if(req.params.time == "t0")
+          return db.T0Eortc.find({where : {id : patient.T0EortcId}}, {transaction : t}).then(function(e){
+            console.log(e);
+            if (e) { // if the record exists in the db
+              log.log('info',"USER " + req.user.id + " UPDATE T0Eortc " + e.id + ' ('+ JSON.stringify(e) + ')');
+              e.updateAttributes(req.body);
+            }
+          });
+        else if(req.params.time == "t1")
+          return db.T1Eortc.find({where : {id : patient.T1EortcId}}, {transaction : t}).then(function(e){
+            if (e) { // if the record exists in the db
+              log.log('info',"USER " + req.user.id + " UPDATE T1Eortc " + e.id + ' ('+ JSON.stringify(e) + ')');
+              e.updateAttributes(req.body);
+            }
+          });
+
+      }
+
+     });
+   }).then(function(result){
+     log.log('info',"USER " + JSON.stringify(result) + ")");
+     return res.json({code: 200, message : "Risposta aggiornata"});
+   }).catch(TypeError, function(error){
+     return res.json({code: 101, message : "Paziente non presente nel DB"});
+   }).catch(function(error){
+     log.log('info',"USER Received error " + JSON.stringify(error) + ")");
+     return res.json({code: 100, message : "Risposta NON aggiornata correttamente"});
+   });
+}
+
+module.exports.saveFieldHads = function(req,res,next){
+
+  db.sequelize.transaction(function(t){
+    return db.Patient.find({where : {name : req.params.patientName, test: 0, finalized : 0}}, {transaction : t}).then(function(patient){
+
+      if(!patient)
+        throw new TypeError();
+      else {
+        if(req.params.time == "t0")
+          return db.T0Hads.find({where : {id : patient.T0HadId}}, {transaction : t}).then(function(h){
+            if (h) { // if the record exists in the db
+              log.log('info',"USER " + req.user.id + " UPDATE T0Had " + h.id + ' ('+ JSON.stringify(h) + ')');
+              h.updateAttributes(req.body);
+            }
+          });
+        else if(req.params.time == "t1")
+          return db.T1Hads.find({where : {id : patient.T1HadId}}, {transaction : t}).then(function(h){
+            if (h) { // if the record exists in the db
+              log.log('info',"USER " + req.user.id + " UPDATE T1Had " + h.id + ' ('+ JSON.stringify(h) + ')');
+              h.updateAttributes(req.body);
+            }
+          });
+
+      }
+
+     });
+   }).then(function(result){
+     log.log('info',"USER " + JSON.stringify(result) + ")");
+     return res.json({code: 200, message : "Risposta aggiornata"});
+   }).catch(TypeError, function(error){
+     return res.json({code: 101, message : "Paziente non presente nel DB"});
+   }).catch(function(error){
+     log.log('info',"USER Received error " + JSON.stringify(error) + ")");
+     return res.json({code: 100, message : "Risposta NON aggiornata correttamente"});
+   });
+}
+
+module.exports.saveFieldNeq = function(req,res,next){
+
+  db.sequelize.transaction(function(t){
+    return db.Patient.find({where : {name : req.params.patientName, test: 0, finalized : 0}}, {transaction : t}).then(function(patient){
+
+      if(!patient)
+        throw new TypeError();
+      else {
+        if(req.params.time == "t0")
+          return db.T0Neq.find({where : {id : patient.T0NeqId}}, {transaction : t}).then(function(n){
+            if (n) { // if the record exists in the db
+              log.log('info',"USER " + req.user.id + " UPDATE T0Neq " + n.id + ' ('+ JSON.stringify(n) + ')');
+              n.updateAttributes(req.body);
+            }
+          });
+        else if(req.params.time == "t1")
+          return db.T1Neq.find({where : {id : patient.T1NeqId}}, {transaction : t}).then(function(n){
+            if (n) { // if the record exists in the db
+              log.log('info',"USER " + req.user.id + " UPDATE T1Neq " + n.id + ' ('+ JSON.stringify(n) + ')');
+              n.updateAttributes(req.body);
+            }
+          });
+
+      }
+
+     });
+   }).then(function(result){
+     log.log('info',"USER " + JSON.stringify(result) + ")");
+     return res.json({code: 200, message : "Risposta aggiornata"});
+   }).catch(TypeError, function(error){
+     return res.json({code: 101, message : "Paziente non presente nel DB"});
+   }).catch(function(error){
+     log.log('info',"USER Received error " + JSON.stringify(error) + ")");
+     return res.json({code: 100, message : "Risposta NON aggiornata correttamente"});
+   });
+}
+
+
+
 
 /*--------------ALTRI------------------*/
 

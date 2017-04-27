@@ -50,7 +50,7 @@ module.exports = function(app) {
   app.route("/patients/:id").put(isAuthenticated,Patient.updatePatient);
   app.route("/patients").post(isAuthenticated,Patient.insertPatient);
   app.route("/patient/login").post(Patient.isValidPatient);
-  app.route("/screening").post(isAuthenticated,Patient.insertNoEligiblePatients);
+  app.route("/screening").post(                             isAuthenticated,Patient.insertNoEligiblePatients);
 
   app.route("/stats/dataset").get(              isAdmin,Patient.getDataset);
   app.route("/stats/quest/:clinic/:period").get(isAdmin,Patient.countQuest);
@@ -64,12 +64,15 @@ module.exports = function(app) {
   //app.route("/questionaires/t0/:patientId").post(isAuthenticated,Questionaire.insertAllT0);
   //app.route("/questionaires/t1/:patientId").post(isAuthenticated,Questionaire.insertAllT1);
 
-  app.route("/questionaires/insertall/t0/").post(            isAuthenticated,Questionaire.insertAllRowT0);
+  /* For mobile section */
+  app.route("/questionaires/insertall/patient").post(        isAuthenticated,Questionaire.insertPatient);
+  app.route("/questionaires/insertall/t0/:patientName").post(isAuthenticated,Questionaire.insertAllRowT0);
   app.route("/questionaires/insertall/t1/:patientName").post(isAuthenticated,Questionaire.insertAllRowT1);
-  app.route("/questionaires/clone/:patientName").post(       isAuthenticated,Questionaire.makeACopy);
+  app.route("/questionaires/clone/:patientName").put(        isAuthenticated,Questionaire.makeACopy);
+  app.route("/questionaires/get/:patientName").get(          isAuthenticated,Patient.getPatientForMobile);
 
-  /*app.route("/questionaires/eortcs/t0").post(isAuthenticated,Questionaire.insertT0Eortc);
-  app.route("/questionaires/eortcs/t1").post(isAuthenticated,Questionaire.insertT1Eortc);
+  app.route("/questionaires/Eortcs/savefield/:time/:patientName").post(isAuthenticated,Questionaire.saveFieldEortc);
+  /*app.route("/questionaires/eortcs/savefield/t1").post(isAuthenticated,Questionaire.saveField);
   app.route("/questionaires/hads/t0").post(isAuthenticated,Questionaire.insertT0Hads);
   app.route("/questionaires/hads/t1").post(isAuthenticated,Questionaire.insertT1Hads);
   app.route("/questionaires/neqs/t0").post(isAuthenticated,Questionaire.insertT0Neq);

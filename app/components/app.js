@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('app', ['ngRoute', 'ngCookies','ja.qr'])
+        .module('app', ['ngRoute', 'ngCookies','ja.qr','ui.bootstrap'])
         .config(config)
         .run(run);
 

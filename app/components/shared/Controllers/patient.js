@@ -15,6 +15,7 @@
         service.Create = Create;
         service.Update = Update;
         service.Delete = Delete;
+        service.Clone = Clone;
 
         return service;
 
@@ -36,6 +37,10 @@
 
         function Delete(id) {
             return $http.delete(application + '/patients/' + id).then(handleSuccess, handleError('Error deleting user'));
+        }
+
+        function Clone(id) {
+            return $http.put(application + '/questionaires/clone/' + id).then(handleSuccess, handleError('Error cloning user'));
         }
 
         // private functions

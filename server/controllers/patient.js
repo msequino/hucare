@@ -55,7 +55,18 @@ module.exports.getPatient = function(req,res,next){
     res.json({code : 200, data : patient});
 
   }).catch(function(error){
-    res.json({code : 200, message : error});
+    res.json({code : 400, message : error});
+  });
+}
+module.exports.getPatientForMobile = function(req,res,next){
+  db.Patient.findOne({
+    where : {name:req.params.patientName, test : 0}
+  }).then(function(patient){
+
+    res.json({code : 200, data : patient});
+
+  }).catch(function(error){
+    res.json({code : 400, message : error});
   });
 }
 
@@ -141,11 +152,23 @@ module.exports.insertPatient = function(req,res,next){
 
 module.exports.insertNoEligiblePatients = function(req,res,next){
 
-  db.Screening.create(req.body.Screening).then(function(result){
+  db.sequelize.transaction(function(t){
+    return db.Screening.create(req.body.Screening, {transaction : t}).then(function(screening){
+      log.log('info',"USER " + req.user.id + " CREATED screening of UNELIGIBLE PATIENT " + screening.id + ' ('+ JSON.stringify(screening) + ')');
+
+      req.body.Patient.ScreeningId = screening.id;
+      return db.Patient.create(req.body.Patient, {transaction : t}).then(function(patient){
+        log.log('info',"USER " + req.user.id + " CREATED patient for UNELIGIBLE PATIENT " + patient.id + ' ('+ JSON.stringify(patient) + ')');
+        res.json({code : 200 , data: result ,message : "Informazioni salvate"});
+      });
+
+    });
+  }).then(function(){
     res.json({code : 200 , data: result ,message : "Informazioni salvate"});
+
   }).catch(function(error){
-    log.log('error',error);
-    res.status(404).send({message : "No Screening inserted"});
+    log.log('error',"Errore in insertNoEligiblePatients " + req.user.id + " " + JSON.stringify(error) + ")");
+    res.json({code : 404 , data: result ,message : "Le Informazioni non sono state salvate"});
   });
 }
 
@@ -750,7 +773,7 @@ module.exports.createEortc = function(name, eortc, time){
     "</table>"+
     "</body>"+
     "</html>";
-//  else
+    //  else
     return " ";
 }
 
@@ -793,7 +816,7 @@ module.exports.createHads = function(name, hads, time){
     "</table>"+
     "</body>"+
     "</html>";
-//  else
+    //  else
     return " ";
 }
 

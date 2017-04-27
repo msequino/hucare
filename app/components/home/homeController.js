@@ -3,10 +3,11 @@
 
     angular
         .module('app')
-        .controller('HomeController', HomeController);
+        .controller('HomeController', HomeController)
+        .controller('ModalController', ModalController)
 
-    HomeController.$inject = ['FileUploaderService','UserService', 'PatientService', 'StatisticService', 'AuthenticationService', 'OptionService', 'StudyService', '$rootScope', '$location', '$timeout', '$window'];
-    function HomeController(FileUploaderService, UserService, PatientService, StatisticService, AuthenticationService, OptionService, StudyService, $rootScope, $location, $timeout, window) {
+      HomeController.$inject = ['FileUploaderService','UserService', 'PatientService', 'StatisticService', 'AuthenticationService', 'OptionService', 'StudyService', '$rootScope', '$location', '$timeout','$modal', '$window'];
+      function HomeController(FileUploaderService, UserService, PatientService, StatisticService, AuthenticationService, OptionService, StudyService, $rootScope, $location, $timeout, $modal, window) {
 
         var vm = this;
         vm.Math = window.Math;
@@ -128,7 +129,7 @@
           else{
             if(loadItems == 2) //Load doctors
               StatisticService.GetAll("/"+(vm.periodStat ? vm.periodStat : "0")).then(function (response) {
-//                vm.patientPage = "components/home/editPatientPage1.html";
+                // vm.patientPage = "components/home/editPatientPage1.html";
                 vm.clinicCounter = response.data;
                 //vm.clinicCounter = [{username :"TO"},{username :"BR"},{username :"NU"},{username :"TG"},{username :"VR"},{username :"PA"},{username :"MI"},{username :"BR"},{username :"NU"}];
               });
@@ -156,6 +157,8 @@
                             angular.copy(response.data.T1Reporting,vm.data.T1Reporting);
                             delete vm.data.Patient.Screening;
 
+                            vm.data.disabled = true;
+                            
                             var pdd = vm.data.Patient.birth.substr(0,10).split("-");
 
                             vm.data.Patient.birth = vm.data.Patient.birth.substring(0,vm.data.Patient.birth.indexOf("T"));
@@ -202,7 +205,6 @@
             vm.form.$setPristine();
         }
 
-
         function changeResource(view,resource,buttonId){
           vm.pdf = view;
           vm.resource_name = resource;
@@ -210,7 +212,7 @@
         }
 
         function change(id){
-          vm.countPatView = (id+vm.countPatView)%5;
+          vm.countPatView = (id+vm.countPatView)%6;
           vm.patientPage = "components/home/editPatientPage"+ vm.countPatView + ".html";
         }
 
@@ -288,6 +290,33 @@
           timer(true,true);
         }
 
+        vm.open = function (size) {
+          var modalInstance = $modal.open({
+            templateUrl: 'myModalContent.html',
+            controller: 'ModalController',
+            size: size,
+            resolve: {
+              name: function () {
+                return vm.data.Patient.name;
+              }
+            }
+          });
+
+          modalInstance.result.then(function (response) {
+            if(response.code == 200){
+              vm.error = false;
+              vm.success = true;
+              vm.message = response.message;
+            }
+          }, function(error){
+            vm.error = true;
+            vm.success = false;
+            vm.message = error.message;
+
+          });
+        };
+
+
         function timer(successAlert,mChangeView){
           vm.success = successAlert;
           vm.error = !successAlert;
@@ -315,6 +344,21 @@
             return size;
         };
 
+    }
+
+    function ModalController($scope, $modalInstance, name, PatientService) {
+
+      $scope.name = name;
+      $scope.ok = function () {
+        PatientService.Clone($scope.name).then(function(response){
+
+          $modalInstance.close(response);
+        })
+      };
+
+      $scope.cancel = function () {
+        $modalInstance.dismiss('cancel');
+      };
     }
 
 })();

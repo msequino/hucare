@@ -1,71 +1,77 @@
-<h3>Reporting Form {{vm.data.Patient.name}}</h3>
+<h3>Reporting Form FU {{vm.data.Patient.name}}</h3>
 <div class="panel panel-success">
   <div class="panel-heading">
-    Follow-Up
+    FOLLOW-UP
   </div>
   <div class="panel-body">
     <table class="table">
       <tbody>
-        <tr ng-class="{'danger': vm.data.Patient.finalized && vm.form.T1Reporting.$error.required}">
-          <td><label>Performance Status di ECOG</label></td>
+        <tr ng-class="{'danger': vm.data.Patient.finalized && vm.form.ReportingForm1.$error.required}">
+          <td><label>ECOG</label></td>
           <td class="col-md-6">
-            <label for="Rf11{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 0, 2: 1, 3: 2, 4 : 3, 5: 4, 6: 5}">
-              <input type="radio" name="Rf11" ng-model="vm.data.T1Reporting.dom1" value="{{key}}" required>{{item}}
+            <label for="Rf11{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : '0', 2: '1', 3: '2', 4 : '3', 5 : '4', 6: '5'}">
+              <input type="radio" name="Rf11" ng-disabled="vm.data.disabled" ng-model="vm.data.ReportingForm1.dom1" value="{{key}}" required>{{item}}
             </label>
           </td>
         </tr>
-        <tr ng-class="{'danger': vm.data.Patient.finalized && vm.form.T1Reporting.$error.required}">
-          <td><label>Il paziente è in progressione</label></td>
+        <tr ng-class="{'danger': vm.data.Patient.finalized && vm.form.ReportingForm1.$error.required}">
+          <td><label>Il paziente è in progressione?</label></td>
           <td class="col-md-6">
-            <label for="Rf12{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Si',2: 'No', 3: 'NA'}">
-              <input type="radio" name="Rf12" ng-model="vm.data.T1Reporting.dom2" value="{{key}}" required>{{item}}
+            <label for="Rf12{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Si',2: 'No', 3: 'Non applicabile'}">
+              <input type="radio" name="Rf12" ng-disabled="vm.data.disabled" ng-model="vm.data.ReportingForm1.dom2" value="{{key}}" required>{{item}}
             </label>
           </td>
         </tr>
-        <tr ng-class="{'danger': vm.data.Patient.finalized && vm.form.T1Reporting.$error.required}">
-          <td><label>Il paziente è ancora in trattamento</label></td>
+        <tr ng-class="{'danger': vm.data.Patient.finalized && vm.form.ReportingForm1.$error.required}">
+          <td><label>Il paziente è ancora in trattamento?</label></td>
           <td class="col-md-6">
             <label for="Rf13{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Si',2: 'No'}">
-              <input type="radio" name="Rf13" ng-model="vm.data.T1Reporting.dom3" value="{{key}}" required>{{item}}
+              <input type="radio" name="Rf13" ng-disabled="vm.data.disabled" ng-model="vm.data.ReportingForm1.dom3" value="{{key}}" required>{{item}}
             </label>
           </td>
         </tr>
-        <tr ng-class="{'danger': vm.data.Patient.finalized && vm.form.T1Reporting.$error.required}">
+        <tr ng-class="{'danger': vm.data.Patient.finalized && vm.form.ReportingForm1.$error.required}">
           <td><label>Il paziente ha utilizzato il TABLET?</label></td>
           <td class="col-md-6">
             <label for="Rf14{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Si',2: 'No', 3: 'In parte'}">
-              <input type="radio" name="Rf14" ng-model="vm.data.T1Reporting.dom4" ng-change="vm.data.T1Reporting.dom4t = ''" value="{{key}}" required>{{item}}
+              <input type="radio" name="Rf14" ng-disabled="vm.data.disabled" ng-model="vm.data.ReportingForm1.dom4" value="{{key}}" required>{{item}}
             </label>
           </td>
         </tr>
-        <tr ng-class="{'danger': vm.data.Patient.finalized && vm.form.T1Reporting.$error.required}" ng-show="vm.data.T1Reporting.dom4 != 1">
-          <td><label>Indicare chi ha inserito il questionario cartaceo</label></td>
+        <tr ng-class="{'danger': vm.data.Patient.finalized && vm.form.ReportingForm1.$error.required}">
+          <td><label>Data di compilazione</label></td>
           <td class="col-md-6">
-            <input class="form-control" name="Rf14t" ng-model="vm.data.T1Reporting.dom4t">
+            <p class="showInline"><input type="text" name="Rf14t" ng-disabled="vm.data.disabled" class="form-control" ng-show="vm.data.ReportingForm1.dom4 > 1" ng-model="vm.data.ReportingForm1.dom4_1"/></p>
           </td>
         </tr>
-        <tr ng-class="{'danger': vm.data.Patient.finalized && vm.form.T1Reporting.$error.required}">
+        <tr ng-class="{'danger': vm.data.Patient.finalized && vm.form.ReportingForm1.$error.required}">
+          <td><label>Indicare chi ha inserito il questionario cartaceo</label></td>
+          <td class="col-md-6">
+            <input class="form-control" name="Rf14t" ng-show="vm.data.ReportingForm1.dom4 > 1" ng-disabled="vm.data.disabled" ng-model="vm.data.ReportingForm1.dom4t">
+          </td>
+        </tr>
+        <tr ng-class="{'danger': vm.data.Patient.finalized && vm.form.ReportingForm1.$error.required}">
           <td><label>Il paziente ha richiesto assistenza per la compilazione?</label></td>
           <td class="col-md-6">
             <label for="Rf15{{item}}" class="radio-inline" ng-repeat="(key,item) in {1 : 'Si',2: 'No', 3: 'In parte'}">
-              <input type="radio" name="Rf15" ng-model="vm.data.T1Reporting.dom5" value="{{key}}" required>{{item}}
+              <input type="radio" name="Rf15" ng-model="vm.data.ReportingForm1.dom5" value="{{key}}" ng-disabled="vm.data.disabled" required>{{item}}
             </label>
           </td>
         </tr>
-        <tr ng-class="{'danger': vm.data.Patient.finalized && vm.form.T1Reporting.$error.required}" ng-show="vm.data.T1Reporting.dom6 != 0">
+        <tr ng-class="{'danger': vm.data.Patient.finalized && vm.form.ReportingForm1.$error.required}">
           <td><label>Indicare la motivazione per cui il paziente NON ha compilato correttamente i questionari</label></td>
           <td class="col-md-6">
-            <select class="form-control" name="Rf16" ng-model="vm.data.T1Reporting.dom6">
-              <option value="{{key}}" ng-selected="{{key == vm.data.T1Reporting.dom6}}" ng-change="vm.data.T1Reporting.dom6t = ''" ng-repeat="(key,value) in {1:'Il paziente ha ritirato l\'adesione allo studio', 2:'Si rifiuta di compilare il questionario', 3:'Le condizioni di salute non consentono la compilazione', 4:'Perso al follow-up', 5:'Deceduto', 6:'Altro, specificare'}">
-                 {{value}}
+            <select class="form-control" name="Rf16" ng-model="vm.data.ReportingForm1.dom6" ng-disabled="vm.data.disabled" >
+              <option value="{{key}}" ng-selected="{{key == vm.data.ReportingForm1.dom6}}" ng-repeat="(key,value) in {1:'Si rifiuta di compilare il questionario',2:'Le condizioni di salute non consentono di proseguire',3:'Altro'}">
+                 {{value}
               </option>
             </select>
           </td>
         </tr>
-        <tr ng-class="{'danger': vm.data.Patient.finalized && vm.form.T1Reporting.$error.required}"  ng-show="vm.data.T1Reporting.dom6 == 6">
+        <tr ng-class="{'danger': vm.data.Patient.finalized && vm.form.ReportingForm1.$error.required}">
           <td><label>Se altro, specificare</label></td>
           <td class="col-md-6">
-            <input class="form-control" name="Rf16t" ng-model="vm.data.T1Reporting.dom6t" >
+            <input class="form-control" name="Rf16t" ng-disabled="vm.data.disabled" ng-model="vm.data.ReportingForm1.dom6t" >
           </td>
         </tr>
 

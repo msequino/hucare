@@ -8,8 +8,23 @@
 
         <br>
 
+
         <div ng-show="vm.user.GroupId == 1" class="col-md-10 col-md-offset-1">
-          E' un paziente di test?
+          <b>Vuoi permettere al centro di poter modificare i questionari?</b>
+          <br><br>
+          Questa attività richiede che tu abbia ricevuto una mail da parte del centro che specifica  il motivo per cui sbloccare l'utente.
+          <br>
+          I centri potranno modificare solo il reporting form se il paziente ha compilato in autonomia i questionari.
+          <br><br>
+          <b>STATO FINALIZZAZIONE PAZIENTE: </b>
+          <input type="radio" name="PatientFinalized" ng-model="vm.data.Patient.finalized" value="1"> <b>FINALIZZATO</b>
+          <input type="radio" name="PatientFinalized" ng-model="vm.data.Patient.finalized" value="0"> <b>NON FINALIZZATO</b>
+          <br><br>
+        </div>
+
+
+        <div ng-show="vm.user.GroupId == 1" class="col-md-10 col-md-offset-1">
+          <b>E' un paziente di test?</b>
           <input type="radio" name="PatientTest" ng-model="vm.data.Patient.test" value="1"> Si
           <input type="radio" name="PatientTest" ng-model="vm.data.Patient.test" value="0"> No
         </div>
@@ -19,19 +34,20 @@
           <textarea class="form-control" name="PatientNote" ng-model="vm.data.Patient.note" rows="3"></textarea>
         </div>
 
-        <div class="col-md-12" style="margin-bottom:40px;margin-top:10px">
+        <div class="col-md-12" style="margin-bottom:20px;margin-top:10px">
           <nav>
               <ul class="pager">
               <li class="previous mouse-over" ng-show="vm.countPatView > 0">
                 <a ng-click="vm.change(-1);"><span aria-hidden="true">&larr;</span> Indietro</a>
               </li>
               <li ng-show="vm.user.GroupId == 1"><a ng-click="vm.savePatient()">Salva info</a></li>
-              <li class="next mouse-over" ng-show="vm.countPatView < 4">
+              <li class="next mouse-over" ng-show="vm.countPatView < 5">
                 <a ng-click="vm.change(1);">Avanti <span aria-hidden="true">&rarr;</span></a>
               </li>
             </ul>
           </nav>
         </div>
+
       </form>
 
   </div>

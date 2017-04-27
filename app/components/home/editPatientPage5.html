@@ -1,0 +1,40 @@
+<h3>Clonazione paziente {{vm.data.Patient.name}}</h3>
+<div class="panel panel-success">
+  <div class="panel-heading">
+    Clona
+  </div>
+  <div class="panel-body">
+    <div ng-show="vm.user.GroupId == 1" ng-if="vm.data.Patient.test == 0" class="col-md-10 col-md-offset-1" >
+
+      Vuoi permettere il re-inserimento dei questionari al T1? Clona il paziente con il bottone in basso:
+      <ul>
+        <li>il paziente verrà clonato</li>
+        <li>una copia figurerà come test e non sarà più visibile nell'applicativo</li>
+        <li>nell'altra copia verranno annullati i riferimenti ai questionari inseriti dal paziente</li>
+      </ul>
+      <button type="button" class="col-md-offset-5 btn btn-danger" ng-click="vm.open()">Clona</button>
+
+    </div>
+
+    <div ng-show="vm.user.GroupId == 1" ng-if="vm.data.Patient.test == 1" class="col-md-10 col-md-offset-1" >
+
+      Il paziente selezionato è già di test, per cui non può essere modificato.
+
+    </div>
+  </div>
+</div>
+
+
+<!-- The actual modal template, just a bit o bootstrap -->
+<script type="text/ng-template" id="myModalContent.html">
+    <div class="modal-header">
+        <h3 class="modal-title">ATTENZIONE</h3>
+    </div>
+    <div class="modal-body">
+      Stai per clonare il paziente <b>{{name}}</b>, ciò permetterà ad un utente di re-inserire i questionari al tempo T1. Questa operazione non sarà reversibile.
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">OK</button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
