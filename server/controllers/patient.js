@@ -596,7 +596,7 @@ module.exports.printPatient = function(req,res,next){
 
   /*  if(req.user.rand_date < new Date())
     return res.json({code : 400  ,message : "Attenzione: il centro non è stato ancora randomizzato, queste informazioni saranno visibili solo ad inizio sperimentazione"})*/
-  db.Patient.findOne( { where : {name:req.params.id, testo : 0} ,
+  db.Patient.findOne( { where : {name:req.params.id, test : 0} ,
     include:
     [{model: db.T0Eortc},{model: db.T1Eortc},{model: db.T0Neq},{model: db.T1Neq},{model: db.T0Hads},{model: db.T1Hads},{model: db.Screening}],
   }).then(function(patient){
