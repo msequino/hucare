@@ -72,6 +72,8 @@ module.exports = function(app) {
   app.route("/questionaires/get/:patientName").get(          isAuthenticated,Patient.getPatientForMobile);
 
   app.route("/questionaires/Eortcs/savefield/:time/:patientName").post(isAuthenticated,Questionaire.saveFieldEortc);
+  app.route("/questionaires/Hads/savefield/:time/:patientName").post(isAuthenticated,Questionaire.saveFieldHad);
+  app.route("/questionaires/Neqs/savefield/:time/:patientName").post(isAuthenticated,Questionaire.saveFieldNeq);
   /*app.route("/questionaires/eortcs/savefield/t1").post(isAuthenticated,Questionaire.saveField);
   app.route("/questionaires/hads/t0").post(isAuthenticated,Questionaire.insertT0Hads);
   app.route("/questionaires/hads/t1").post(isAuthenticated,Questionaire.insertT1Hads);

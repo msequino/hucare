@@ -82,6 +82,7 @@ module.exports.insertUser = function(req,res,next){
           user.update({password : req.body.password}).then(function(u){
             db.Patient.findAll(
               { order : [['id']],
+                where : {test : 0},
                 include:
                 [{
                   model: db.Screening,
