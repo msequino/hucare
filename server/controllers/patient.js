@@ -218,10 +218,10 @@ module.exports.countRecluted = function(req,res,next){
 
           db.Patient.findAll({
             include : [
-              {model : db.Screening , attributes : ['ClinicId'], where : {'createdAt' : timeLimit} }
+              {model : db.Screening , attributes : ['ClinicId'] }
             ],
             attributes : ['Screening.ClinicId',[db.sequelize.fn('count',db.sequelize.col('*')), 'ClinicCount']],
-            where : {'T0Date' : {$ne : null}, 'test' : 0},
+            where : {'T0Date' : {$ne : null}, 'test' : 0, 'createdAt' : timeLimit},
             group : ['Screening.ClinicId']
           }).then(function(enrolledPatientsT0){
 
