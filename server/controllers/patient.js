@@ -45,7 +45,7 @@ module.exports.getPatient = function(req,res,next){
         model:db.Clinic,
       }]
     }, {model: db.T0Reporting}, {model: db.T1Reporting}],
-    where : {id:req.params.id}
+    where : {name:req.params.id}
   }).then(function(patient){
 
     //res.sendFile(__dirname + "/../qrcodes/"+patient.name+".png");
@@ -551,6 +551,57 @@ module.exports.getDataset = function(req,res,next) {
   });
 }
 
+module.exports.getDatasetForTest = function(req,res,next) {
+
+
+    db.sequelize.query("SELECT "+
+        " e0.patientid PatientId, e0.time Time, e0.userid as name, e0.dom1 e0dom1, e0.dom2 e0dom2, e0.dom3 e0dom3, e0.dom4 e0dom4, e0.dom5 e0dom5, e0.dom6 e0dom6, e0.dom7 e0dom7, e0.dom8 e0dom8, e0.dom9 e0dom9, e0.dom10 e0dom10, e0.dom11 e0dom11, e0.dom12 e0dom12, e0.dom13 e0dom13, e0.dom14 e0dom14, e0.dom15 e0dom15, e0.dom16 e0dom16, e0.dom17 e0dom17, e0.dom18 e0dom18, e0.dom19 e0dom19, e0.dom20 e0dom20, e0.dom21 e0dom21, e0.dom22 e0dom22, e0.dom23 e0dom23, e0.dom24 e0dom24, e0.dom25 e0dom25, e0.dom26 e0dom26, e0.dom27 e0dom27, e0.dom28 e0dom28, e0.dom29 e0dom29, e0.dom30 e0dom30, "+
+        " h0.dom1 h0dom1, h0.dom2 h0dom2, h0.dom3 h0dom3, h0.dom4 h0dom4, h0.dom5 h0dom5, h0.dom6 h0dom6, h0.dom7 h0dom7, h0.dom8 h0dom8, h0.dom9 h0dom9, h0.dom10 h0dom10, h0.dom11 h0dom11, h0.dom12 h0dom12, h0.dom13 h0dom13, h0.dom14 h0dom14, "+
+        " n0.dom1 n0dom1, n0.dom2 n0dom2, n0.dom3 n0dom3, n0.dom4 n0dom4, n0.dom5 n0dom5, n0.dom6 n0dom6, n0.dom7 n0dom7, n0.dom8 n0dom8, n0.dom9 n0dom9, n0.dom10 n0dom10, n0.dom11 n0dom11, n0.dom12 n0dom12, n0.dom13 n0dom13, n0.dom14 n0dom14, n0.dom15 n0dom15, n0.dom16 n0dom16, n0.dom17 n0dom17, n0.dom18 n0dom18, n0.dom19 n0dom19, n0.dom20 n0dom20, n0.dom21 n0dom21, n0.dom22 n0dom22, n0.dom23 n0dom23 "+
+        " FROM Eortcs e0 LEFT JOIN Hads h0 ON e0.id=h0.id LEFT JOIN Neqs n0 ON e0.id=n0.id", {type : db.sequelize.QueryTypes.SELECT}).then(function(result){
+
+        //res.json({code : 200 , data: result});
+        var today = new Date();
+        var file_date = today.getFullYear() +"" + today.getMonth()+""+today.getDate();
+        var file_path = path.join(__dirname, '..','tmp','test_dataset_' + file_date + '.csv');
+        var head = "";
+        for(var key in result[0]) head+=[key]+";";
+        head = head.substring(0,head.length-1);
+
+        fs.appendFileSync(file_path, head + "\n");
+
+        console.log( result);
+        for(var i=0; i< result.length;i++) {
+            var line = "";
+            var element = result[i];
+
+            for(var key in result[i]) {
+                if(element[key] instanceof Date)
+                    line+="\""+new Date(element[key]).getDate()+"-"+(new Date(element[key]).getMonth()+1)+"-"+new Date(element[key]).getFullYear()+"\";";
+                else
+                    line+="\""+(element[key] == null ? "" : element[key])+"\";";
+
+            }
+            console.log(i + ") " + line);
+            line = line.substring(0,line.length-1);
+            fs.appendFileSync(file_path, line + "\n");
+        }
+
+        res.download(file_path,'test_dataset_' + file_date + '.csv', function(err){
+            if(!err)
+                fs.unlink(file_path);
+            else {
+                console.log(err);
+            }
+        });
+
+    }).catch(function(error) {
+        log.log('error',error);
+        console.log(error);
+        res.status(404).send({message : "No Screening inserted"});
+    });
+}
+
 module.exports.updatePatient = function(req,res,next){
   db.Patient.findOne({where : {id : req.params.id}}).then(function(patient){
 
@@ -871,6 +922,29 @@ module.exports.createNeq = function(name, neq, time){
     return " ";
 }
 
+
+module.exports.insertPatientForTest = function(req,res,next){
+    db.sequelize.transaction(function(t){
+        return db.Eortc.create(req.body.Eortc, {transaction : t}).then(function(eortc){
+            //log.log('info',"USER " + req.user.id + " CREATED screening of UNELIGIBLE PATIENT " + screening.id + ' ('+ JSON.stringify(screening) + ')');
+            return db.Hads.create(req.body.Hads, {transaction : t}).then(function(hads){
+                //log.log('info',"USER " + req.user.id + " CREATED screening of UNELIGIBLE PATIENT " + screening.id + ' ('+ JSON.stringify(screening) + ')');
+                return db.Neq.create(req.body.Neq, {transaction : t}).then(function(neq){
+                  //log.log('info',"USER " + req.user.id + " CREATED patient for UNELIGIBLE PATIENT " + patient.id + ' ('+ JSON.stringify(patient) + ')');
+                });
+            });
+
+        });
+    }).then(function(){
+        res.json({code : 200 , data: {} ,message : "Informazioni salvate"});
+
+    }).catch(function(error){
+      console.log(error);
+//        log.log('error',"Errore in insertNoEligiblePatients " + req.user.id + " " + JSON.stringify(error) + ")");
+        res.json({code : 404 , data: {} ,message : "Le Informazioni non sono state salvate"});
+    });
+
+}
 /*
 function createQRCode(args){
 

@@ -1,0 +1,59 @@
+<div class="row">
+
+    <div class="row">
+        <div class="col col-md-4">
+            <a ng-href="" target="_blank" ng-click="vm.downloadDataset('/test')" class="btn btn-primary">Scarica dataset attuale dataset</a>
+        </div>
+    </div>
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="row">
+        <span>Inserisci il codice paziente</span>
+        <input type="text" class="form-control small" maxlength="6" ng-model="vm.Comparing.Patient1" required/>
+    </div>
+
+    <div class="row" style="margin-top:20px">
+        <span>Inserisci il tempo</span>
+        <label class="radio-inline" ng-repeat="(key,item) in {'T0' : 'Basale', 'T1': 'Follow-up'}">
+            <input type="radio" ng-model="vm.Comparing.Type" value="{{key}}" required> {{item}}
+        </label>
+    </div>
+
+    <div class="row" style="margin-top:20px">
+        <ul class="nav nav-tabs">
+            <li role="presentation" ng-class="{'active': vm.pageQuest == 1}"><a ng-click="vm.pageQuest = 1">Eortc</a></li>
+            <li role="presentation" ng-class="{'active': vm.pageQuest == 2}"><a ng-click="vm.pageQuest = 2">Hads</a></li>
+            <li role="presentation" ng-class="{'active': vm.pageQuest == 3}"><a ng-click="vm.pageQuest = 3">Neq</a></li>
+        </ul>
+        <div ng-show="vm.pageQuest == 1" ng-include="'components/home/questionares/eortc.html'"></div>
+        <div ng-show="vm.pageQuest == 2" ng-include="'components/home/questionares/hads.html'"></div>
+        <div ng-show="vm.pageQuest == 3" ng-include="'components/home/questionares/neq.html'"></div>
+    </div>
+
+    <div class="row" style="margin-top:20px">
+        <div class="col-md-2">
+            <button ng-disabled="!vm.Comparing.Type || !vm.Comparing.Patient1" class="btn btn-primary" ng-click="vm.saveQuestionaires()">Salva</button>
+        </div>
+    </div>
+    <div class="row">
+        <span><b>ATTENZIONE!!!</b> Salva solo quando hai inserito tutti i questionari</span>
+    </div>
+
+</div>
+
+<!-- The actual modal template, just a bit o bootstrap -->
+<script type="text/ng-template" id="myModalContentAreUSure.html">
+    <div class="modal-header">
+        <h3 class="modal-title">ATTENZIONE</h3>
+    </div>
+    <div class="modal-body">
+        Stai per salvare il paziente <b>{{PatientId}}</b>.
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="ok()">OK</button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</script>

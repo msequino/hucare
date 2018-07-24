@@ -16,6 +16,7 @@
         service.Update = Update;
         service.Delete = Delete;
         service.Clone = Clone;
+        service.InsertForTesting = InsertForTesting;
 
         return service;
 
@@ -42,6 +43,11 @@
         function Clone(id) {
             return $http.put(application + '/questionaires/clone/' + id).then(handleSuccess, handleError('Error cloning user'));
         }
+
+        function InsertForTesting(data) {
+            return $http.post(application + '/questionaires/test', data).then(handleSuccess, handleError('Error cloning user'));
+        }
+
 
         // private functions
 

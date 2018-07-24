@@ -5,6 +5,7 @@
         .module('app')
         .controller('HomeController', HomeController)
         .controller('ModalController', ModalController)
+        .controller('ModalControllerAreUSure', ModalControllerAreUSure)
 
       HomeController.$inject = ['FileUploaderService','UserService', 'PatientService', 'StatisticService', 'AuthenticationService', 'OptionService', 'StudyService', '$rootScope', '$location', '$timeout','$modal', '$window'];
       function HomeController(FileUploaderService, UserService, PatientService, StatisticService, AuthenticationService, OptionService, StudyService, $rootScope, $location, $timeout, $modal, window) {
@@ -13,6 +14,7 @@
         vm.Math = window.Math;
 
         vm.errors = {};
+        vm.Comparing = {};
         vm.today = new Date();
         vm.yrs18ago = new Date(vm.today.getFullYear()-18,vm.today.getMonth(),vm.today.getDate());
         vm.yrs75ago = new Date(vm.today.getFullYear()-75,vm.today.getMonth(),vm.today.getDate());
@@ -39,6 +41,9 @@
 
         vm.itemsPerPage = 10;
 
+        vm.Eortc = {}
+        vm.Hads = {}
+        vm.Neq = {}
         vm.loadUser = loadUser;
         vm.logout = logout;
         vm.changeView = changeView;
@@ -85,8 +90,8 @@
           });
         }
 
-        function downloadDataset() {
-          window.open(StatisticService.GetDatasetUrl(), '_blank');
+        function downloadDataset(test) {
+          window.open(StatisticService.GetDatasetUrl() + test, '_blank');
         }
 
         //Profile functionalities
@@ -183,8 +188,12 @@
                           vm.isActive = 1;
                           vm.pdf = false;
                           vm.resource_name = 'resources/commons/registrazione1.mp4';
-                        }
+                        } else if(loadItems == 7){
 
+                        } else if(loadItems == 8) {
+                          vm.pageQuest = 1;
+
+                        }
                       }
                     }
                   }
@@ -259,6 +268,65 @@
               vm.message = error.message;
             });
           }
+        }
+
+        vm.compare = function() {
+          alert(vm.Comparing.Patient1 + " " + vm.Comparing.Patient2 + " " + vm.Comparing.Type + " ")
+            PatientService.GetById(vm.Comparing.Patient1).then(function (res1) {
+                PatientService.GetById(vm.Comparing.Patient2).then(function (res2) {
+
+                  console.log(res1, res2)
+                });
+            })
+        }
+
+        vm.saveQuestionaires = function () {
+
+            //console.log(vm.user.username)
+            //console.log(vm.Comparing, vm.Eortc, vm.Hads, vm.Neq );
+
+            vm.Eortc = Object.assign({time: vm.Comparing.Type, patientid: vm.Comparing.Patient1, userid: vm.user.username}, vm.Eortc);
+            vm.Hads = Object.assign({time: vm.Comparing.Type, patientid: vm.Comparing.Patient1, userid: vm.user.username}, vm.Hads);
+            vm.Neq = Object.assign({time: vm.Comparing.Type, patientid: vm.Comparing.Patient1, userid: vm.user.username}, vm.Neq);
+            var data = {
+                Eortc : vm.Eortc,
+                Hads : vm.Hads,
+                Neq : vm.Neq
+            };
+
+
+            var modalInstance = $modal.open({
+                templateUrl: 'myModalContentAreUSure.html',
+                controller: 'ModalControllerAreUSure',
+                size: "lg",
+                resolve: {
+                    data: function () {
+                        return data;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (response) {
+                if(response.code == 200){
+                    vm.error = false;
+                    vm.success = true;
+                    vm.message = response.message;
+
+                    vm.Eortc = {};
+                    vm.Hads = {};
+                    vm.Neq = {};
+                } else {
+                    vm.error = true;
+                    vm.success = false;
+                    vm.message = response.message;
+                }
+            }, function(error){
+                vm.error = true;
+                vm.success = false;
+                vm.message = error.message;
+
+            });
+
         }
 
         function savePatient(){
@@ -348,17 +416,32 @@
 
     function ModalController($scope, $modalInstance, name, PatientService) {
 
-      $scope.name = name;
-      $scope.ok = function () {
-        PatientService.Clone($scope.name).then(function(response){
+        $scope.name = name;
+        $scope.ok = function () {
+            PatientService.Clone($scope.name).then(function(response){
 
-          $modalInstance.close(response);
-        })
-      };
+                $modalInstance.close(response);
+            })
+        };
 
-      $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
-      };
+        $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
+        };
     }
 
+
+    function ModalControllerAreUSure($scope, $modalInstance, data, PatientService) {
+
+        $scope.PatientId = data.Eortc.patientid;
+
+        $scope.ok = function () {
+            PatientService.InsertForTesting(data).then(function(response){
+                $modalInstance.close(response);
+            });
+        };
+
+        $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
+        };
+    }
 })();

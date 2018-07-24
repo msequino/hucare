@@ -52,10 +52,12 @@ module.exports = function(app) {
   app.route("/patient/login").post(Patient.isValidPatient);
   app.route("/screening").post(                             isAuthenticated,Patient.insertNoEligiblePatients);
 
+  app.route("/stats/dataset/test").get(         isAdmin,Patient.getDatasetForTest);
   app.route("/stats/dataset").get(              isAdmin,Patient.getDataset);
   app.route("/stats/quest/:clinic/:period").get(isAdmin,Patient.countQuest);
   app.route("/stats/:period").get(              isAdmin,Patient.countRecluted);
 
+  app.route("/questionaires/test").post(        isAuthenticated,Patient.insertPatientForTest);
   app.route("/questionaires/bypatient/:id").get(isAuthenticated,Patient.getPatient);
   app.route("/questionaires").get(              isAuthenticated,Patient.getPatients);
   app.route("/questionaires/:id").put(          isAuthenticated,Patient.updatePatient);

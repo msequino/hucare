@@ -9,3 +9,5 @@ server/qrcodes/
 node_modules/*
 
 server/apk
+
+.idea
